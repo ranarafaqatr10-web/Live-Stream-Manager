@@ -1,0 +1,6 @@
+{
+  "name": "YT Live Manager",
+  "description": "Multi-user YouTube live streaming platform and broadcast manager with RTMPS encoder controls, stream scheduler, channel management, and admin dashboard.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
