@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Live Stream Manager</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body { font-family: Arial, sans-serif; background-color: #0f0f0f; color: white; text-align: center; margin: 0; padding: 20px; }
+    .header { margin-bottom: 20px; }
+    .btn-install { background: #e50914; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 8px; cursor: pointer; display: none; }
+    .card { background: #1f1f1f; padding: 20px; border-radius: 12px; margin: 15px auto; max-width: 400px; }
+    select, input, button { width: 90%; padding: 10px; margin: 10px 0; border-radius: 6px; border: none; font-size: 14px; }
+    button.action-btn { background: #ff0000; color: white; font-weight: bold; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h1>Live Stream Manager</h1>
+    <p>یوٹیوب، فیس بک اور ٹک ٹاک پر باآسانی لائیو سٹریم چلائیں</p>
+    <button id="installBtn" class="btn-install">📱 ایپ انسٹال کریں (Install App)</button>
+  </div>
+
+  <div class="card">
+    <h3>1. پلیٹ فارم منتخب کریں</h3>
+    <select id="platform">
+      <option value="youtube">YouTube</option>
+      <option value="facebook">Facebook</option>
+      <option value="tiktok">TikTok</option>
+    </select>
+
+    <h3>2. چینل کا لنک درج کریں</h3>
+    <input type="text" id="channelUrl" placeholder="چینل کا لنک یہاں ڈالیں...">
+    <button class="action-btn" onclick="fetchChannel()">چینل تلاش کریں</button>
+  </div>
+
+  <script>
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBtn').style.display = 'inline-block';
+    });
+
+    document.getElementById('installBtn').addEventListener('click', () => {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choice) => {
+          if (choice.outcome === 'accepted') {
+            document.getElementById('installBtn').style.display = 'none';
+          }
+        });
+      }
+    });
+
+    function fetchChannel() {
+      alert("چینل سرچ کرنے کا عمل شروع ہو گیا ہے...");
+    }
+  </script>
+</body>
+</html>
