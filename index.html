@@ -1,20 +1,19 @@
-                    
-<!DOCTYPE html>
-<html lang="ur" dir="rtl">
+here<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="google-adsense-account" content="ca-pub-3418695563807315">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لائیو سٹریم اور چینل مینیجر</title>
+    <title>Live Stream & Channel Manager</title>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
             --navbar-bg: linear-gradient(135deg, #4f46e5, #7c3aed);
             --sidebar-bg: #1e1b4b;
             --card-bg: #ffffff;
-            --section-bg-1: #fdf4ff; /* ہلکا پنک */
-            --section-bg-2: #ecfdf5; /* ہلکا سبز */
-            --section-bg-3: #eff6ff; /* ہلکا نیلا */
+            --section-bg-1: #fdf4ff; /* Light Pink */
+            --section-bg-2: #ecfdf5; /* Light Green */
+            --section-bg-3: #eff6ff; /* Light Blue */
             --text-color: #0f172a;
             --border-color: #cbd5e1;
         }
@@ -28,7 +27,7 @@
             min-height: 100vh;
         }
 
-        /* ٹاپ نیویگیشن بار - تیز رنگ */
+        /* Top Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -43,7 +42,7 @@
         }
 
         .menu-icon {
-            font-size: 26px;
+            font-size: 24px;
             cursor: pointer;
             background: rgba(255, 255, 255, 0.2);
             border: none;
@@ -54,7 +53,7 @@
         }
 
         .app-title {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 800;
             color: #ffffff;
             margin: 0;
@@ -71,26 +70,26 @@
             box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
         }
 
-        /* سلائیڈ سائیڈ مینیو - الگ ڈارک کلر */
+        /* Sidebar Menu */
         .sidebar {
             height: 100%;
             width: 0;
             position: fixed;
             z-index: 1000;
             top: 0;
-            right: 0;
+            left: 0; /* Left side drawer for English */
             background: var(--sidebar-bg);
             overflow-x: hidden;
             transition: 0.3s;
             padding-top: 60px;
-            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
-            border-left: 2px solid #4f46e5;
+            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+            border-right: 2px solid #4f46e5;
         }
 
-        .sidebar a {
+        .sidebar a, .sidebar .sidebar-content {
             padding: 15px 25px;
             text-decoration: none;
-            font-size: 16px;
+            font-size: 15px;
             color: #e2e8f0;
             display: block;
             transition: 0.2s;
@@ -101,14 +100,14 @@
         .sidebar a:hover {
             background-color: #4f46e5;
             color: #ffffff;
-            padding-right: 30px;
+            padding-left: 30px;
         }
 
         .sidebar .close-btn {
             position: absolute;
             top: 15px;
-            left: 20px;
-            font-size: 22px;
+            right: 20px;
+            font-size: 20px;
             cursor: pointer;
             background: #ef4444;
             border: none;
@@ -119,7 +118,18 @@
             font-weight: bold;
         }
 
-        /* مین کنٹینر */
+        .sidebar select {
+            background: #334155;
+            color: white;
+            border: 1px solid #475569;
+            padding: 8px;
+            border-radius: 8px;
+            width: calc(100% - 50px);
+            margin: 10px 25px;
+            font-size: 14px;
+        }
+
+        /* Main Container */
         .container {
             width: 90%;
             max-width: 500px;
@@ -131,7 +141,6 @@
             border: 3px solid #6366f1;
         }
 
-        /* ہر سیکشن کا اپنا الگ خوبصورت رنگ */
         .section-1 {
             background: var(--section-bg-3);
             border: 2px solid #3b82f6;
@@ -183,14 +192,13 @@
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
 
-        /* تیز اور شاندار گرین و ब्लू بٹنز */
         button.action-btn {
             background: linear-gradient(135deg, #059669, #10b981);
             color: white;
             border: none;
             padding: 14px;
             border-radius: 12px;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
             width: 100%;
@@ -228,66 +236,77 @@
 </head>
 <body>
 
-    <!-- ٹاپ بار -->
+    <!-- Top Navbar -->
     <div class="navbar">
         <button class="menu-icon" onclick="toggleMenu()">☰</button>
-        <h1 class="app-title">لائیو سٹریم مینیجر</h1>
-        <div class="balance-info">🪙 <span id="navCoins">0</span> کوائنز</div>
+        <h1 class="app-title">Live Stream Manager</h1>
+        <div class="balance-info">🪙 <span id="navCoins">0</span> Coins</div>
     </div>
 
-    <!-- سلائیڈ سائیڈ مینیو -->
+    <!-- Sidebar Menu with Language Selector -->
     <div id="mySidebar" class="sidebar">
         <button class="close-btn" onclick="toggleMenu()">✕</button>
         <div style="text-align: center; padding: 25px 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <h3 style="margin: 0; color: #ffffff;" id="menuUserName">مہمان صارف</h3>
-            <p style="margin: 8px 0 0 0; font-size: 12px; color: #94a3b8;" id="menuUserEmail">آن لائن اکاؤنٹ</p>
+            <h3 style="margin: 0; color: #ffffff;" id="menuUserName">Guest User</h3>
+            <p style="margin: 8px 0 0 0; font-size: 12px; color: #94a3b8;">Online Account</p>
         </div>
-        <a href="#" onclick="loginWithGoogle()">🔐 گوگل (Gmail) سے لاگ ان کریں</a>
-        <a href="#" onclick="logoutUser()">🚪 لاگ آؤٹ کریں</a>
-        <a href="#" onclick="alert('آپ کے کل کوائنز: ' + (localStorage.getItem('userCoins') || 0))">💰 بیلنس چیک کریں</a>
+        
+        <!-- Language Selector inside Three Lines Menu -->
+        <div style="padding: 10px 0;">
+            <label style="color: #cbd5e1; font-size: 13px; padding: 0 25px;">Select Language:</label>
+            <select id="langSelect" onchange="changeLanguage()">
+                <option value="en">English</option>
+                <option value="ur">اردو (Urdu)</option>
+                <option value="hi">हिन्दी (Hindi)</option>
+            </select>
+        </div>
+
+        <a href="#" onclick="loginWithGoogle()">🔐 Login with Google</a>
+        <a href="#" onclick="logoutUser()">🚪 Logout</a>
+        <a href="#" onclick="alert('Your Total Coins: ' + (localStorage.getItem('userCoins') || 0))">💰 Check Balance</a>
     </div>
 
-    <!-- مین کارڈ -->
+    <!-- Main Container -->
     <div class="container">
-        <!-- چینل سرچ سیکشن (نیلا رنگ) -->
+        <!-- Channel Search Section -->
         <div class="section section-1">
-            <label>🔍 اپنا چینل تلاش کریں</label>
+            <label>🔍 Search Your Channel</label>
             <select id="platformSelect">
-                <option value="youtube">یوٹیوب (YouTube)</option>
-                <option value="tiktok">ٹک ٹاک (TikTok)</option>
+                <option value="youtube">YouTube</option>
+                <option value="tiktok">TikTok</option>
             </select>
-            <input type="text" id="channelInput" placeholder="چینل کا نام یا پروفائل لنک لکھیں">
-            <button class="action-btn search-btn" onclick="searchChannel()">چینل تلاش کریں</button>
+            <input type="text" id="channelInput" placeholder="Enter channel name or profile link">
+            <button class="action-btn search-btn" onclick="searchChannel()">Search Channel</button>
         </div>
 
-        <!-- کوائنز اور پیمنٹ سیکشن (سبز رنگ) -->
+        <!-- Coins & Payment Section -->
         <div class="section section-2">
-            <label>💳 کوائنز حاصل کریں (پیمنٹ تصدیق)</label>
+            <label>💳 Get Coins (Payment Verification)</label>
             <select id="paymentSelect">
-                <option value="easypaisa">ایزی پیسا (EasyPaisa)</option>
-                <option value="jazzcash">جاز کیش (JazzCash)</option>
-                <option value="meezan">میزان بینک (Meezan Bank)</option>
+                <option value="easypaisa">EasyPaisa</option>
+                <option value="jazzcash">JazzCash</option>
+                <option value="meezan">Meezan Bank</option>
             </select>
-            <input type="text" id="tidInput" placeholder="ٹرانزیکشن کی آئی ڈی (TID) یا نمبر درج کریں">
-            <button class="action-btn" onclick="submitPayment()">100 روپے جمع کریں (50 کوائنز)</button>
+            <input type="text" id="tidInput" placeholder="Enter Transaction ID (TID) or Number">
+            <button class="action-btn" onclick="submitPayment()">Pay 100 PKR (Get 50 Coins)</button>
         </div>
 
-        <!-- فری لائیو سٹریم ٹائم (پنک رنگ) -->
+        <!-- Free Live Stream Time Section -->
         <div class="section section-3">
-            <label>⏱️ فری لائیو سٹریم ٹائم</label>
-            <p style="font-size: 12px; color: #475569; margin-top: 0; margin-bottom: 12px; font-weight: 600;">اشتہار دیکھ کر فری منٹس حاصل کریں:</p>
-            <button class="action-btn ad-btn" onclick="watchAd()">30 سیکنڈ کا ایڈ دیکھیں</button>
-            <div class="status-text" id="statusDisplay">دیکھے گئے ایڈز: 0 | فری ٹائم: 0 منٹ</div>
+            <label>⏱️ Free Live Stream Time</label>
+            <p style="font-size: 12px; color: #475569; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Watch ads to earn free minutes:</p>
+            <button class="action-btn ad-btn" onclick="watchAd()">Watch 30s Ad</button>
+            <div class="status-text" id="statusDisplay">Watched Ads: 0 | Free Time: 0 mins</div>
         </div>
     </div>
 
     <script>
         function toggleMenu() {
             let sidebar = document.getElementById("mySidebar");
-            if (sidebar.style.width === "260px") {
+            if (sidebar.style.width === "280px") {
                 sidebar.style.width = "0";
             } else {
-                sidebar.style.width = "260px";
+                sidebar.style.width = "280px";
             }
         }
 
@@ -302,7 +321,7 @@
             let savedUser = localStorage.getItem('userName');
 
             document.getElementById('navCoins').innerText = savedCoins;
-            document.getElementById('statusDisplay').innerText = "دیکھے گئے ایڈز: " + savedAds + " | فری ٹائم: " + savedMinutes + " منٹ";
+            document.getElementById('statusDisplay').innerText = "Watched Ads: " + savedAds + " | Free Time: " + savedMinutes + " mins";
 
             if(savedUser) {
                 document.getElementById('menuUserName').innerText = savedUser;
@@ -310,36 +329,36 @@
         }
 
         function loginWithGoogle() {
-            let name = prompt("اپنا نام یا جی میل درج کریں:");
+            let name = prompt("Enter your name or Gmail:");
             if(name && name.trim() !== "") {
                 localStorage.setItem('userName', name);
                 refreshData();
-                alert("کامیابی سے لاگ ان ہو گئے!");
+                alert("Successfully logged in!");
                 toggleMenu();
             }
         }
 
         function logoutUser() {
             localStorage.removeItem('userName');
-            document.getElementById('menuUserName').innerText = "مہمان صارف";
+            document.getElementById('menuUserName').innerText = "Guest User";
             refreshData();
-            alert("لاگ آؤٹ ہو گئے!");
+            alert("Logged out successfully!");
             toggleMenu();
         }
 
         function searchChannel() {
             let val = document.getElementById('channelInput').value;
             if(val.trim() === "") {
-                alert("براہ کرم چینل کا نام یا لنک لکھیں!");
+                alert("Please enter a channel name or link!");
             } else {
-                alert("چینل کی معلومات تلاش کی جا رہی ہیں: " + val);
+                alert("Searching channel information for: " + val);
             }
         }
 
         function submitPayment() {
             let tid = document.getElementById('tidInput').value;
             if(tid.trim() === "") {
-                alert("براہ کرم ٹرانزیکشن آئی ڈی (TID) یا نمبر درج کریں!");
+                alert("Please enter Transaction ID (TID) or number!");
                 return;
             }
 
@@ -348,7 +367,7 @@
             localStorage.setItem('userCoins', currentCoins);
 
             refreshData();
-            alert("پیمنٹ موصول ہو گئی! 50 کوائنز شامل کر دیے گئے ہیں۔");
+            alert("Payment received! 50 coins added to your account.");
             document.getElementById('tidInput').value = "";
         }
 
@@ -363,7 +382,19 @@
             localStorage.setItem('freeMinutes', minutes);
 
             refreshData();
-            alert("ایڈ مکمل ہو گیا! 15 منٹ فری ٹائم مل گیا۔");
+            alert("Ad completed! You earned 15 minutes of free stream time.");
+        }
+
+        function changeLanguage() {
+            let lang = document.getElementById('langSelect').value;
+            if(lang === 'ur') {
+                alert("Language changed to Urdu (Feature preview)");
+            } else if(lang === 'hi') {
+                alert("Language changed to Hindi (Feature preview)");
+            } else {
+                alert("Language set to English");
+            }
+            toggleMenu();
         }
     </script>
 </body>
