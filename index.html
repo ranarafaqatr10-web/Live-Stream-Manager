@@ -1,110 +1,197 @@
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Live Stream Manager</title>
-  <link rel="manifest" href="manifest.json">
-  <style>
-    body { font-family: Arial, sans-serif; background-color: #0f0f0f; color: white; text-align: center; margin: 0; padding: 20px; }
-    .header { margin-bottom: 20px; }
-    .btn-install { background: #e50914; color: white; border: none; padding: 12px 24px; font-size: 16px; border-radius: 8px; cursor: pointer; display: none; }
-    .card { background: #1f1f1f; padding: 20px; border-radius: 12px; margin: 15px auto; max-width: 400px; }
-    select, input, button { width: 90%; padding: 10px; margin: 10px 0; border-radius: 6px; border: none; font-size: 14px; }
-    button.action-btn { background: #ff0000; color: white; font-weight: bold; cursor: pointer; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لائیو سٹریم اور چینل ڈیش بورڈ</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2, h3 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .section {
+            margin-bottom: 25px;
+            padding: 15px;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e1e8ed;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+        #installBtn {
+            background-color: #2980b9;
+            display: none;
+        }
+        .status-text {
+            font-weight: bold;
+            color: #e67e22;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .video-card {
+            background: #fff;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .video-card:hover {
+            background: #eef2f7;
+        }
+    </style>
 </head>
 <body>
 
-  <div class="header">
-    <h1>Live Stream Manager</h1>
-    <p>یوٹیوب، فیس بک اور ٹک ٹاک پر باآسانی لائیو سٹریم چلائیں</p>
-    <button id="installBtn" class="btn-install">📱 ایپ انسٹال کریں (Install App)</button>
-  </div>
+<div class="container">
+    <h2>لائیو سٹریم اور چینل مینیجر</h2>
 
-  <div class="card">
-    <h3>1. پلیٹ فارم منتخب کریں</h3>
-    <select id="platform">
-      <option value="youtube">YouTube</option>
-      <option value="facebook">Facebook</option>
-      <option value="tiktok">TikTok</option>
-    </select>
+    <button id="installBtn">موبাইল پر ایپ انسٹال کریں</button>
 
-    <h3>2. چینل کا لنک درج کریں</h3>
-    <input type="text" id="channelUrl" placeholder="چینل کا لنک یہاں ڈالیں...">
-    <button class="action-btn" onclick="fetchChannel()">چینل تلاش کریں</button>
-  </div>
-
-  <script>
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      deferredPrompt = e;
-      document.getElementById('installBtn').style.display = 'inline-block';
-    });
-
-    document.getElementById('installBtn').addEventListener('click', () => {
-      if (deferredPrompt) {
-        deferredPrompt.prompt();
-        deferredPrompt.userChoice.then((choice) => {
-          if (choice.outcome === 'accepted') {
-            document.getElementById('installBtn').style.display = 'none';
-          }
-        });
-      }
-    });
-
-    function fetchChannel() {
-      alert("چینل سرچ کرنے کا عمل شروع ہو گیا ہے...");
-    }
-  </script>
-
-
-<!-- کوائنز پیکجز اور پیمنٹ میتھڈ -->
-<div class="card">
-    <h3>3. کوائنز پیکجز اور پیمنٹ میتھڈ</h3>
-    
-    <div class="account-info" style="background: #111; padding: 10px; border-radius: 6px; margin-bottom: 10px; border: 1px dashed #ff9800; font-size: 13px; color: #ffeb3b; text-align: right;">
-        <p><b>پہلے اس اکاؤنٹ پر رقم بھیجیں:</b></p>
-        <p>🔹 <b>JazzCash:</b> 03029630434 (نام: Rafaqat Ali)</p>
-        <p>🔹 <b>EasyPaisa:</b> 03486739367 (نام: Rafaqat Ali)</p>
-        <p>🔹 <b>Meezan Bank:</b> 00300111825215 (نام: Rafaqat Ali)</p>
-    </div>
-
-    <div class="package-box" style="background: #2a2a2a; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; text-align: right;">
-        <p><b>سلور پیکج:</b> 1000 کوائنز - 500 روپے</p>
-        <p style="font-size: 11px; color: #ccc;">پیسے بھیجنے کے بعد میتھڈ منتخب کریں:</p>
-        <select id="payMethod1">
-            <option value="JazzCash">JazzCash</option>
-            <option value="EasyPaisa">EasyPaisa</option>
-            <option value="Bank">Bank Transfer</option>
+    <div class="section">
+        <h3>اپنا چینل تلاش کریں (YouTube / TikTok)</h3>
+        <select id="platformSelect">
+            <option value="YouTube">یوٹیوب (YouTube)</option>
+            <option value="TikTok">ٹک ٹاک (TikTok)</option>
         </select>
-        <input type="text" id="tid1" placeholder="ٹرانزیکشن آئی ڈی (TID) یہاں لکھیں...">
-        <button class="btn-action" style="background: #00A859;" onclick="verifyAndAddCoins('500', '1000', 'tid1', 'payMethod1')">تصدیق کریں اور کوائن حاصل کریں</button>
+        <input type="text" id="channelInput" placeholder="چینل کا نام یا پروفাইল لنک لکھیں">
+        <button onclick="fetchChannel()">چینل تلاش کریں</button>
+        <div id="channelResult" style="margin-top: 15px;"></div>
     </div>
 
-    <div class="package-box" style="background: #2a2a2a; padding: 12px; margin: 10px 0; border-radius: 8px; border: 1px solid #444; text-align: right;">
-        <p><b>گولڈ پیکج:</b> 5000 کوائنز - 2000 روپے</p>
-        <p style="font-size: 11px; color: #ccc;">پیسے بھیجنے کے بعد میتھڈ منتخب کریں:</p>
-        <select id="payMethod2">
-            <option value="JazzCash">JazzCash</option>
-            <option value="EasyPaisa">EasyPaisa</option>
-            <option value="Bank">Bank Transfer</option>
+    <div class="section">
+        <h3>کوائنز حاصل کریں (پیمنٹ تصدیق)</h3>
+        <select id="payMethod">
+            <option value="EasyPaisa">ایزی پیسہ (EasyPaisa)</option>
+            <option value="JazzCash">جاز کیش (JazzCash)</option>
         </select>
-        <input type="text" id="tid2" placeholder="ٹرانزیکشن آئی ڈی (TID) یہاں لکھیں...">
-        <button class="btn-action" style="background: #0066B3;" onclick="verifyAndAddCoins('2000', '5000', 'tid2', 'payMethod2')">تصدیق کریں اور کوائن حاصل کریں</button>
+        <input type="text" id="tidInput" placeholder="ٹرانزیکشن آئی ڈی (TID) درج کریں">
+        <button onclick="verifyAndAddCoins(100, 50, 'tidInput', 'payMethod')">100 روپے جمع کریں (50 کوائنز)</button>
     </div>
-</div> <!-- Card 3 بند ہو گیا -->
 
-<!-- 4. مفت لائیو ٹائم (اشتہار دیکھ کر) -->
-<div class="card" style="border: 1px solid #ff9800; text-align: right;">
-    <h3>4. مفت لائیو ٹائم (اشتہار دیکھ کر)</h3>
-    <p style="font-size: 13px; color: #ccc;">فری لائیو چلائیں: صرف 2 ایڈز دیکھیں اور کل **30 منٹ** فری لائیو سٹریم حاصل کریں!</p>
-    <button class="action-btn" style="background: #ff9800; color: #000; width: 100%; padding: 10px; border-radius: 6px; border: none; font-size: 16px; font-weight: bold; cursor: pointer;" onclick="watchAd()">30 سیکنڈ کا ایڈ دیکھیں</button>
-    <p id="adStatus" style="font-size: 14px; margin-top: 10px; color: #ffeb3b; text-align: center;">دیکھے گئے ایڈز: 0/2 | فری ٹائم: 0 منٹ</p>
+    <div class="section">
+        <h3>فری لائیو سٹریم ٹائم</h3>
+        <p>اشتہار دیکھ کر فری منٹس حاصل کریں:</p>
+        <button onclick="watchAd()">30 سیکنڈ کا ایڈ دیکھیں</button>
+        <div id="adStatus" class="status-text">دیکھے گئے ایڈز: 0/2 | فری ٹائم: 0 منٹ</div>
+    </div>
 </div>
 
 <script>
+    let adsWatched = 0;
+    let freeMinutes = 0;
+
+    // پیج کھلتے ہی لوکل اسٹوریج سے پرانا ڈیٹا اٹھانا
+    window.onload = function() {
+        let savedAds = localStorage.getItem('adsWatched');
+        let savedMinutes = localStorage.getItem('freeMinutes');
+        
+        if (savedAds !== null) {
+            adsWatched = parseInt(savedAds);
+            freeMinutes = parseInt(savedMinutes);
+            let statusEl = document.getElementById('adStatus');
+            if (statusEl) {
+                statusEl.innerText = "دیکھے گئے ایڈز: " + adsWatched + "/2 | فری ٹائم: " + freeMinutes + " منٹ";
+            }
+        }
+    };
+
+    let deferredPrompt;
+    window.addEventListener('beforeinstallprompt', (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        let installBtn = document.getElementById('installBtn');
+        if(installBtn) installBtn.style.display = 'block';
+    });
+
+    let installBtn = document.getElementById('installBtn');
+    if(installBtn) {
+        installBtn.addEventListener('click', () => {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choice) => {
+                    if (choice.outcome === 'accepted') {
+                        installBtn.style.display = 'none';
+                    }
+                });
+            }
+        });
+    }
+
+    // چینل سرچ اور ویڈیوز شو کرنے کا فنکشن
+    function fetchChannel() {
+        let platform = document.getElementById('platformSelect').value;
+        let channel = document.getElementById('channelInput').value;
+        let resultDiv = document.getElementById('channelResult');
+
+        if(channel.trim() === "") {
+            alert("براہ کرم چینل کا نام یا لنک درج کریں!");
+            return;
+        }
+
+        resultDiv.innerHTML = "<p style='text-align:center; color:#555;'>لاگ ان اور چینل کی ویڈیوز تلاش کی جا رہی ہیں...</p>";
+
+        setTimeout(() => {
+            resultDiv.innerHTML = `
+                <div style="background:#fff; padding:10px; border-radius:6px; border:1px solid #ccc;">
+                    <h4 style="margin:5px 0; color:#2c3e50;">چینل: ${channel} (${platform})</h4>
+                    <p style="font-size:13px; color:green; margin:5px 0;">اکاؤنٹ کامیاب لاگ ان / کنیکٹ ہو گیا ہے!</p>
+                    <p style="margin:5px 0; font-weight:bold;">موجودہ ویڈیوز:</p>
+                    <div class="video-card" onclick="playVideoWithAd('لائیو سٹریم ویڈیو 1')">▶ پہلی لائیو ویڈیو دیکھیں (کلک کریں)</div>
+                    <div class="video-card" onclick="playVideoWithAd('لائیو سٹریم ویڈیو 2')">▶ دوسری لائیو ویڈیو دیکھیں (کلک کریں)</div>
+                </div>
+            `;
+        }, 1500);
+    }
+
+    // ویڈیو پر کلک کرنے پر ایڈ اور پھر ویڈیو چلانے کا فلو
+    function playVideoWithAd(videoName) {
+        alert("ویڈیو چلانے سے پہلے اشتہار (Ad) کا عمل چیک کیا جا رہا ہے...");
+        
+        setTimeout(() => {
+            let confirmAd = confirm("کیا آپ ویڈیو دیکھنے کے لیے 30 سیکنڈ کا ایڈ دیکھنا چاہیں گے؟ (یا فری ٹائم استعمال کریں)");
+            if(confirmAd) {
+                watchAd();
+            } else {
+                alert("ویڈیو پلے ہو رہی ہے: " + videoName);
+            }
+        }, 1000);
+    }
+
     function verifyAndAddCoins(amount, coins, tidId, methodId) {
         let method = document.getElementById(methodId).value;
         let tid = document.getElementById(tidId).value;
@@ -117,13 +204,14 @@
         alert(method + " کے ذریعے " + amount + " روپے کی ٹرانزیکشن (TID: " + tid + ") کی تصدیق کی جا رہی ہے... براہ کرم انتظار کریں!");
 
         setTimeout(() => {
-            alert("کامیابی! آپ کی پیمنٹ تصدیق ہو گئی ہے اور " + coins + " کوائنز آپ کے اکاؤنٹ میں کامیابی سے شامل کر دیے گئے ہیں!");
-            document.getElementById(tidId).value = ""; 
-        }, 3000);
-    }
+            let currentCoins = parseInt(localStorage.getItem('userCoins')) || 0;
+            currentCoins += parseInt(coins);
+            localStorage.setItem('userCoins', currentCoins);
 
-    let adsWatched = 0;
-    let freeMinutes = 0;
+            alert("کامیابی! آپ کی پیمنٹ تصدیق ہو گئی ہے اور " + coins + " کوائنز آپ کے اکاؤنٹ میں شامل کر دیے گئے ہیں۔ کل کوائنز: " + currentCoins);
+            document.getElementById(tidId).value = ""; 
+        }, 2000);
+    }
 
     function watchAd() {
         if (adsWatched >= 2) {
@@ -137,7 +225,14 @@
             adsWatched++;
             freeMinutes += 15; 
 
-            document.getElementById('adStatus').innerText = "دیکھے گئے ایڈز: " + adsWatched + "/2 | فری ٹائم: " + freeMinutes + " منٹ";
+            // لوکل اسٹوریج میں ایڈز اور منٹس محفوظ کرنا
+            localStorage.setItem('adsWatched', adsWatched);
+            localStorage.setItem('freeMinutes', freeMinutes);
+
+            let statusEl = document.getElementById('adStatus');
+            if (statusEl) {
+                statusEl.innerText = "دیکھے گئے ایڈز: " + adsWatched + "/2 | فری ٹائم: " + freeMinutes + " منٹ";
+            }
 
             if (adsWatched === 2) {
                 alert("شاندار! آپ نے دونوں ایڈز مکمل دیکھ لیے ہیں، اب آپ کے پاس پورا آدھا گھنٹہ فری لائیو سٹریم کا وقت موجود ہے!");
@@ -147,5 +242,6 @@
         }, 1500);
     }
 </script>
+
 </body>
 </html>
