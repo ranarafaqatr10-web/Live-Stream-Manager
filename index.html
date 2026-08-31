@@ -1,248 +1,306 @@
-+<!DOCTYPE html>
+        <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
-<meta name="google-adsense-account" content="ca-pub-3418695563807315">
     <meta charset="UTF-8">
+    <meta name="google-adsense-account" content="ca-pub-3418695563807315">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لائیو سٹریم اور چینل ڈیش بورڈ</title>
+    <title>لائیو سٹریم اور چینل مینیجر</title>
     <style>
+        :root {
+            --primary-color: #2575fc;
+            --secondary-color: #6a11cb;
+            --accent-color: #ff416c;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --border-color: #e2e8f0;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
+            background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
             margin: 0;
             padding: 20px;
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 550px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* پروفیشنل یوزر بیلنس بار */
+        .user-balance-bar {
+            display: flex;
+            justify-content: space-between;
+            background: #f8fafc;
+            padding: 12px 18px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 2px solid var(--border-color);
+            font-weight: bold;
+            font-size: 14px;
+            color: #1e293b;
+        }
+
+        .login-box {
+            text-align: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .google-login-btn {
+            background-color: #ffffff;
+            color: #444444;
+            border: 2px solid var(--border-color);
+            padding: 12px 20px;
+            border-radius: 30px;
+            font-size: 15px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.04);
+        }
+
+        .google-login-btn:hover {
+            background-color: #f8f9fa;
+            border-color: #4285F4;
+            color: #4285F4;
+            box-shadow: 0 6px 12px rgba(66, 133, 244, 0.15);
+            transform: translateY(-1px);
+        }
+
+        h2 {
+            text-align: center;
+            color: #1e293b;
+            margin-top: 0;
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .section {
+            background: #fafbfc;
+            margin-bottom: 20px;
+            padding: 20px;
+            border-radius: 14px;
+            border: 2px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(37, 117, 252, 0.08);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+            color: #334155;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-top: 5px;
+            margin-bottom: 15px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: border-color 0.3s;
+            background: #fff;
             color: #333;
         }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+
+        input:focus, select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(37, 117, 252, 0.1);
         }
-        h2, h3 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        .section {
-            margin-bottom: 25px;
-            padding: 15px;
-            background: #fafafa;
-            border-radius: 8px;
-            border: 1px solid #e1e8ed;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 10px;
-            margin-top: 8px;
-            margin-bottom: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-        }
-        button {
-            background-color: #27ae60;
+
+        button.action-btn {
+            background: linear-gradient(135deg, #11998e, #38ef7d);
             color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 15px;
             font-weight: bold;
             cursor: pointer;
-            border: none;
+            width: 100%;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 12px rgba(17, 153, 142, 0.2);
         }
-        button:hover {
-            background-color: #219653;
+
+        button.action-btn:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
         }
-        #installBtn {
-            background-color: #2980b9;
-            display: none;
+
+        button.action-btn:active {
+            transform: scale(0.98);
         }
+
+        .ad-btn {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b) !important;
+            box-shadow: 0 4px 12px rgba(255, 65, 108, 0.25) !important;
+        }
+
         .status-text {
             font-weight: bold;
-            color: #e67e22;
+            color: #059669;
             text-align: center;
-            margin-top: 10px;
-        }
-        .video-card {
-            background: #fff;
-            padding: 10px;
-            margin-top: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            cursor: pointer;
-            text-align: center;
-            transition: 0.2s;
-        }
-        .video-card:hover {
-            background: #eef2f7;
+            margin-top: 12px;
+            font-size: 13px;
+            background: #ecfdf5;
+            padding: 8px;
+            border-radius: 8px;
+            border: 1px dashed #10b981;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>لائیو سٹریم اور چینل مینیجر</h2>
+    <div class="container">
+        <!-- پروفیشنل بیلنس بار -->
+        <div class="user-balance-bar">
+            <span>🪙 کوائنز: <span id="coinCount">0</span></span>
+            <span>⏱️ فری ٹائم: <span id="timeCount">0</span> منٹ</span>
+        </div>
 
-    <button id="installBtn">موبাইল پر ایپ انسٹال کریں</button>
+        <!-- جی میل لاگ ان سیکشن -->
+        <div class="login-box">
+            <button class="google-login-btn" onclick="loginWithGoogle()">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.1-6.72-4.93H1.2v3.15C3.16 21.3 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.27c-.25-.72-.38-1.49-.38-2.27s.13-1.55.38-2.27V6.58H1.2C.44 8.1 0 9.8 0 12s.44 3.9 1.2 5.42l4.08-3.15z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.16 2.7 1.2 6.58l4.08 3.15c.95-2.83 3.6-4.98 6.72-4.98z"/></svg>
+                <span id="loginText">Google (Gmail) سے لاگ ان کریں</span>
+            </button>
+        </div>
 
-    <div class="section">
-        <h3>اپنا چینل تلاش کریں (YouTube / TikTok)</h3>
-        <select id="platformSelect">
-            <option value="YouTube">یوٹیوب (YouTube)</option>
-            <option value="TikTok">ٹک ٹاک (TikTok)</option>
-        </select>
-        <input type="text" id="channelInput" placeholder="چینل کا نام یا پروفাইল لنک لکھیں">
-        <button onclick="fetchChannel()">چینل تلاش کریں</button>
-        <div id="channelResult" style="margin-top: 15px;"></div>
+        <h2>لائیو سٹریم اور چینل مینیجر</h2>
+
+        <!-- چینل سرچ سیکشن -->
+        <div class="section">
+            <label>اپنا چینل تلاش کریں (YouTube / TikTok)</label>
+            <select id="platformSelect">
+                <option value="youtube">یوٹیوب (YouTube)</option>
+                <option value="tiktok">ٹک ٹاک (TikTok)</option>
+            </select>
+            <input type="text" id="channelInput" placeholder="چینل کا نام یا پروفائل لنک لکھیں">
+            <button class="action-btn" onclick="searchChannel()">چینل تلاش کریں</button>
+        </div>
+
+        <!-- کوائنز اور پیمنٹ سیکشن -->
+        <div class="section">
+            <label>کوائنز حاصل کریں (پیمنٹ تصدیق)</label>
+            <select id="paymentSelect">
+                <option value="easypaisa">ایزی پیسا (EasyPaisa)</option>
+                <option value="jazzcash">جاز کیش (JazzCash)</option>
+                <option value="meezan">میزان بینک (Meezan Bank)</option>
+            </select>
+            <input type="text" id="tidInput" placeholder="ٹرانزیکشن کی آئی ڈی (TID) یا نمبر درج کریں">
+            <button class="action-btn" onclick="submitPayment()">100 روپے جمع کریں (50 کوائنز)</button>
+        </div>
+
+        <!-- فری لائیو سٹریم ٹائم -->
+        <div class="section">
+            <label>فری لائیو سٹریم ٹائم</label>
+            <p style="font-size: 12px; color: #64748b; margin-top: 0; margin-bottom: 12px;">اشتہار دیکھ کر فری منٹس حاصل کریں:</p>
+            <button class="action-btn ad-btn" onclick="watchAd()">30 سیکنڈ کا ایڈ دیکھیں</button>
+            <div class="status-text" id="statusDisplay">دیکھے گئے ایڈز: 0 | فری ٹائم: 0 منٹ</div>
+        </div>
     </div>
 
-    <div class="section">
-        <h3>کوائنز حاصل کریں (پیمنٹ تصدیق)</h3>
-        <select id="payMethod">
-            <option value="EasyPaisa">ایزی پیسہ (EasyPaisa)</option>
-            <option value="JazzCash">جاز کیش (JazzCash)</option>
-        </select>
-        <input type="text" id="tidInput" placeholder="ٹرانزیکشن آئی ڈی (TID) درج کریں">
-        <button onclick="verifyAndAddCoins(100, 50, 'tidInput', 'payMethod')">100 روپے جمع کریں (50 کوائنز)</button>
-    </div>
+    <script>
+        // ڈیٹا لوڈ کرنے کا فنکشن (جب بھی پیج کھلے گا)
+        window.onload = function() {
+            refreshData();
+        };
 
-    <div class="section">
-        <h3>فری لائیو سٹریم ٹائم</h3>
-        <p>اشتہار دیکھ کر فری منٹس حاصل کریں:</p>
-        <button onclick="watchAd()">30 سیکنڈ کا ایڈ دیکھیں</button>
-        <div id="adStatus" class="status-text">دیکھے گئے ایڈز: 0/2 | فری ٹائم: 0 منٹ</div>
-    </div>
-</div>
+        function refreshData() {
+            let savedAds = localStorage.getItem('watchedAds') || 0;
+            let savedMinutes = localStorage.getItem('freeMinutes') || 0;
+            let savedCoins = localStorage.getItem('userCoins') || 0;
+            let savedUser = localStorage.getItem('userName');
 
-<script>
-    let adsWatched = 0;
-    let freeMinutes = 0;
+            document.getElementById('coinCount').innerText = savedCoins;
+            document.getElementById('timeCount').innerText = savedMinutes;
+            document.getElementById('statusDisplay').innerText = "دیکھے گئے ایڈز: " + savedAds + " | فری ٹائم: " + savedMinutes + " منٹ";
 
-    // پیج کھلتے ہی لوکل اسٹوریج سے پرانا ڈیٹا اٹھانا
-    window.onload = function() {
-        let savedAds = localStorage.getItem('adsWatched');
-        let savedMinutes = localStorage.getItem('freeMinutes');
-        
-        if (savedAds !== null) {
-            adsWatched = parseInt(savedAds);
-            freeMinutes = parseInt(savedMinutes);
-            let statusEl = document.getElementById('adStatus');
-            if (statusEl) {
-                statusEl.innerText = "دیکھے گئے ایڈز: " + adsWatched + "/2 | فری ٹائم: " + freeMinutes + " منٹ";
+            if(savedUser) {
+                document.getElementById('loginText').innerText = "خوش آمدید: " + savedUser;
             }
         }
-    };
 
-    let deferredPrompt;
-    window.addEventListener('beforeinstallprompt', (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        let installBtn = document.getElementById('installBtn');
-        if(installBtn) installBtn.style.display = 'block';
-    });
-
-    let installBtn = document.getElementById('installBtn');
-    if(installBtn) {
-        installBtn.addEventListener('click', () => {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choice) => {
-                    if (choice.outcome === 'accepted') {
-                        installBtn.style.display = 'none';
-                    }
-                });
+        // گوگل لاگ ان
+        function loginWithGoogle() {
+            let name = prompt("اپنا نام یا جی میل درج کریں:");
+            if(name && name.trim() !== "") {
+                localStorage.setItem('userName', name);
+                document.getElementById('loginText').innerText = "خوش آمدید: " + name;
+                alert("کامیابی سے لاگ ان ہو گئے!");
             }
-        });
-    }
-
-    // چینل سرچ اور ویڈیوز شو کرنے کا فنکشن
-    function fetchChannel() {
-        let platform = document.getElementById('platformSelect').value;
-        let channel = document.getElementById('channelInput').value;
-        let resultDiv = document.getElementById('channelResult');
-
-        if(channel.trim() === "") {
-            alert("براہ کرم چینل کا نام یا لنک درج کریں!");
-            return;
         }
 
-        resultDiv.innerHTML = "<p style='text-align:center; color:#555;'>لاگ ان اور چینل کی ویڈیوز تلاش کی جا رہی ہیں...</p>";
-
-        setTimeout(() => {
-            resultDiv.innerHTML = `
-                <div style="background:#fff; padding:10px; border-radius:6px; border:1px solid #ccc;">
-                    <h4 style="margin:5px 0; color:#2c3e50;">چینل: ${channel} (${platform})</h4>
-                    <p style="font-size:13px; color:green; margin:5px 0;">اکاؤنٹ کامیاب لاگ ان / کنیکٹ ہو گیا ہے!</p>
-                    <p style="margin:5px 0; font-weight:bold;">موجودہ ویڈیوز:</p>
-                    <div class="video-card" onclick="playVideoWithAd('لائیو سٹریم ویڈیو 1')">▶ پہلی لائیو ویڈیو دیکھیں (کلک کریں)</div>
-                    <div class="video-card" onclick="playVideoWithAd('لائیو سٹریم ویڈیو 2')">▶ دوسری لائیو ویڈیو دیکھیں (کلک کریں)</div>
-                </div>
-            `;
-        }, 1500);
-    }
-
-    // ویڈیو پر کلک کرنے پر ایڈ اور پھر ویڈیو چلانے کا فلو
-    function playVideoWithAd(videoName) {
-        alert("ویڈیو چلانے سے پہلے اشتہار (Ad) کا عمل چیک کیا جا رہا ہے...");
-        
-        setTimeout(() => {
-            let confirmAd = confirm("کیا آپ ویڈیو دیکھنے کے لیے 30 سیکنڈ کا ایڈ دیکھنا چاہیں گے؟ (یا فری ٹائم استعمال کریں)");
-            if(confirmAd) {
-                watchAd();
+        // چینل سرچ
+        function searchChannel() {
+            let val = document.getElementById('channelInput').value;
+            if(val.trim() === "") {
+                alert("براہ کرم چینل کا نام یا لنک لکھیں!");
             } else {
-                alert("ویڈیو پلے ہو رہی ہے: " + videoName);
+                alert("چینل کی معلومات تلاش کی جا رہی ہیں: " + val);
             }
-        }, 1000);
-    }
-
-    function verifyAndAddCoins(amount, coins, tidId, methodId) {
-        let method = document.getElementById(methodId).value;
-        let tid = document.getElementById(tidId).value;
-
-        if (tid.trim() === "") {
-            alert("براہ کرم ادائیگی کے بعد اپنی ٹرانزیکشن آئی ڈی (TID) درج کریں!");
-            return;
         }
 
-        alert(method + " کے ذریعے " + amount + " روپے کی ٹرانزیکشن (TID: " + tid + ") کی تصدیق کی جا رہی ہے... براہ کرم انتظار کریں!");
+        // پیمنٹ تصدیق اور کوائنز ایڈ کرنا
+        function submitPayment() {
+            let tid = document.getElementById('tidInput').value;
 
-        setTimeout(() => {
-            let currentCoins = parseInt(localStorage.getItem('userCoins')) || 0;
-            currentCoins += parseInt(coins);
+            if(tid.trim() === "") {
+                alert("براہ کرم ٹرانزیکشن آئی ڈی (TID) یا نمبر درج کریں!");
+                return;
+            }
+
+            let currentCoins = parseInt(localStorage.getItem('userCoins') || 0);
+            currentCoins += 50; // 50 کوائنز ایڈ ہوں گے
             localStorage.setItem('userCoins', currentCoins);
 
-            alert("کامیابی! آپ کی پیمنٹ تصدیق ہو گئی ہے اور " + coins + " کوائنز آپ کے اکاؤنٹ میں شامل کر دیے گئے ہیں۔ کل کوائنز: " + currentCoins);
-            document.getElementById(tidId).value = ""; 
-        }, 2000);
-    }
-
-    function watchAd() {
-        if (adsWatched >= 2) {
-            alert("آپ اپنے دونوں ایڈز دیکھ چکے ہیں اور آپ کا آدھا گھنٹہ فری لائیو ٹائم مکمل ہو چکا ہے!");
-            return;
+            refreshData();
+            alert("پیمنٹ موصول ہو گئی! آپ کے اکاؤنٹ میں 50 کوائنز کامیابی سے شامل کر دیے گئے ہیں۔");
+            document.getElementById('tidInput').value = "";
         }
 
-        alert("30 سیکنڈ کا اشتہار (Ad) چل رہا ہے... براہ کرم انتظار کریں...");
+        // ایڈ دیکھنے کا فنکشن
+        function watchAd() {
+            let ads = parseInt(localStorage.getItem('watchedAds') || 0);
+            let minutes = parseInt(localStorage.getItem('freeMinutes') || 0);
 
-        setTimeout(() => {
-            adsWatched++;
-            freeMinutes += 15; 
+            ads += 1;
+            minutes += 15; // ہر ایڈ پر 15 منٹ
 
-            // لوکل اسٹوریج میں ایڈز اور منٹس محفوظ کرنا
-            localStorage.setItem('adsWatched', adsWatched);
-            localStorage.setItem('freeMinutes', freeMinutes);
+            localStorage.setItem('watchedAds', ads);
+            localStorage.setItem('freeMinutes', minutes);
 
-            let statusEl = document.getElementById('adStatus');
-            if (statusEl) {
-                statusEl.innerText = "دیکھے گئے ایڈز: " + adsWatched + "/2 | فری ٹائم: " + freeMinutes + " منٹ";
-            }
-
-            if (adsWatched === 2) {
-                alert("شاندار! آپ نے دونوں ایڈز مکمل دیکھ لیے ہیں، اب آپ کے پاس پورا آدھا گھنٹہ فری لائیو سٹریم کا وقت موجود ہے!");
-            } else {
-                alert("پہلا ایڈ مکمل ہو گیا! 15 منٹ مل گئے ہیں، ایک ایڈ اور دیکھیں۔");
-            }
-        }, 1500);
-    }
-</script>
-
+            refreshData();
+            alert("ایڈ مکمل ہو گیا! آپ کو 15 منٹ کا فری لائیو سٹریم ٹائم مل گیا ہے۔");
+        }
+    </script>
 </body>
 </html>
