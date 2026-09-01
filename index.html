@@ -1,79 +1,103 @@
-        .
+here<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI VideoFlow Studio</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #0f172a; color: #f8fafc; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: #1e293b; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #38bdf8; margin-bottom: 20px; font-size: 28px; }
+        
+        .login-box { text-align: center; margin-bottom: 25px; padding: 15px; background: #0f172a; border-radius: 8px; border: 1px solid #334155; }
+        .google-btn { background: #ffffff; color: #334155; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; font-size: 15px; }
+        .user-info { color: #22c55e; font-weight: bold; }
+
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #94a3b8; }
+        input[type="file"], textarea, select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 8px; font-size: 16px; }
+        textarea { resize: vertical; height: 100px; }
+        .btn { display: block; width: 100%; background: linear-gradient(135deg, #0ea5e9, #2563eb); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .output-section { margin-top: 30px; padding: 20px; background: #0f172a; border-radius: 8px; text-align: center; border: 1px dashed #334155; }
+        .hidden { display: none; }
+        .spinner { border: 4px solid rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: #38bdf8; animation: spin 1s linear infinite; margin: 20px auto; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>AI VideoFlow Studio</h1>
+    
+    <div class="login-box" id="loginBox">
+        <button class="google-btn" onclick="loginWithGoogle()">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
+            Sign in with Google (Gmail)
+        </button>
+    </div>
+    <div id="userProfile" class="login-box hidden">
+        <p>Logged in as: <span id="userEmail" class="user-info"></span></p>
     </div>
 
-    <script>
-        window.onload = function() {
-            let loggedUser = localStorage.getItem('googleUserEmail');
-            if(loggedUser) {
-                showDashboard(loggedUser);
-            }
+    <div class="form-group">
+        <label>1. Upload Base Picture or Video Flow</label>
+        <input type="file" id="mediaInput" accept="image/*,video/*">
+    </div>
 
-            let savedCh = localStorage.getItem('savedChannelLink');
-            if(savedCh) {
-                document.getElementById('savedChannelDisplay').innerHTML = "<b>Saved Channel:</b> <a href='" + savedCh + "' target='_blank' style='color: #2563eb;'>" + savedCh + "</a>";
-            }
-        };
+    <div class="form-group">
+        <label>2. Enter Video Prompt & Script Flow</label>
+        <textarea id="promptInput" placeholder="Yahan video ka prompt ya script likhein..."></textarea>
+    </div>
 
-        function simulateGoogleLogin() {
-            let email = prompt("Enter your Gmail account to sign in:", "user@gmail.com");
-            if(email && email.includes("@")) {
-                localStorage.setItem('googleUserEmail', email);
-                showDashboard(email);
-                alert("Successfully logged in with " + email);
-            } else {
-                alert("Please enter a valid Gmail address.");
-            }
+    <div class="form-group">
+        <label>3. Select Quality & Resolution</label>
+        <select id="qualitySelect">
+            <option value="hd">HD 1080p Cinematic</option>
+            <option value="4k">4K Ultra Resolution</option>
+        </select>
+    </div>
+
+    <button class="btn" onclick="startGeneration()">Generate Video Flow</button>
+
+    <div id="outputArea" class="output-section hidden">
+        <div class="spinner" id="loadingSpinner"></div>
+        <p id="statusText">Processing video flow...</p>
+    </div>
+</div>
+
+<script>
+    function loginWithGoogle() {
+        const simulatedEmail = "creator.user@gmail.com";
+        document.getElementById('loginBox').classList.add('hidden');
+        document.getElementById('userProfile').classList.remove('hidden');
+        document.getElementById('userEmail').innerText = simulatedEmail;
+    }
+
+    function startGeneration() {
+        const media = document.getElementById('mediaInput').files[0];
+        const prompt = document.getElementById('promptInput').value;
+
+        if(!media || !prompt) {
+            alert('Pehle apni picture/video upload karein aur prompt likhein!');
+            return;
         }
 
-        function showDashboard(email) {
-            document.getElementById('loginSection').style.display = "none";
-            document.getElementById('dashboardSection').style.display = "block";
-            document.getElementById('sidebarUserEmail').innerText = email;
-            let namePart = email.split('@')[0];
-            document.getElementById('sidebarUserName').innerText = namePart.charAt(0).toUpperCase() + namePart.slice(1);
-        }
+        const outputArea = document.getElementById('outputArea');
+        const spinner = document.getElementById('loadingSpinner');
+        const statusText = document.getElementById('statusText');
 
-        function handleLogout() {
-            localStorage.removeItem('googleUserEmail');
-            location.reload();
-        }
+        outputArea.classList.remove('hidden');
+        spinner.style.display = 'block';
+        statusText.innerText = "Processing media flow, generating frames and syncing AI...";
 
-        function saveChannelLink() {
-            let val = document.getElementById('channelInput').value.trim();
-            if(!val) {
-                alert("Please enter a channel link!");
-                return;
-            }
-            localStorage.setItem('savedChannelLink', val);
-            document.getElementById('savedChannelDisplay').innerHTML = "<b>Saved Channel:</b> <a href='" + val + "' target='_blank' style='color: #2563eb;'>" + val + "</a>";
-            document.getElementById('channelInput').value = "";
-            alert("Channel saved successfully!");
-        }
+        setTimeout(() => {
+            spinner.style.display = 'none';
+            statusText.innerHTML = "✅ Video Flow Ready Successfully! <br><br> <button style='padding:10px 20px; background:#22c55e; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold;'>Download Final Video</button>";
+        }, 4000);
+    }
+</script>
 
-        function startLiveStreamSession() {
-            let val = document.getElementById('videoLinkInput').value.trim();
-            if(!val) {
-                alert("Please enter a YouTube video link or ID!");
-                return;
-            }
-            
-            let videoId = val;
-            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            let match = val.match(regExp);
-            if (match && match[2].length === 11) {
-                videoId = match[2];
-            }
-
-            let currentDomain = window.location.hostname || "localhost";
-            
-            // یوٹیوب ویڈیو کو لائیو موڈ اور لائیو چیٹ کے ساتھ فورس کرنا
-            document.getElementById('ytIframe').src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1&live=1&controls=1&modestbranding=1";
-            document.getElementById('ytChatIframe').src = "https://www.youtube.com/live_chat?v=" + videoId + "&embed_domain=" + currentDomain;
-            
-            document.getElementById('liveWrapperBox').style.display = "block";
-            document.getElementById('videoLinkInput').value = "";
-            alert("Live Stream & Live Chat started successfully!");
-        }
-    </script>
 </body>
 </html>
