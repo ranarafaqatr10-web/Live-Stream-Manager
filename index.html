@@ -8,7 +8,7 @@
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3418695563807315"
          crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rafaqat Ali - Channel & Live Video Stream</title>
+    <title>Rafaqat Ali - Live Stream & Chat Manager</title>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
@@ -288,6 +288,24 @@
             border: none;
         }
 
+        .chat-container {
+            position: relative;
+            width: 100%;
+            height: 250px;
+            margin-top: 10px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            border: 2px solid #cbd5e1;
+            display: none;
+        }
+
+        .chat-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
         .status-text {
             font-weight: bold;
             color: #047857;
@@ -356,15 +374,20 @@
             <div class="saved-box" id="savedChannelDisplay">No Channel Saved Yet</div>
         </div>
 
-        <!-- 2. Step 2: Add Video Link & Stream on Page Section -->
+        <!-- 2. Step 2: Add Video Link & Live Stream + Chat Section -->
         <div class="section section-2">
-            <label>🔴 Step 2: Add Video Link & Stream Live on Page</label>
-            <input type="text" id="videoLinkInput" placeholder="Enter YouTube Video Link or ID to live stream">
-            <button class="action-btn video-btn" onclick="loadLiveVideo()">Stream Video on Page</button>
+            <label>🔴 Step 2: Add Live Video Link & View Live Chat</label>
+            <input type="text" id="videoLinkInput" placeholder="Enter YouTube Live Video Link or ID">
+            <button class="action-btn video-btn" onclick="loadLiveVideo()">Stream Video & Live Chat</button>
             
             <!-- Live Video Player Frame -->
             <div class="video-container" id="videoPlayerBox">
                 <iframe id="ytIframe" src="" allowfullscreen></iframe>
+            </div>
+
+            <!-- Live Chat Frame -->
+            <div class="chat-container" id="chatPlayerBox">
+                <iframe id="ytChatIframe" src=""></iframe>
             </div>
         </div>
 
@@ -483,22 +506,32 @@
         function loadLiveVideo() {
             let inputVal = document.getElementById('videoLinkInput').value.trim();
             if(inputVal === "") {
-                alert("Please enter a valid YouTube video link or ID!");
+                alert("Please enter a valid YouTube live link or ID!");
                 return;
             }
             let videoId = extractYouTubeID(inputVal);
             localStorage.setItem('savedYtVideo', videoId);
             displayVideo(videoId);
-            alert("Video is now streaming live on your page!");
+            alert("Live stream & Live chat loaded successfully!");
             document.getElementById('videoLinkInput').value = "";
         }
 
         function displayVideo(videoId) {
             let playerBox = document.getElementById('videoPlayerBox');
             let iframe = document.getElementById('ytIframe');
+            
+            let chatBox = document.getElementById('chatPlayerBox');
+            let chatIframe = document.getElementById('ytChatIframe');
+
             if(videoId) {
+                // Video player setup
                 iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
                 playerBox.style.display = "block";
+
+                // Live Chat embed setup (gets domain dynamically)
+                let currentDomain = window.location.hostname;
+                chatIframe.src = "https://www.youtube.com/live_chat?v=" + videoId + "&embed_domain=" + currentDomain;
+                chatBox.style.display = "block";
             }
         }
 
@@ -613,7 +646,7 @@
             if(lang === 'ur') {
                 alert("زبان کامیابی سے اردو میں تبدیل ہو گئی ہے!");
             } else if(lang === 'hi') {
-                alert("भाषा हिंदी में बदल दी गई है!");
+                भाषा हिंदी में बदल दी गई है!
             } else {
                 alert("Language changed to English successfully!");
             }
