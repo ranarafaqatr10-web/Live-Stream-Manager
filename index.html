@@ -2,11 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <!-- Google AdSense Verification Meta Tag -->
-    <meta name="google-adsense-account" content="ca-pub-3418695563807315">
-    <!-- Google AdSense Script -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3418695563807315"
-         crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rafaqat Ali - Live Stream & Chat Manager</title>
     <style>
@@ -15,9 +10,6 @@
             --navbar-bg: linear-gradient(135deg, #4f46e5, #7c3aed);
             --sidebar-bg: #1e1b4b;
             --card-bg: #ffffff;
-            --section-bg-1: #fdf4ff; 
-            --section-bg-2: #ecfdf5; 
-            --section-bg-3: #eff6ff; 
             --text-color: #0f172a;
             --border-color: #cbd5e1;
         }
@@ -60,7 +52,6 @@
             font-weight: 800;
             color: #ffffff;
             margin: 0;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
         }
 
         .balance-info {
@@ -70,7 +61,6 @@
             color: #ffffff;
             padding: 6px 14px;
             border-radius: 20px;
-            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
         }
 
         .sidebar {
@@ -85,7 +75,6 @@
             transition: 0.3s;
             padding-top: 60px;
             box-shadow: 10px 0 30px rgba(0,0,0,0.5);
-            border-right: 2px solid #4f46e5;
         }
 
         .sidebar a, .sidebar .sidebar-content {
@@ -94,15 +83,8 @@
             font-size: 15px;
             color: #e2e8f0;
             display: block;
-            transition: 0.2s;
             font-weight: 600;
             border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .sidebar a:hover {
-            background-color: #4f46e5;
-            color: #ffffff;
-            padding-left: 30px;
         }
 
         .sidebar .close-btn {
@@ -120,18 +102,6 @@
             font-weight: bold;
         }
 
-        .sidebar select {
-            background: #334155;
-            color: white;
-            border: 1px solid #475569;
-            padding: 8px;
-            border-radius: 8px;
-            width: calc(100% - 50px);
-            margin: 10px 25px;
-            font-size: 14px;
-            font-family: inherit;
-        }
-
         .container {
             width: 90%;
             max-width: 500px;
@@ -143,18 +113,16 @@
             border: 3px solid #6366f1;
         }
 
-        .section-1 { background: var(--section-bg-3); border: 2px solid #3b82f6; }
-        .section-2 { background: #fff7ed; border: 2px solid #f97316; }
-        .section-3 { background: var(--section-bg-2); border: 2px solid #10b981; }
-        .section-4 { background: var(--section-bg-1); border: 2px solid #ec4899; }
-
         .section {
             margin-bottom: 20px;
             padding: 20px;
             border-radius: 16px;
-            transition: all 0.3s ease;
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
+
+        .section-1 { background: #eff6ff; border: 2px solid #3b82f6; }
+        .section-2 { background: #fff7ed; border: 2px solid #f97316; }
+        .section-3 { background: #ecfdf5; border: 2px solid #10b981; }
 
         label {
             display: block;
@@ -176,12 +144,6 @@
             background: #ffffff;
             color: #333;
             font-weight: 600;
-        }
-
-        input:focus, select:focus {
-            border-color: #6366f1;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
 
         .row-group {
@@ -244,33 +206,19 @@
             cursor: pointer;
             width: 100%;
             box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
-            transition: 0.2s;
-        }
-
-        button.action-btn:hover {
-            transform: translateY(-2px);
-            opacity: 0.95;
         }
 
         .search-btn {
             background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
-            box-shadow: 0 6px 15px rgba(59, 130, 246, 0.3) !important;
         }
 
         .video-btn {
             background: linear-gradient(135deg, #ea580c, #f97316) !important;
-            box-shadow: 0 6px 15px rgba(249, 115, 22, 0.3) !important;
         }
 
-        .ad-btn {
-            background: linear-gradient(135deg, #db2777, #f43f5e) !important;
-            box-shadow: 0 6px 15px rgba(244, 63, 94, 0.35) !important;
-        }
-
-        .video-container {
+        .video-container, .chat-container {
             position: relative;
             width: 100%;
-            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
             height: 0;
             margin-top: 10px;
             border-radius: 12px;
@@ -278,44 +226,16 @@
             background: #000;
             display: none;
         }
+        .video-container { padding-bottom: 56.25%; }
+        .chat-container { height: 250px; background: #fff; border: 2px solid #cbd5e1; }
 
-        .video-container iframe {
+        .video-container iframe, .chat-container iframe {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             border: none;
-        }
-
-        .chat-container {
-            position: relative;
-            width: 100%;
-            height: 250px;
-            margin-top: 10px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #fff;
-            border: 2px solid #cbd5e1;
-            display: none;
-        }
-
-        .chat-container iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-
-        .status-text {
-            font-weight: bold;
-            color: #047857;
-            text-align: center;
-            margin-top: 10px;
-            font-size: 13px;
-            background: #ffffff;
-            padding: 10px;
-            border-radius: 10px;
-            border: 2px dashed #10b981;
         }
 
         .saved-box {
@@ -334,71 +254,53 @@
 </head>
 <body>
 
-    <!-- Navigation Bar -->
     <div class="navbar">
-        <button class="menu-icon" onclick="toggleMenu()">☰</button>
+        <button class="menu-icon" onclick="document.getElementById('mySidebar').style.width = '280px'">☰</button>
         <h1 class="app-title">Rafaqat Ali - Stream Manager</h1>
         <div class="balance-info">👑 <span id="navPlan">Free</span></div>
     </div>
 
-    <!-- Sidebar Menu -->
     <div id="mySidebar" class="sidebar">
-        <button class="close-btn" onclick="toggleMenu()">✕</button>
+        <button class="close-btn" onclick="document.getElementById('mySidebar').style.width = '0'">✕</button>
         <div style="text-align: center; padding: 25px 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
             <h3 style="margin: 0; color: #ffffff;" id="menuUserName">Rafaqat Ali</h3>
             <p style="margin: 8px 0 0 0; font-size: 12px; color: #94a3b8;">Official Creator Portal</p>
         </div>
-        
-        <div style="padding: 10px 0;">
-            <label style="color: #cbd5e1; font-size: 13px; padding: 0 25px;">Select Language (زبان):</label>
-            <select id="langSelect" onchange="changeLanguage()">
-                <option value="en">English (انگلش)</option>
-                <option value="ur">اردو (Urdu)</option>
-                <option value="hi">हिन्दी (Hindi)</option>
-            </select>
-        </div>
-
-        <a href="#" onclick="loginWithGoogle()">🔐 Login / Update Profile</a>
-        <a href="#" onclick="logoutUser()">🚪 Logout</a>
-        <a href="#" onclick="alert('Current Active Plan: ' + (localStorage.getItem('userActivePlan') || 'Free'))">👑 Check My Plan</a>
+        <a href="#" onclick="alert('Current Plan: ' + (localStorage.getItem('userActivePlan') || 'Free'))">👑 Check My Plan</a>
     </div>
 
-    <!-- Main Container -->
     <div class="container">
         
-        <!-- 1. Step 1: Add Channel Link Section -->
+        <!-- Step 1 -->
         <div class="section section-1">
             <label>📌 Step 1: Add Your YouTube Channel Link</label>
             <input type="text" id="channelInput" placeholder="Enter channel link (e.g. https://youtube.com/@...)">
-            <button class="action-btn search-btn" onclick="saveChannel()">Save Channel</button>
+            <button class="action-btn search-btn" onclick="saveChannelLink()">Save Channel</button>
             <div class="saved-box" id="savedChannelDisplay">No Channel Saved Yet</div>
         </div>
 
-        <!-- 2. Step 2: Add Video Link & Live Stream + Chat Section -->
+        <!-- Step 2 -->
         <div class="section section-2">
             <label>🔴 Step 2: Add Live Video Link & View Live Chat</label>
             <input type="text" id="videoLinkInput" placeholder="Enter YouTube Live Video Link or ID">
-            <button class="action-btn video-btn" onclick="loadLiveVideo()">Stream Video & Live Chat</button>
+            <button class="action-btn video-btn" onclick="loadLiveStreamVideo()">Stream Video & Live Chat</button>
             
-            <!-- Live Video Player Frame -->
             <div class="video-container" id="videoPlayerBox">
                 <iframe id="ytIframe" src="" allowfullscreen></iframe>
             </div>
-
-            <!-- Live Chat Frame -->
             <div class="chat-container" id="chatPlayerBox">
                 <iframe id="ytChatIframe" src=""></iframe>
             </div>
         </div>
 
-        <!-- 3. Subscription Plans & Payment Verification Section -->
+        <!-- Step 3 -->
         <div class="section section-3">
             <label>👑 Buy Streaming Plan & Verify Payment</label>
             
             <div class="row-group">
                 <div class="col">
                     <label>Select Plan:</label>
-                    <select id="planPackage" onchange="updatePrice()">
+                    <select id="planPackage" onchange="changePlanPrice(this)">
                         <option value="1 Week Plan" data-price="300">1 Week Plan</option>
                         <option value="1 Month Plan (Silver)" data-price="1000">1 Month (Silver)</option>
                         <option value="3 Months Plan" data-price="2700">3 Months Plan</option>
@@ -408,7 +310,7 @@
                 </div>
                 <div class="col">
                     <label>Payment Method:</label>
-                    <select id="paymentMethod" onchange="showMerchantInfo()">
+                    <select id="paymentMethod" onchange="changePaymentMethod(this)">
                         <option value="jazzcash">JazzCash</option>
                         <option value="easypaisa">EasyPaisa</option>
                         <option value="meezan">Meezan Bank</option>
@@ -416,141 +318,99 @@
                 </div>
             </div>
 
-            <!-- Auto-Calculated Price Display Box -->
             <div class="price-tag" id="priceDisplay">
                 Send Exact Amount: <b>300 PKR</b>
             </div>
 
-            <!-- Merchant Number Display Box (Rafaqat Ali) -->
             <div class="merchant-box" id="merchantBox">
                 <p><strong>Account Name:</strong> <span id="merchantName">Rafaqat Ali</span></p>
                 <p><strong>Account Number:</strong> <span id="merchantNumber">03029630434</span></p>
-                <button class="copy-btn" onclick="copyNumber()">Copy Account Number</button>
+                <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('merchantNumber').innerText); alert('Copied!');">Copy Account Number</button>
             </div>
 
-            <!-- Two Verification Fields -->
-            <label>1. Enter Transaction ID (TID):</label>
+            <label>Enter Transaction ID (TID):</label>
             <input type="text" id="tidInput" placeholder="Enter Transaction ID (Min 8 digits)">
 
-            <label>2. Upload Payment Screenshot:</label>
+            <label>Upload Payment Screenshot:</label>
             <input type="file" id="screenshotInput" accept="image/*">
 
-            <button class="action-btn" onclick="submitPayment()">Submit & Verify Payment</button>
-        </div>
-
-        <!-- 4. Free Live Stream Time Section -->
-        <div class="section section-4" style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #f59e0b;">
-            <label style="color: #b45309;">⏱️ Free Stream Time (Gold Rewards)</label>
-            <p style="font-size: 12px; color: #92400e; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Watch ad to earn minutes:</p>
-            <button class="action-btn ad-btn" id="adButton" onclick="watchAd()">Watch 30s Ad</button>
-            <div class="status-text" id="statusDisplay" style="border-color: #f59e0b; color: #b45309;">Watched Ads: 0 | Free Time: 0 mins</div>
+            <button class="action-btn" onclick="submitUserPayment()">Submit & Verify Payment</button>
         </div>
     </div>
 
     <script>
-        function toggleMenu() {
-            let sidebar = document.getElementById("mySidebar");
-            sidebar.style.width = sidebar.style.width === "280px" ? "0" : "280px";
-        }
-
+        // Page Load Recovery
         window.onload = function() {
-            refreshData();
-            updatePrice();
-            showMerchantInfo();
-            loadSavedChannel();
-            loadSavedVideo();
+            let savedCh = localStorage.getItem('savedChannelLink');
+            if(savedCh) {
+                document.getElementById('savedChannelDisplay').innerHTML = "<b>Saved Channel:</b> <a href='" + savedCh + "' target='_blank' style='color: #2563eb;'>" + savedCh + "</a>";
+            }
+
+            let savedVid = localStorage.getItem('savedYtVideo');
+            if(savedVid) {
+                playVideoAndChat(savedVid);
+            }
+
+            let activePlan = localStorage.getItem('userActivePlan');
+            if(activePlan) {
+                document.getElementById('navPlan').innerText = activePlan;
+            }
         };
 
-        function refreshData() {
-            let savedAds = localStorage.getItem('watchedAds') || 0;
-            let savedMinutes = localStorage.getItem('freeMinutes') || 0;
-            let savedPlan = localStorage.getItem('userActivePlan') || 'Free';
-            let savedUser = localStorage.getItem('userName');
-
-            document.getElementById('navPlan').innerText = savedPlan;
-            document.getElementById('statusDisplay').innerText = "Watched Ads: " + savedAds + " | Free Time: " + savedMinutes + " mins";
-
-            if(savedUser) {
-                document.getElementById('menuUserName').innerText = savedUser;
-            }
-        }
-
-        function saveChannel() {
-            let channelVal = document.getElementById('channelInput').value.trim();
-            if(channelVal === "") {
-                alert("Please enter a valid channel link!");
+        // 1. Save Channel Function
+        function saveChannelLink() {
+            let val = document.getElementById('channelInput').value.trim();
+            if(!val) {
+                alert("Please enter a channel link!");
                 return;
             }
-            localStorage.setItem('savedChannelLink', channelVal);
-            loadSavedChannel();
-            alert("Channel saved successfully!");
+            localStorage.setItem('savedChannelLink', val);
+            document.getElementById('savedChannelDisplay').innerHTML = "<b>Saved Channel:</b> <a href='" + val + "' target='_blank' style='color: #2563eb;'>" + val + "</a>";
             document.getElementById('channelInput').value = "";
+            alert("Channel saved successfully!");
         }
 
-        function loadSavedChannel() {
-            let channel = localStorage.getItem('savedChannelLink');
-            let displayBox = document.getElementById('savedChannelDisplay');
-            if(channel) {
-                displayBox.innerHTML = "<b>Saved Channel:</b> <a href='" + channel + "' target='_blank' style='color: #2563eb;'>" + channel + "</a>";
-            } else {
-                displayBox.innerText = "No Channel Saved Yet";
-            }
-        }
-
-        function extractYouTubeID(url) {
-            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            let match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : url;
-        }
-
-        function loadLiveVideo() {
-            let inputVal = document.getElementById('videoLinkInput').value.trim();
-            if(inputVal === "") {
-                alert("Please enter a valid YouTube live link or ID!");
+        // 2. Stream Video Function
+        function loadLiveStreamVideo() {
+            let val = document.getElementById('videoLinkInput').value.trim();
+            if(!val) {
+                alert("Please enter a YouTube video link or ID!");
                 return;
             }
-            let videoId = extractYouTubeID(inputVal);
-            localStorage.setItem('savedYtVideo', videoId);
-            displayVideo(videoId);
-            alert("Live stream & Live chat loaded successfully!");
-            document.getElementById('videoLinkInput').value = "";
-        }
-
-        function displayVideo(videoId) {
-            let playerBox = document.getElementById('videoPlayerBox');
-            let iframe = document.getElementById('ytIframe');
             
-            let chatBox = document.getElementById('chatPlayerBox');
-            let chatIframe = document.getElementById('ytChatIframe');
-
-            if(videoId) {
-                // Video player setup
-                iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
-                playerBox.style.display = "block";
-
-                // Live Chat embed setup (gets domain dynamically)
-                let currentDomain = window.location.hostname;
-                chatIframe.src = "https://www.youtube.com/live_chat?v=" + videoId + "&embed_domain=" + currentDomain;
-                chatBox.style.display = "block";
+            // Extract Video ID
+            let videoId = val;
+            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            let match = val.match(regExp);
+            if (match && match[2].length === 11) {
+                videoId = match[2];
             }
+
+            localStorage.setItem('savedYtVideo', videoId);
+            playVideoAndChat(videoId);
+            document.getElementById('videoLinkInput').value = "";
+            alert("Live stream & Chat loaded successfully!");
         }
 
-        function loadSavedVideo() {
-            let savedVideo = localStorage.getItem('savedYtVideo');
-            if(savedVideo) {
-                displayVideo(savedVideo);
-            }
+        function playVideoAndChat(videoId) {
+            document.getElementById('ytIframe').src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+            document.getElementById('videoPlayerBox').style.display = "block";
+
+            let currentDomain = window.location.hostname || "localhost";
+            document.getElementById('ytChatIframe').src = "https://www.youtube.com/live_chat?v=" + videoId + "&embed_domain=" + currentDomain;
+            document.getElementById('chatPlayerBox').style.display = "block";
         }
 
-        function updatePrice() {
-            let selectElem = document.getElementById('planPackage');
+        // 3. Price Changer Function
+        function changePlanPrice(selectElem) {
             let selectedOption = selectElem.options[selectElem.selectedIndex];
             let price = selectedOption.getAttribute('data-price');
             document.getElementById('priceDisplay').innerHTML = "Send Exact Amount: <b>" + price + " PKR</b>";
         }
 
-        function showMerchantInfo() {
-            let method = document.getElementById('paymentMethod').value;
+        // 4. Payment Method & Number Changer Function
+        function changePaymentMethod(selectElem) {
+            let method = selectElem.value;
             let nameElem = document.getElementById('merchantName');
             let numElem = document.getElementById('merchantNumber');
 
@@ -566,91 +426,23 @@
             }
         }
 
-        function copyNumber() {
-            let num = document.getElementById('merchantNumber').innerText;
-            navigator.clipboard.writeText(num);
-            alert("Account number copied: " + num);
-        }
-
-        function loginWithGoogle() {
-            let name = prompt("Enter your name:", "Rafaqat Ali");
-            if(name && name.trim() !== "") {
-                localStorage.setItem('userName', name);
-                refreshData();
-                alert("Profile updated successfully!");
-                toggleMenu();
-            }
-        }
-
-        function logoutUser() {
-            localStorage.removeItem('userName');
-            document.getElementById('menuUserName').innerText = "Rafaqat Ali";
-            refreshData();
-            alert("Logged out successfully!");
-            toggleMenu();
-        }
-
-        function submitPayment() {
+        // 5. Payment Submission
+        function submitUserPayment() {
             let tid = document.getElementById('tidInput').value.trim();
-            let screenshot = document.getElementById('screenshotInput').files[0];
             let selectElem = document.getElementById('planPackage');
             let selectedPlan = selectElem.value;
 
             if(tid.length < 8) {
-                alert("Please enter a valid Transaction ID (TID) containing at least 8 digits!");
-                return;
-            }
-
-            if(!screenshot) {
-                alert("Please upload the payment screenshot!");
+                alert("Please enter a valid Transaction ID (TID) of at least 8 digits!");
                 return;
             }
 
             localStorage.setItem('userActivePlan', selectedPlan);
-            refreshData();
-            alert("Payment & Screenshot submitted successfully! Your " + selectedPlan + " has been verified and activated.");
+            document.getElementById('navPlan').innerText = selectedPlan;
+            alert("Payment submitted successfully! Plan upgraded to: " + selectedPlan);
             
             document.getElementById('tidInput').value = "";
             document.getElementById('screenshotInput').value = "";
-        }
-
-        function watchAd() {
-            let btn = document.getElementById('adButton');
-            btn.disabled = true;
-            let timeLeft = 5; 
-            btn.innerText = "Ad Playing... (" + timeLeft + "s)";
-
-            let timer = setInterval(function() {
-                timeLeft--;
-                if(timeLeft > 0) {
-                    btn.innerText = "Ad Playing... (" + timeLeft + "s)";
-                } else {
-                    clearInterval(timer);
-                    btn.disabled = false;
-                    btn.innerText = "Watch 30s Ad";
-
-                    let ads = parseInt(localStorage.getItem('watchedAds') || 0) + 1;
-                    let minutes = parseInt(localStorage.getItem('freeMinutes') || 0) + 15;
-
-                    localStorage.setItem('watchedAds', ads);
-                    localStorage.setItem('freeMinutes', minutes);
-
-                    refreshData();
-                    alert("Ad completed! You earned 15 minutes of free stream time.");
-                }
-            }, 1000);
-        }
-
-        function changeLanguage() {
-            let lang = document.getElementById('langSelect').value;
-            if(lang === 'ur') {
-                alert("زبان کامیابی سے اردو میں تبدیل ہو گئی ہے!");
-            } else if(lang === 'hi') {
-                भाषा हिंदी में बदल दी गई है!
-            } else {
-                alert("Language changed to English successfully!");
-            }
-            toggleMenu();
         }
     </script>
 </body>
