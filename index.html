@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+here<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rafaqat Ali - Live Stream & Chat Manager</title>
+    <title>Rafaqat Ali - Stream Manager</title>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
@@ -48,18 +48,19 @@
         }
 
         .app-title {
-            font-size: 18px;
+            font-size: 17px;
             font-weight: 800;
             color: #ffffff;
             margin: 0;
+            text-align: center;
         }
 
-        .balance-info {
-            font-size: 13px;
+        .plan-badge {
+            font-size: 12px;
             font-weight: bold;
-            background: #f59e0b;
+            background: #10b981;
             color: #ffffff;
-            padding: 6px 14px;
+            padding: 6px 12px;
             border-radius: 20px;
         }
 
@@ -120,6 +121,7 @@
             box-shadow: 0 4px 10px rgba(0,0,0,0.03);
         }
 
+        .section-login { background: #f8fafc; border: 2px solid #64748b; text-align: center; }
         .section-1 { background: #eff6ff; border: 2px solid #3b82f6; }
         .section-2 { background: #fff7ed; border: 2px solid #f97316; }
         .section-3 { background: #ecfdf5; border: 2px solid #10b981; }
@@ -132,7 +134,7 @@
             color: #1e293b;
         }
 
-        input, select {
+        input {
             width: 100%;
             padding: 10px 12px;
             margin-top: 4px;
@@ -144,55 +146,6 @@
             background: #ffffff;
             color: #333;
             font-weight: 600;
-        }
-
-        .row-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .col {
-            flex: 1;
-        }
-
-        .price-tag {
-            background: #fffbeb;
-            border: 2px solid #f59e0b;
-            padding: 10px;
-            border-radius: 10px;
-            text-align: center;
-            margin-bottom: 12px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #d97706;
-        }
-
-        .merchant-box {
-            background: #ffffff;
-            border: 2px dashed #059669;
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 12px;
-            text-align: center;
-        }
-
-        .merchant-box p {
-            margin: 4px 0;
-            font-size: 13px;
-            font-weight: bold;
-            color: #047857;
-        }
-
-        .copy-btn {
-            background: #059669;
-            color: white;
-            border: none;
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-top: 5px;
         }
 
         button.action-btn {
@@ -208,6 +161,17 @@
             box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
         }
 
+        .google-login-btn {
+            background: #ffffff !important;
+            color: #334155 !important;
+            border: 2px solid #cbd5e1 !important;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: bold;
+        }
+
         .search-btn {
             background: linear-gradient(135deg, #2563eb, #3b82f6) !important;
         }
@@ -216,20 +180,19 @@
             background: linear-gradient(135deg, #ea580c, #f97316) !important;
         }
 
-        .video-container, .chat-container {
+        .video-container {
             position: relative;
             width: 100%;
             height: 0;
+            padding-bottom: 56.25%;
             margin-top: 10px;
             border-radius: 12px;
             overflow: hidden;
             background: #000;
             display: none;
         }
-        .video-container { padding-bottom: 56.25%; }
-        .chat-container { height: 250px; background: #fff; border: 2px solid #cbd5e1; }
 
-        .video-container iframe, .chat-container iframe {
+        .video-container iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -256,108 +219,101 @@
 
     <div class="navbar">
         <button class="menu-icon" onclick="document.getElementById('mySidebar').style.width = '280px'">☰</button>
-        <h1 class="app-title">Rafaqat Ali - Stream Manager</h1>
-        <div class="balance-info">👑 <span id="navPlan">Free</span></div>
+        <h1 class="app-title">Rafaqat Ali</h1>
+        <div class="plan-badge">FREE 24/7</div>
     </div>
 
     <div id="mySidebar" class="sidebar">
         <button class="close-btn" onclick="document.getElementById('mySidebar').style.width = '0'">✕</button>
         <div style="text-align: center; padding: 25px 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <h3 style="margin: 0; color: #ffffff;" id="menuUserName">Rafaqat Ali</h3>
-            <p style="margin: 8px 0 0 0; font-size: 12px; color: #94a3b8;">Official Creator Portal</p>
+            <h3 style="margin: 0; color: #ffffff;" id="sidebarUserName">Rafaqat Ali</h3>
+            <p style="margin: 8px 0 0 0; font-size: 12px; color: #94a3b8;" id="sidebarUserEmail">Not Logged In</p>
         </div>
-        <a href="#" onclick="alert('Current Plan: ' + (localStorage.getItem('userActivePlan') || 'Free'))">👑 Check My Plan</a>
+        <a href="#" onclick="handleLogout()">🚪 Logout / Switch Account</a>
     </div>
 
     <div class="container">
         
-        <!-- Step 1 -->
-        <div class="section section-1">
-            <label>📌 Step 1: Add Your YouTube Channel Link</label>
-            <input type="text" id="channelInput" placeholder="Enter channel link (e.g. https://youtube.com/@...)">
-            <button class="action-btn search-btn" onclick="saveChannelLink()">Save Channel</button>
-            <div class="saved-box" id="savedChannelDisplay">No Channel Saved Yet</div>
+        <!-- Google Login Section -->
+        <div class="section section-login" id="loginSection">
+            <label style="font-size: 15px; color: #0f172a; margin-bottom: 10px;">🔐 Google Login Required</label>
+            <p style="font-size: 12px; color: #64748b; margin-top: 0; margin-bottom: 15px;">Login with your Gmail account to manage and stream 24/7 live videos.</p>
+            <button class="action-btn google-login-btn" onclick="simulateGoogleLogin()">
+                <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.66-5.17 3.66-9.17z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3.05c-1.08.72-2.45 1.16-4.05 1.16-3.13 0-5.78-2.11-6.73-4.96H1.19v3.15C3.17 21.36 7.23 24 12 24z"/><path fill="#FBBC05" d="M5.27 14.24c-.25-.72-.39-1.49-.39-2.24s.14-1.52.39-2.24V6.6H1.19C.43 8.15 0 9.92 0 11.8s.43 3.65 1.19 5.2l4.08-2.76z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.23 0 3.17 2.64 1.19 6.6l4.08 3.15c.95-2.85 3.6-4.96 6.73-4.96z"/></svg>
+                Sign in with Google
+            </button>
         </div>
 
-        <!-- Step 2 -->
-        <div class="section section-2">
-            <label>🔴 Step 2: Add Live Video Link & View Live Chat</label>
-            <input type="text" id="videoLinkInput" placeholder="Enter YouTube Live Video Link or ID">
-            <button class="action-btn video-btn" onclick="loadLiveStreamVideo()">Stream Video & Live Chat</button>
+        <!-- Main Stream Manager Panel (Hidden until login) -->
+        <div id="dashboardSection" style="display: none;">
             
-            <div class="video-container" id="videoPlayerBox">
-                <iframe id="ytIframe" src="" allowfullscreen></iframe>
+            <!-- Step 1 -->
+            <div class="section section-1">
+                <label>📌 Step 1: Save Your YouTube Channel</label>
+                <input type="text" id="channelInput" placeholder="Enter channel link (e.g. https://youtube.com/@...)">
+                <button class="action-btn search-btn" onclick="saveChannelLink()">Save Channel</button>
+                <div class="saved-box" id="savedChannelDisplay">No Channel Saved Yet</div>
             </div>
-            <div class="chat-container" id="chatPlayerBox">
-                <iframe id="ytChatIframe" src=""></iframe>
-            </div>
-        </div>
 
-        <!-- Step 3 -->
-        <div class="section section-3">
-            <label>👑 Buy Streaming Plan & Verify Payment</label>
-            
-            <div class="row-group">
-                <div class="col">
-                    <label>Select Plan:</label>
-                    <select id="planPackage" onchange="changePlanPrice(this)">
-                        <option value="1 Week Plan" data-price="300">1 Week Plan</option>
-                        <option value="1 Month Plan (Silver)" data-price="1000">1 Month (Silver)</option>
-                        <option value="3 Months Plan" data-price="2700">3 Months Plan</option>
-                        <option value="6 Months Plan (Gold)" data-price="5000">6 Months (Gold)</option>
-                        <option value="1 Year Plan (VIP)" data-price="9000">1 Year (VIP)</option>
-                    </select>
-                </div>
-                <div class="col">
-                    <label>Payment Method:</label>
-                    <select id="paymentMethod" onchange="changePaymentMethod(this)">
-                        <option value="jazzcash">JazzCash</option>
-                        <option value="easypaisa">EasyPaisa</option>
-                        <option value="meezan">Meezan Bank</option>
-                    </select>
+            <!-- Step 2 -->
+            <div class="section section-2">
+                <label>🔴 Step 2: Free 24/7 Live Stream Setup</label>
+                <input type="text" id="videoLinkInput" placeholder="Enter YouTube Video Link or ID">
+                <button class="action-btn video-btn" onclick="startLiveStreamSession()">Start 24/7 Live Stream</button>
+                
+                <div class="video-container" id="videoPlayerBox">
+                    <iframe id="ytIframe" src="" allowfullscreen></iframe>
                 </div>
             </div>
 
-            <div class="price-tag" id="priceDisplay">
-                Send Exact Amount: <b>300 PKR</b>
+            <!-- Free Success Info Box -->
+            <div class="section section-3">
+                <label style="color: #065f46; font-size: 14px;">✨ Free Stream Active Status</label>
+                <p style="font-size: 12px; color: #047857; margin: 5px 0 0 0; line-height: 1.5;">
+                    Your channel is successfully linked for continuous 24/7 live broadcasting. All payment requirements have been permanently removed. Enjoy free unlimited streaming!
+                </p>
             </div>
 
-            <div class="merchant-box" id="merchantBox">
-                <p><strong>Account Name:</strong> <span id="merchantName">Rafaqat Ali</span></p>
-                <p><strong>Account Number:</strong> <span id="merchantNumber">03029630434</span></p>
-                <button class="copy-btn" onclick="navigator.clipboard.writeText(document.getElementById('merchantNumber').innerText); alert('Copied!');">Copy Account Number</button>
-            </div>
-
-            <label>Enter Transaction ID (TID):</label>
-            <input type="text" id="tidInput" placeholder="Enter Transaction ID (Min 8 digits)">
-
-            <label>Upload Payment Screenshot:</label>
-            <input type="file" id="screenshotInput" accept="image/*">
-
-            <button class="action-btn" onclick="submitUserPayment()">Submit & Verify Payment</button>
         </div>
     </div>
 
     <script>
-        // Page Load Recovery
         window.onload = function() {
+            let loggedUser = localStorage.getItem('googleUserEmail');
+            if(loggedUser) {
+                showDashboard(loggedUser);
+            }
+
             let savedCh = localStorage.getItem('savedChannelLink');
             if(savedCh) {
                 document.getElementById('savedChannelDisplay').innerHTML = "<b>Saved Channel:</b> <a href='" + savedCh + "' target='_blank' style='color: #2563eb;'>" + savedCh + "</a>";
             }
-
-            let savedVid = localStorage.getItem('savedYtVideo');
-            if(savedVid) {
-                playVideoAndChat(savedVid);
-            }
-
-            let activePlan = localStorage.getItem('userActivePlan');
-            if(activePlan) {
-                document.getElementById('navPlan').innerText = activePlan;
-            }
         };
 
-        // 1. Save Channel Function
+        function simulateGoogleLogin() {
+            let email = prompt("Enter your Gmail account to sign in:", "rafaqat@gmail.com");
+            if(email && email.includes("@")) {
+                localStorage.setItem('googleUserEmail', email);
+                showDashboard(email);
+                alert("Successfully logged in with " + email);
+            } else {
+                alert("Please enter a valid Gmail address.");
+            }
+        }
+
+        function showDashboard(email) {
+            document.getElementById('loginSection').style.display = "none";
+            document.getElementById('dashboardSection').style.display = "block";
+            document.getElementById('sidebarUserEmail').innerText = email;
+            let namePart = email.split('@')[0];
+            document.getElementById('sidebarUserName').innerText = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('googleUserEmail');
+            location.reload();
+        }
+
         function saveChannelLink() {
             let val = document.getElementById('channelInput').value.trim();
             if(!val) {
@@ -370,15 +326,13 @@
             alert("Channel saved successfully!");
         }
 
-        // 2. Stream Video Function
-        function loadLiveStreamVideo() {
+        function startLiveStreamSession() {
             let val = document.getElementById('videoLinkInput').value.trim();
             if(!val) {
                 alert("Please enter a YouTube video link or ID!");
                 return;
             }
             
-            // Extract Video ID
             let videoId = val;
             let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
             let match = val.match(regExp);
@@ -386,63 +340,10 @@
                 videoId = match[2];
             }
 
-            localStorage.setItem('savedYtVideo', videoId);
-            playVideoAndChat(videoId);
-            document.getElementById('videoLinkInput').value = "";
-            alert("Live stream & Chat loaded successfully!");
-        }
-
-        function playVideoAndChat(videoId) {
             document.getElementById('ytIframe').src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
             document.getElementById('videoPlayerBox').style.display = "block";
-
-            let currentDomain = window.location.hostname || "localhost";
-            document.getElementById('ytChatIframe').src = "https://www.youtube.com/live_chat?v=" + videoId + "&embed_domain=" + currentDomain;
-            document.getElementById('chatPlayerBox').style.display = "block";
-        }
-
-        // 3. Price Changer Function
-        function changePlanPrice(selectElem) {
-            let selectedOption = selectElem.options[selectElem.selectedIndex];
-            let price = selectedOption.getAttribute('data-price');
-            document.getElementById('priceDisplay').innerHTML = "Send Exact Amount: <b>" + price + " PKR</b>";
-        }
-
-        // 4. Payment Method & Number Changer Function
-        function changePaymentMethod(selectElem) {
-            let method = selectElem.value;
-            let nameElem = document.getElementById('merchantName');
-            let numElem = document.getElementById('merchantNumber');
-
-            if(method === 'jazzcash') {
-                nameElem.innerText = "Rafaqat Ali";
-                numElem.innerText = "03029630434";
-            } else if(method === 'easypaisa') {
-                nameElem.innerText = "Rafaqat Ali";
-                numElem.innerText = "03486739367";
-            } else if(method === 'meezan') {
-                nameElem.innerText = "Rafaqat Ali (Meezan Bank)";
-                numElem.innerText = "00300111825215";
-            }
-        }
-
-        // 5. Payment Submission
-        function submitUserPayment() {
-            let tid = document.getElementById('tidInput').value.trim();
-            let selectElem = document.getElementById('planPackage');
-            let selectedPlan = selectElem.value;
-
-            if(tid.length < 8) {
-                alert("Please enter a valid Transaction ID (TID) of at least 8 digits!");
-                return;
-            }
-
-            localStorage.setItem('userActivePlan', selectedPlan);
-            document.getElementById('navPlan').innerText = selectedPlan;
-            alert("Payment submitted successfully! Plan upgraded to: " + selectedPlan);
-            
-            document.getElementById('tidInput').value = "";
-            document.getElementById('screenshotInput').value = "";
+            document.getElementById('videoLinkInput').value = "";
+            alert("24/7 Live Stream broadcast started successfully!");
         }
     </script>
 </body>
