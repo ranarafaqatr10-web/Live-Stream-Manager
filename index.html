@@ -1,4 +1,4 @@
-here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -332,7 +332,7 @@ here<!DOCTYPE html>
         }
 
         function saveChannelLink() {
-            let val = document.getElementById('channelInputT' in window ? '' : document.getElementById('channelInput').value.trim()).trim();
+            let val = document.getElementById('channelInput').value.trim();
             if(!val) {
                 alert("Please enter a channel link!");
                 return;
@@ -359,8 +359,8 @@ here<!DOCTYPE html>
 
             let currentDomain = window.location.hostname || "localhost";
             
-            // لائیو موड پیرامیٹرز کے ساتھ پلیئر اور چیٹ لنک
-            document.getElementById('ytIframe').src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1&live=1&modestbranding=1";
+            // یوٹیوب ویڈیو کو لائیو موڈ اور لائیو چیٹ کے ساتھ فورس کرنا
+            document.getElementById('ytIframe').src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1&live=1&controls=1&modestbranding=1";
             document.getElementById('ytChatIframe').src = "https://www.youtube.com/live_chat?v=" + videoId + "&embed_domain=" + currentDomain;
             
             document.getElementById('liveWrapperBox').style.display = "block";
