@@ -1,4 +1,4 @@
-here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -272,21 +272,23 @@ here<!DOCTYPE html>
 </head>
 <body>
 
+    <!-- Navigation Bar -->
     <div class="navbar">
         <button class="menu-icon" onclick="toggleMenu()">☰</button>
         <h1 class="app-title">Live Stream Manager</h1>
-        <div class="balance-info">👑 Plan: <span id="navPlan">Free</span></div>
+        <div class="balance-info">👑 <span id="navPlan">Free</span></div>
     </div>
 
+    <!-- Sidebar Menu -->
     <div id="mySidebar" class="sidebar">
         <button class="close-btn" onclick="toggleMenu()">✕</button>
         <div style="text-align: center; padding: 25px 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <h3 style="margin: 0; color: #ffffff;" id="menuUserName">Guest User</h3>
+            <h3 style="margin: 0; color: #ffffff;" id="menuUserName">Ali</h3>
             <p style="margin: 8px 0 0 0; font-size: 12px; color: #94a3b8;">Online Account</p>
         </div>
         
         <div style="padding: 10px 0;">
-            <label style="color: #cbd5e1; font-size: 13px; padding: 0 25px;">زبان منتخب کریں (Select Language):</label>
+            <label style="color: #cbd5e1; font-size: 13px; padding: 0 25px;">Select Language (زبان):</label>
             <select id="langSelect" onchange="changeLanguage()">
                 <option value="en">English (انگلش)</option>
                 <option value="ur">اردو (Urdu)</option>
@@ -294,13 +296,14 @@ here<!DOCTYPE html>
             </select>
         </div>
 
-        <a href="#" onclick="loginWithGoogle()">🔐 Login with Google</a>
+        <a href="#" onclick="loginWithGoogle()">🔐 Login / Update Profile</a>
         <a href="#" onclick="logoutUser()">🚪 Logout</a>
         <a href="#" onclick="alert('Current Active Plan: ' + (localStorage.getItem('userActivePlan') || 'Free'))">👑 Check My Plan</a>
     </div>
 
+    <!-- Main Container -->
     <div class="container">
-        <!-- Channel Search Section -->
+        <!-- 1. Channel Search Section -->
         <div class="section section-1">
             <label>🔍 Open/Search Your Channel</label>
             <select id="platformSelect">
@@ -311,41 +314,40 @@ here<!DOCTYPE html>
             <button class="action-btn search-btn" onclick="searchChannel()">Open Channel</button>
         </div>
 
-        <!-- Subscription Plans & Payment Verification Section -->
+        <!-- 2. Subscription Plans & Payment Verification Section -->
         <div class="section section-2">
             <label>👑 Buy Streaming Plan & Verify Payment</label>
             
-            <!-- Side-by-Side Selection -->
             <div class="row-group">
                 <div class="col">
-                    <label>Select Plan Package:</label>
+                    <label>Select Plan:</label>
                     <select id="planPackage" onchange="updatePrice()">
                         <option value="1 Week Plan" data-price="300">1 Week Plan</option>
-                        <option value="1 Month Plan (Silver)" data-price="1000">1 Month Plan (Silver)</option>
+                        <option value="1 Month Plan (Silver)" data-price="1000">1 Month (Silver)</option>
                         <option value="3 Months Plan" data-price="2700">3 Months Plan</option>
-                        <option value="6 Months Plan (Gold)" data-price="5000">6 Months Plan (Gold)</option>
-                        <option value="1 Year Plan (VIP)" data-price="9000">1 Year Plan (VIP)</option>
+                        <option value="6 Months Plan (Gold)" data-price="5000">6 Months (Gold)</option>
+                        <option value="1 Year Plan (VIP)" data-price="9000">1 Year (VIP)</option>
                     </select>
                 </div>
                 <div class="col">
                     <label>Payment Method:</label>
                     <select id="paymentMethod" onchange="showMerchantInfo()">
-                        <option value="easypaisa">EasyPaisa</option>
                         <option value="jazzcash">JazzCash</option>
-                        <option value="meezan">Meezan Bank</option>
+                        <option value="easypaisa">EasyPaisa</option>
+                        <option value="meezan">Bank Account</option>
                     </select>
                 </div>
             </div>
 
             <!-- Auto-Calculated Price Display Box -->
             <div class="price-tag" id="priceDisplay">
-                Send Amount: <b>300 PKR</b>
+                Send Exact Amount: <b>300 PKR</b>
             </div>
 
-            <!-- Merchant Number Display Box -->
+            <!-- Merchant Number Display Box (Rafaqat Ali) -->
             <div class="merchant-box" id="merchantBox">
-                <p><strong>Account Name:</strong> <span id="merchantName">Muhammad Bilal</span></p>
-                <p><strong>Account Number:</strong> <span id="merchantNumber">03009876543</span></p>
+                <p><strong>Account Name:</strong> <span id="merchantName">Rafaqat Ali</span></p>
+                <p><strong>Account Number:</strong> <span id="merchantNumber">03029630434</span></p>
                 <button class="copy-btn" onclick="copyNumber()">Copy Account Number</button>
             </div>
 
@@ -359,7 +361,7 @@ here<!DOCTYPE html>
             <button class="action-btn" onclick="submitPayment()">Submit & Activate Plan</button>
         </div>
 
-        <!-- Free Live Stream Time Section -->
+        <!-- 3. Free Live Stream Time Section -->
         <div class="section section-3">
             <label>⏱️ Free Live Stream Time</label>
             <p style="font-size: 12px; color: #475569; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Watch full ad to earn minutes:</p>
@@ -406,16 +408,16 @@ here<!DOCTYPE html>
             let nameElem = document.getElementById('merchantName');
             let numElem = document.getElementById('merchantNumber');
 
-            // یہاں آپ اپنا اصل نام اور نمبر سیٹ کر سکتے ہیں
-            if(method === 'easypaisa') {
-                nameElem.innerText = "Muhammad Bilal";
-                numElem.innerText = "03009876543";
-            } else if(method === 'jazzcash') {
-                nameElem.innerText = "Muhammad Bilal";
-                numElem.innerText = "03011223344";
+            // رافقت علی کا نام اور نمبر یہاں سیٹ کر دیا گیا ہے
+            if(method === 'jazzcash') {
+                nameElem.innerText = "Rafaqat Ali";
+                numElem.innerText = "03029630434";
+            } else if(method === 'easypaisa') {
+                nameElem.innerText = "Rafaqat Ali";
+                numElem.innerText = "03029630434";
             } else {
-                nameElem.innerText = "Muhammad Bilal (Meezan Bank)";
-                numElem.innerText = "1234-56789012-34";
+                nameElem.innerText = "Rafaqat Ali (Bank Account)";
+                numElem.innerText = "03029630434";
             }
         }
 
@@ -426,18 +428,18 @@ here<!DOCTYPE html>
         }
 
         function loginWithGoogle() {
-            let name = prompt("Enter your name or Gmail:");
+            let name = prompt("Enter your name:", "Ali");
             if(name && name.trim() !== "") {
                 localStorage.setItem('userName', name);
                 refreshData();
-                alert("Successfully logged in!");
+                alert("Profile updated successfully!");
                 toggleMenu();
             }
         }
 
         function logoutUser() {
             localStorage.removeItem('userName');
-            document.getElementById('menuUserName').innerText = "Guest User";
+            document.getElementById('menuUserName').innerText = "Ali";
             refreshData();
             alert("Logged out successfully!");
             toggleMenu();
