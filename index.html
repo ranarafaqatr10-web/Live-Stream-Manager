@@ -3,185 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI VideoFlow Studio - Live Dynamic Creator</title>
+    <title>Ultimate AI Studio - Chat & Video Flow Creator</title>
     <style>
         :root {
             --bg-main: #07090e;
-            --bg-card: #121826;
-            --border-color: #1e293b;
+            --bg-card: #111827;
+            --border-color: #1f2937;
             --accent-blue: #38bdf8;
             --accent-purple: #818cf8;
-            --text-main: #f8fafc;
+            --accent-green: #4ade80;
+            --text-main: #f1f5f9;
             --text-muted: #94a3b8;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; }
-        body { background-color: var(--bg-main); color: var(--text-main); padding: 20px; direction: rtl; text-align: right; min-height: 100vh; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); padding: 20px; direction: rtl; text-align: right; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
         
-        .container { max-width: 900px; margin: 0 auto; background: var(--bg-card); padding: 30px; border-radius: 20px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); border: 1px solid var(--border-color); position: relative; }
+        .container { width: 100%; max-width: 850px; background: var(--bg-card); padding: 30px; border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.7); border: 1px solid var(--border-color); }
         
-        .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; border-bottom: 2px solid var(--border-color); padding-bottom: 18px; }
-        .logo-area h1 { font-size: 24px; font-weight: 800; background: linear-gradient(135deg, #38bdf8, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .logo-area p { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+        h1 { font-size: 26px; color: var(--accent-blue); text-align: center; margin-bottom: 25px; font-weight: 800; background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 
-        .control-group { margin-bottom: 22px; }
+        /* Chat Section */
+        .chat-box { height: 320px; background: #0f172a; border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+        .message { padding: 12px 16px; border-radius: 10px; font-size: 14px; line-height: 1.6; max-width: 85%; word-break: break-word; }
+        .user-msg { background: #1e3a8a; color: #fff; align-self: flex-start; }
+        .ai-msg { background: #1e293b; color: #e2e8f0; align-self: flex-end; border: 1px solid #334155; }
+
+        /* Media & Prompt Inputs */
+        .input-section { background: #0f172a; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; }
         label { display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-muted); font-size: 14px; }
-        input[type="file"], textarea, select { width: 100%; padding: 14px; background: #0f172a; border: 1px solid var(--border-color); color: #fff; border-radius: 10px; font-size: 14px; direction: rtl; outline: none; transition: 0.2s; }
-        textarea { resize: vertical; height: 95px; }
+        input[type="file"], textarea, select { width: 100%; padding: 12px; background: #111827; border: 1px solid var(--border-color); color: #fff; border-radius: 8px; font-size: 14px; direction: rtl; outline: none; }
+        textarea { resize: vertical; height: 85px; }
 
-        .generate-btn { display: block; width: 100%; background: linear-gradient(135deg, #0284c7, #4f46e5); color: white; padding: 16px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4); transition: 0.3s; }
-        .generate-btn:hover { opacity: 0.95; transform: translateY(-2px); }
+        .action-row { display: flex; gap: 10px; }
+        .btn { flex: 1; padding: 14px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; font-size: 15px; transition: 0.2s; }
+        .btn-primary { background: linear-gradient(135deg, #0ea5e9, #4f46e5); color: white; box-shadow: 0 5px 15px rgba(79,70,229,0.4); }
+        .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-voice { background: #374151; color: #fff; max-width: 60px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
 
-        .output-container { margin-top: 25px; padding: 20px; background: #0f172a; border-radius: 12px; border: 1px dashed #334155; }
-        .hidden { display: none; }
-        
-        .loader { border: 4px solid rgba(255,255,255,0.1); width: 45px; height: 45px; border-radius: 50%; border-left-color: var(--accent-blue); animation: spin 1s linear infinite; margin: 20px auto; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .result-card { background: #121826; padding: 20px; border-radius: 10px; margin-top: 15px; border: 1px solid var(--border-color); }
-        .result-card h3 { color: var(--accent-blue); margin-bottom: 8px; font-size: 15px; font-weight: 700; }
-        .result-card p { color: #cbd5e1; font-size: 14px; line-height: 1.6; margin-bottom: 15px; background: #0f172a; padding: 12px; border-radius: 8px; border: 1px solid #1e293b; word-break: break-word; }
-
-        .thumbnail-container { text-align: center; margin-bottom: 20px; }
-        #thumbnailCanvas { width: 100%; max-width: 100%; height: auto; border-radius: 10px; border: 2px solid var(--accent-blue); box-shadow: 0 10px 25px rgba(0,0,0,0.5); background: #000; }
-
-        .btn-row { display: flex; gap: 10px; margin-top: 15px; }
-        .action-dl-btn { flex: 1; background: #16a34a; color: white; padding: 12px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; text-align: center; font-size: 14px; transition: 0.2s; display: inline-block; }
-        .action-dl-btn:hover { background: #15803d; }
+        /* Output & Canvas */
+        .output-box { background: #0f172a; padding: 20px; border-radius: 12px; border: 1px solid var(--border-color); margin-top: 20px; display: none; }
+        .thumbnail-preview { text-align: center; margin-bottom: 15px; }
+        #thumbCanvas { width: 100%; max-width: 100%; height: auto; border-radius: 8px; border: 2px solid var(--accent-blue); background: #000; }
+        .result-content { font-size: 14px; line-height: 1.6; color: #cbd5e1; background: #111827; padding: 15px; border-radius: 8px; border: 1px solid var(--border-color); margin-top: 10px; word-break: break-word; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <div class="logo-area">
-            <h1>AI VideoFlow Studio Live</h1>
-            <p>آپ کے اصل ٹاپک پر مبنی ڈائنامیک اسٹوڈیو</p>
+    <h1>Ultimate AI Studio & Chat Assistant</h1>
+    
+    <div class="chat-box" id="chatContainer">
+        <div class="message ai-msg">ہیلو! میں آپ کا اے آئی اسسٹنٹ ہوں۔ آپ مجھ سے بات بھی کر سکتے ہیں، میڈیا یا ویڈیو فرام (Prompt) دے کر وائرل ٹائتل، ڈسکرپشن اور تھمب نیل تیار کروا سکتے ہیں۔</div>
+    </div>
+
+    <div class="input-section">
+        <div class="form-group">
+            <label>1. بیس تصویر یا ویڈیو (Media) اپ لوڈ کریں</label>
+            <input type="file" id="mediaInput" accept="image/*,video/*">
+        </div>
+        <div class="form-group">
+            <label>2. ویڈیو کا ٹاپک یا پراम्प्ट لکھیں (مثلاً: سورۃ فاتحہ، کوکنگ وغیرہ)</label>
+            <textarea id="promptInput" placeholder="یہاں اپنی بات یا ویڈیو کا موضوع لکھیں..."></textarea>
+        </div>
+        <div class="action-row">
+            <button class="btn btn-primary" onclick="processAllAI()">🚀 اے آئی کے ساتھ جنریٹ کریں</button>
+            <button class="btn btn-voice" onclick="toggleVoice()" title="بول کر بات کریں (Voice)">🎤</button>
         </div>
     </div>
 
-    <div class="control-group">
-        <label>ویڈیو کا اصل ٹاپک یا نام درج کریں (جو آپ لکھیں گے، وہی پروسیس ہوگا)</label>
-        <textarea id="userInput" placeholder="مثلاً: Surah Fatiha, Mobile Review, Cooking Recipe..."></textarea>
-    </div>
-
-    <button class="generate-btn" onclick="processRealData()">⚡ اصل ڈیٹا اور تھمب نیل جنریٹ کریں</button>
-
-    <div id="outputSection" class="output-container hidden">
-        <div class="loader" id="mainLoader"></div>
-        <div id="resultsContent" class="hidden">
-            
-            <div class="result-card">
-                <h3>🖼️ آپ کے ٹاپک کا اصلی تھمب نیل:</h3>
-                <div class="thumbnail-container">
-                    <canvas id="thumbnailCanvas" width="1280" height="720"></canvas>
-                </div>
-                <div class="btn-row">
-                    <a id="downloadThumbBtn" class="action-dl-btn" download="Real_Thumbnail.png">📥 تھمب نیل ڈاؤن لوڈ کریں</a>
-                </div>
-            </div>
-
-            <div class="result-card">
-                <h3>📌 رئیل ٹائتل اور ٹیگز:</h3>
-                <p id="resTitle"></p>
-
-                <h3>📝 رئیل ایس ای او ڈسکرپشن:</h3>
-                <p id="resDesc"></p>
-
-                <h3>💬 پن کمنٹ:</h3>
-                <p id="resComment"></p>
-            </div>
+    <div class="output-box" id="outputSection">
+        <h3 style="color: var(--accent-green); margin-bottom: 10px;">✨ اے آئی کا تیار کردہ رزلٹ:</h3>
+        
+        <div class="thumbnail-preview">
+            <canvas id="thumbCanvas" width="1280" height="720"></canvas>
         </div>
+
+        <div class="result-content" id="textContentResult"></div>
     </div>
 </div>
 
 <script>
-    function processRealData() {
-        // Get the exact value typed by user without any hardcoded fallback
-        const rawInput = document.getElementById('userInput').value.trim();
-        
-        if(!rawInput) {
-            alert("براہ کرم پہلے کوئی ٹاپک یا نام لکھیں!");
+    function processAllAI() {
+        const promptText = document.getElementById('promptInput').value.trim();
+        const fileInput = document.getElementById('mediaInput').files[0];
+        const chatContainer = document.getElementById('chatContainer');
+        const outputSec = document.getElementById('outputSection');
+        const textResult = document.getElementById('textContentResult');
+
+        if(!promptText && !fileInput) {
+            alert("براہ کرم کوئی ٹیکسٹ پراम्प्ट یا میڈیا فائل ضرور درج کریں!");
             return;
         }
 
-        const outSec = document.getElementById('outputSection');
-        const loader = document.getElementById('mainLoader');
-        const content = document.getElementById('resultsContent');
+        let userMsgText = promptText ? promptText : "मीडिया फाइल अपलोड کی گئی ہے۔";
+        
+        // 1. Add to Chat
+        const userDiv = document.createElement('div');
+        userDiv.className = 'message user-msg';
+        userDiv.innerText = userMsgText;
+        chatContainer.appendChild(userDiv);
 
-        outSec.classList.remove('hidden');
-        loader.style.display = 'block';
-        content.classList.add('hidden');
+        // 2. Generate Dynamic Canvas Thumbnail based on user prompt
+        outputSec.style.display = 'block';
+        const canvas = document.getElementById('thumbCanvas');
+        const ctx = canvas.getContext('2d');
+        ctx.clearRect(0, 0, 1280, 720);
 
-        setTimeout(() => {
-            loader.style.display = 'none';
-            content.classList.remove('hidden');
+        let grad = ctx.createLinearGradient(0, 0, 1280, 720);
+        grad.addColorStop(0, '#0f172a');
+        grad.addColorStop(1, '#1e293b');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, 1280, 720);
 
-            // 1. Generate Canvas Thumbnail strictly using user's input
-            const canvas = document.getElementById('thumbnailCanvas');
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, 1280, 720);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 10;
+        ctx.strokeRect(50, 50, 1180, 620);
 
-            // Dynamic Gradient
-            let grad = ctx.createLinearGradient(0, 0, 1280, 720);
-            grad.addColorStop(0, '#020617');
-            grad.addColorStop(0.5, '#1e293b');
-            grad.addColorStop(1, '#0f172a');
-            ctx.fillStyle = grad;
-            ctx.fillRect(0, 0, 1280, 720);
+        ctx.fillStyle = '#ffffff';
+        ctx.font = 'bold 60px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur = 15;
+        ctx.fillText(promptText ? promptText : "AI Studio Video Flow", 640, 320);
 
-            // Frame Border
-            ctx.strokeStyle = '#38bdf8';
-            ctx.lineWidth = 8;
-            ctx.strokeRect(60, 60, 1160, 600);
+        ctx.fillStyle = '#38bdf8';
+        ctx.font = 'bold 32px sans-serif';
+        ctx.fillText("⭐ AI MASTER EDITION ⭐", 640, 480);
 
-            // Draw User's Exact Text on Canvas
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 55px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.shadowColor = 'rgba(0, 0, 0, 0.9)';
-            ctx.shadowBlur = 20;
+        // 3. Set Text Results
+        let aiReplyHtml = `<strong>📌 وائرل ٹائتل:</strong> ${promptText || 'حسب فرمائش ویڈیو'} | مکمل گائیڈ<br><br>` +
+                          `<strong>📝 ایس ای او ڈسکرپشن:</strong> اس ویڈیو میں ہم نے '${promptText || 'نئے ٹاپک'}' کے حوالے سے مکمل تفصیلات فراہم کی ہیں۔ ویڈیو کو لائک اور شیئر ضرور کریں!<br><br>` +
+                          `<strong>💬 پن کمنٹ:</strong> آپ کو یہ سیشن کیسا لگا؟ اپنے خیالات نیچے کمنٹ میں بتائیں! 👇`;
+        
+        textResult.innerHTML = aiReplyHtml;
 
-            drawCustomText(ctx, rawInput, 640, 310, 1000, 75);
+        // 4. Add AI Response in Chat
+        const aiDiv = document.createElement('div');
+        aiDiv.className = 'message ai-msg';
+        aiDiv.innerHTML = "میں نے آپ کے دیے گئے ان پٹ کے مطابق ٹائتل، ڈسکرپشن اور تھمب نیل کامیابی سے تیار کر دیا ہے! نیچے چیک کریں۔";
+        chatContainer.appendChild(aiDiv);
 
-            // Sub-tag
-            ctx.fillStyle = '#38bdf8';
-            ctx.font = 'bold 30px sans-serif';
-            ctx.fillText("--- OFFICIAL CREATOR CUT ---", 640, 520);
-
-            // Set download link
-            document.getElementById('downloadThumbBtn').href = canvas.toDataURL('image/png');
-
-            // 2. Generate Real Text Content using user's exact input
-            document.getElementById('resTitle').innerText = rawInput + " | مکمل گائیڈ اور ڈیجیٹل پریزنٹیشن";
-            document.getElementById('resDesc').innerText = "اس ویڈیو میں ہم '" + rawInput + "' کے بارے میں بات کریں گے۔ تمام بنیادی اور اہم معلومات اس سٹوڈیو سیشن میں شامل کر دی گئی ہیں۔ ویڈیو کو مکمل دیکھیں اور لائک کریں۔";
-            document.getElementById('resComment').innerText = "کیا آپ کو '" + rawInput + "' کی یہ ویڈیو پسند آئی؟ اپنے خیالات نیچے کمنٹ میں بتائیں! 👇";
-
-        }, 1500);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+        document.getElementById('promptInput').value = '';
     }
 
-    // Precise multi-line text renderer for canvas
-    function drawCustomText(context, text, x, y, maxWidth, lineHeight) {
-        let words = text.split(' ');
-        let line = '';
-        let lines = [];
-
-        for(let n = 0; n < words.length; n++) {
-            let testLine = line + words[n] + ' ';
-            let metrics = context.measureText(testLine);
-            if (metrics.width > maxWidth && n > 0) {
-                lines.push(line);
-                line = words[n] + ' ';
-            } else {
-                line = testLine;
-            }
+    // Voice Simulation / Web Speech API Integration
+    function toggleVoice() {
+        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+            alert("معذرت، آپ کا براؤزر وائس ریکگنیشن کو سپورٹ نہیں کرتا۔");
+            return;
         }
-        lines.push(line);
 
-        let startY = y - ((lines.length - 1) * lineHeight) / 2;
-        for(let k = 0; k < lines.length; k++) {
-            context.fillText(lines[k], x, startY + (k * lineHeight));
-        }
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = 'ur-PK'; // Urdu / Hindi support
+        recognition.start();
+
+        recognition.onstart = function() {
+            alert("سن رہا ہوں... بولیں!");
+        };
+
+        recognition.onresult = function(event) {
+            const spokenText = event.results[0][0].transcript;
+            document.getElementById('promptInput').value = spokenText;
+            processAllAI();
+        };
+
+        recognition.onerror = function(event) {
+            alert("وائس ان پٹ میں خرابی پیش آئی۔");
+        };
     }
 </script>
 
