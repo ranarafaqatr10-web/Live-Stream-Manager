@@ -2,6 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <!-- Google AdSense Verification Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3418695563807315"
+         crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-3418695563807315">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Live Stream & Channel Manager</title>
@@ -283,7 +286,7 @@
     <div id="mySidebar" class="sidebar">
         <button class="close-btn" onclick="toggleMenu()">✕</button>
         <div style="text-align: center; padding: 25px 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
-            <h3 style="margin: 0; color: #ffffff;" id="menuUserName">Ali</h3>
+            <h3 style="margin: 0; color: #ffffff;" id="menuUserName">Rafaqat Ali</h3>
             <p style="margin: 8px 0 0 0; font-size: 12px; color: #94a3b8;">Online Account</p>
         </div>
         
@@ -408,7 +411,6 @@
             let nameElem = document.getElementById('merchantName');
             let numElem = document.getElementById('merchantNumber');
 
-            // رافقت علی کا نام اور نمبر یہاں سیٹ کر دیا گیا ہے
             if(method === 'jazzcash') {
                 nameElem.innerText = "Rafaqat Ali";
                 numElem.innerText = "03029630434";
@@ -428,7 +430,7 @@
         }
 
         function loginWithGoogle() {
-            let name = prompt("Enter your name:", "Ali");
+            let name = prompt("Enter your name:", "Rafaqat Ali");
             if(name && name.trim() !== "") {
                 localStorage.setItem('userName', name);
                 refreshData();
@@ -439,7 +441,7 @@
 
         function logoutUser() {
             localStorage.removeItem('userName');
-            document.getElementById('menuUserName').innerText = "Ali";
+            document.getElementById('menuUserName').innerText = "Rafaqat Ali";
             refreshData();
             alert("Logged out successfully!");
             toggleMenu();
