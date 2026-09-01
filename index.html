@@ -1,4 +1,4 @@
-here<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +8,7 @@ here<!DOCTYPE html>
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3418695563807315"
          crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rafaqat Ali - Live Stream & Channel Manager</title>
+    <title>Rafaqat Ali - Channel & Live Video Stream</title>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #0f172a, #1e1b4b, #312e81);
@@ -144,9 +144,9 @@ here<!DOCTYPE html>
         }
 
         .section-1 { background: var(--section-bg-3); border: 2px solid #3b82f6; }
-        .section-2 { background: var(--section-bg-2); border: 2px solid #10b981; }
-        .section-3 { background: var(--section-bg-1); border: 2px solid #ec4899; }
-        .section-4 { background: #fff7ed; border: 2px solid #f97316; }
+        .section-2 { background: #fff7ed; border: 2px solid #f97316; }
+        .section-3 { background: var(--section-bg-2); border: 2px solid #10b981; }
+        .section-4 { background: var(--section-bg-1); border: 2px solid #ec4899; }
 
         .section {
             margin-bottom: 20px;
@@ -257,21 +257,35 @@ here<!DOCTYPE html>
             box-shadow: 0 6px 15px rgba(59, 130, 246, 0.3) !important;
         }
 
+        .video-btn {
+            background: linear-gradient(135deg, #ea580c, #f97316) !important;
+            box-shadow: 0 6px 15px rgba(249, 115, 22, 0.3) !important;
+        }
+
         .ad-btn {
             background: linear-gradient(135deg, #db2777, #f43f5e) !important;
             box-shadow: 0 6px 15px rgba(244, 63, 94, 0.35) !important;
         }
 
-        .live-go-btn {
-            background: linear-gradient(135deg, #dc2626, #ef4444) !important;
-            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4) !important;
-            animation: pulse-live 2s infinite;
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            margin-top: 10px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+            display: none;
         }
 
-        @keyframes pulse-live {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-            100% { transform: scale(1); }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         .status-text {
@@ -286,13 +300,13 @@ here<!DOCTYPE html>
             border: 2px dashed #10b981;
         }
 
-        .saved-channel-box {
+        .saved-box {
             background: #ffffff;
             border: 2px solid #3b82f6;
-            padding: 12px;
+            padding: 10px;
             border-radius: 10px;
             margin-top: 10px;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: bold;
             color: #1e3a8a;
             word-break: break-all;
@@ -305,7 +319,7 @@ here<!DOCTYPE html>
     <!-- Navigation Bar -->
     <div class="navbar">
         <button class="menu-icon" onclick="toggleMenu()">☰</button>
-        <h1 class="app-title">Rafaqat Ali - Live Manager</h1>
+        <h1 class="app-title">Rafaqat Ali - Stream Manager</h1>
         <div class="balance-info">👑 <span id="navPlan">Free</span></div>
     </div>
 
@@ -333,27 +347,29 @@ here<!DOCTYPE html>
 
     <!-- Main Container -->
     <div class="container">
-        <!-- 1. Channel Add Section -->
+        
+        <!-- 1. Step 1: Add Channel Link Section -->
         <div class="section section-1">
-            <label>📌 Add Your Channel to App</label>
-            <select id="platformSelect">
-                <option value="youtube">YouTube</option>
-                <option value="tiktok">TikTok</option>
-            </select>
+            <label>📌 Step 1: Add Your YouTube Channel Link</label>
             <input type="text" id="channelInput" placeholder="Enter channel link (e.g. https://youtube.com/@...)">
-            <button class="action-btn search-btn" onclick="saveChannel()">Add Channel</button>
-            <div class="saved-channel-box" id="savedChannelDisplay">No Channel Added Yet</div>
+            <button class="action-btn search-btn" onclick="saveChannel()">Save Channel</button>
+            <div class="saved-box" id="savedChannelDisplay">No Channel Saved Yet</div>
         </div>
 
-        <!-- 2. Real YouTube Live Stream Launcher Section -->
-        <div class="section section-4" id="videoSection" style="display:none;">
-            <label>🔴 Start Real Live Broadcast on YouTube</label>
-            <p style="font-size: 12px; color: #7c2d12; margin-top: 0; margin-bottom: 10px;">Click below to launch YouTube Live Studio and go live on your channel instantly:</p>
-            <button class="action-btn live-go-btn" onclick="launchYouTubeLive()">📡 Go Live on YouTube Channel</button>
+        <!-- 2. Step 2: Add Video Link & Stream on Page Section -->
+        <div class="section section-2">
+            <label>🔴 Step 2: Add Video Link & Stream Live on Page</label>
+            <input type="text" id="videoLinkInput" placeholder="Enter YouTube Video Link or ID to live stream">
+            <button class="action-btn video-btn" onclick="loadLiveVideo()">Stream Video on Page</button>
+            
+            <!-- Live Video Player Frame -->
+            <div class="video-container" id="videoPlayerBox">
+                <iframe id="ytIframe" src="" allowfullscreen></iframe>
+            </div>
         </div>
 
         <!-- 3. Subscription Plans & Payment Verification Section -->
-        <div class="section section-2">
+        <div class="section section-3">
             <label>👑 Buy Streaming Plan & Verify Payment</label>
             
             <div class="row-group">
@@ -399,10 +415,10 @@ here<!DOCTYPE html>
             <button class="action-btn" onclick="submitPayment()">Submit & Verify Payment</button>
         </div>
 
-        <!-- 4. Free Live Stream Time Section (Golden Gold Style) -->
-        <div class="section section-3" style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #f59e0b;">
-            <label style="color: #b45309;">⏱️ Free Live Stream Time (Gold Rewards)</label>
-            <p style="font-size: 12px; color: #92400e; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Watch full ad to earn minutes:</p>
+        <!-- 4. Free Live Stream Time Section -->
+        <div class="section section-4" style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #f59e0b;">
+            <label style="color: #b45309;">⏱️ Free Stream Time (Gold Rewards)</label>
+            <p style="font-size: 12px; color: #92400e; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Watch ad to earn minutes:</p>
             <button class="action-btn ad-btn" id="adButton" onclick="watchAd()">Watch 30s Ad</button>
             <div class="status-text" id="statusDisplay" style="border-color: #f59e0b; color: #b45309;">Watched Ads: 0 | Free Time: 0 mins</div>
         </div>
@@ -419,6 +435,7 @@ here<!DOCTYPE html>
             updatePrice();
             showMerchantInfo();
             loadSavedChannel();
+            loadSavedVideo();
         };
 
         function refreshData() {
@@ -436,37 +453,60 @@ here<!DOCTYPE html>
         }
 
         function saveChannel() {
-            let val = document.getElementById('channelInput').value.trim();
-            let platform = document.getElementById('platformSelect').value;
-            if(val === "") {
+            let channelVal = document.getElementById('channelInput').value.trim();
+            if(channelVal === "") {
                 alert("Please enter a valid channel link!");
                 return;
             }
-            localStorage.setItem('savedChannelLink', val);
-            localStorage.setItem('savedPlatform', platform);
+            localStorage.setItem('savedChannelLink', channelVal);
             loadSavedChannel();
-            alert("Channel added successfully to the app!");
+            alert("Channel saved successfully!");
             document.getElementById('channelInput').value = "";
         }
 
         function loadSavedChannel() {
             let channel = localStorage.getItem('savedChannelLink');
-            let platform = localStorage.getItem('savedPlatform');
             let displayBox = document.getElementById('savedChannelDisplay');
-            let videoSection = document.getElementById('videoSection');
-
             if(channel) {
-                displayBox.innerHTML = "<b>Platform:</b> " + platform.toUpperCase() + "<br><b>Channel:</b> <a href='" + channel + "' target='_blank' style='color: #2563eb;'>" + channel + "</a>";
-                videoSection.style.display = "block";
+                displayBox.innerHTML = "<b>Saved Channel:</b> <a href='" + channel + "' target='_blank' style='color: #2563eb;'>" + channel + "</a>";
             } else {
-                displayBox.innerText = "No Channel Added Yet";
-                videoSection.style.display = "none";
+                displayBox.innerText = "No Channel Saved Yet";
             }
         }
 
-        function launchYouTubeLive() {
-            let youtubeLiveUrl = "https://studio.youtube.com/channel/live_control";
-            window.open(youtubeLiveUrl, '_blank');
+        function extractYouTubeID(url) {
+            let regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            let match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : url;
+        }
+
+        function loadLiveVideo() {
+            let inputVal = document.getElementById('videoLinkInput').value.trim();
+            if(inputVal === "") {
+                alert("Please enter a valid YouTube video link or ID!");
+                return;
+            }
+            let videoId = extractYouTubeID(inputVal);
+            localStorage.setItem('savedYtVideo', videoId);
+            displayVideo(videoId);
+            alert("Video is now streaming live on your page!");
+            document.getElementById('videoLinkInput').value = "";
+        }
+
+        function displayVideo(videoId) {
+            let playerBox = document.getElementById('videoPlayerBox');
+            let iframe = document.getElementById('ytIframe');
+            if(videoId) {
+                iframe.src = "https://www.youtube.com/embed/" + videoId + "?autoplay=1";
+                playerBox.style.display = "block";
+            }
+        }
+
+        function loadSavedVideo() {
+            let savedVideo = localStorage.getItem('savedYtVideo');
+            if(savedVideo) {
+                displayVideo(savedVideo);
+            }
         }
 
         function updatePrice() {
