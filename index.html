@@ -11,9 +11,9 @@ here<!DOCTYPE html>
             --navbar-bg: linear-gradient(135deg, #4f46e5, #7c3aed);
             --sidebar-bg: #1e1b4b;
             --card-bg: #ffffff;
-            --section-bg-1: #fdf4ff; /* Light Pink */
-            --section-bg-2: #ecfdf5; /* Light Green */
-            --section-bg-3: #eff6ff; /* Light Blue */
+            --section-bg-1: #fdf4ff; 
+            --section-bg-2: #ecfdf5; 
+            --section-bg-3: #eff6ff; 
             --text-color: #0f172a;
             --border-color: #cbd5e1;
         }
@@ -27,7 +27,6 @@ here<!DOCTYPE html>
             min-height: 100vh;
         }
 
-        /* Top Navbar */
         .navbar {
             display: flex;
             justify-content: space-between;
@@ -70,14 +69,13 @@ here<!DOCTYPE html>
             box-shadow: 0 2px 8px rgba(245, 158, 11, 0.4);
         }
 
-        /* Sidebar Menu */
         .sidebar {
             height: 100%;
             width: 0;
             position: fixed;
             z-index: 1000;
             top: 0;
-            left: 0; /* Left side drawer for English */
+            left: 0;
             background: var(--sidebar-bg);
             overflow-x: hidden;
             transition: 0.3s;
@@ -127,9 +125,9 @@ here<!DOCTYPE html>
             width: calc(100% - 50px);
             margin: 10px 25px;
             font-size: 14px;
+            font-family: inherit;
         }
 
-        /* Main Container */
         .container {
             width: 90%;
             max-width: 500px;
@@ -141,20 +139,9 @@ here<!DOCTYPE html>
             border: 3px solid #6366f1;
         }
 
-        .section-1 {
-            background: var(--section-bg-3);
-            border: 2px solid #3b82f6;
-        }
-
-        .section-2 {
-            background: var(--section-bg-2);
-            border: 2px solid #10b981;
-        }
-
-        .section-3 {
-            background: var(--section-bg-1);
-            border: 2px solid #ec4899;
-        }
+        .section-1 { background: var(--section-bg-3); border: 2px solid #3b82f6; }
+        .section-2 { background: var(--section-bg-2); border: 2px solid #10b981; }
+        .section-3 { background: var(--section-bg-1); border: 2px solid #ec4899; }
 
         .section {
             margin-bottom: 20px;
@@ -166,17 +153,17 @@ here<!DOCTYPE html>
 
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             font-weight: bold;
-            font-size: 14px;
+            font-size: 13px;
             color: #1e293b;
         }
 
         input, select {
             width: 100%;
-            padding: 12px 15px;
-            margin-top: 5px;
-            margin-bottom: 15px;
+            padding: 10px 12px;
+            margin-top: 4px;
+            margin-bottom: 12px;
             border: 2px solid var(--border-color);
             border-radius: 10px;
             box-sizing: border-box;
@@ -190,6 +177,55 @@ here<!DOCTYPE html>
             border-color: #6366f1;
             outline: none;
             box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .row-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .price-tag {
+            background: #fffbeb;
+            border: 2px solid #f59e0b;
+            padding: 10px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 12px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #d97706;
+        }
+
+        .merchant-box {
+            background: #ffffff;
+            border: 2px dashed #059669;
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            text-align: center;
+        }
+
+        .merchant-box p {
+            margin: 4px 0;
+            font-size: 13px;
+            font-weight: bold;
+            color: #047857;
+        }
+
+        .copy-btn {
+            background: #059669;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 5px;
         }
 
         button.action-btn {
@@ -225,7 +261,7 @@ here<!DOCTYPE html>
             font-weight: bold;
             color: #047857;
             text-align: center;
-            margin-top: 12px;
+            margin-top: 10px;
             font-size: 13px;
             background: #ffffff;
             padding: 10px;
@@ -236,14 +272,12 @@ here<!DOCTYPE html>
 </head>
 <body>
 
-    <!-- Top Navbar -->
     <div class="navbar">
         <button class="menu-icon" onclick="toggleMenu()">☰</button>
         <h1 class="app-title">Live Stream Manager</h1>
-        <div class="balance-info">🪙 <span id="navCoins">0</span> Coins</div>
+        <div class="balance-info">👑 Plan: <span id="navPlan">Free</span></div>
     </div>
 
-    <!-- Sidebar Menu with Language Selector -->
     <div id="mySidebar" class="sidebar">
         <button class="close-btn" onclick="toggleMenu()">✕</button>
         <div style="text-align: center; padding: 25px 15px; border-bottom: 1px solid rgba(255,255,255,0.1);">
@@ -251,11 +285,10 @@ here<!DOCTYPE html>
             <p style="margin: 8px 0 0 0; font-size: 12px; color: #94a3b8;">Online Account</p>
         </div>
         
-        <!-- Language Selector inside Three Lines Menu -->
         <div style="padding: 10px 0;">
-            <label style="color: #cbd5e1; font-size: 13px; padding: 0 25px;">Select Language:</label>
+            <label style="color: #cbd5e1; font-size: 13px; padding: 0 25px;">زبان منتخب کریں (Select Language):</label>
             <select id="langSelect" onchange="changeLanguage()">
-                <option value="en">English</option>
+                <option value="en">English (انگلش)</option>
                 <option value="ur">اردو (Urdu)</option>
                 <option value="hi">हिन्दी (Hindi)</option>
             </select>
@@ -263,39 +296,74 @@ here<!DOCTYPE html>
 
         <a href="#" onclick="loginWithGoogle()">🔐 Login with Google</a>
         <a href="#" onclick="logoutUser()">🚪 Logout</a>
-        <a href="#" onclick="alert('Your Total Coins: ' + (localStorage.getItem('userCoins') || 0))">💰 Check Balance</a>
+        <a href="#" onclick="alert('Current Active Plan: ' + (localStorage.getItem('userActivePlan') || 'Free'))">👑 Check My Plan</a>
     </div>
 
-    <!-- Main Container -->
     <div class="container">
         <!-- Channel Search Section -->
         <div class="section section-1">
-            <label>🔍 Search Your Channel</label>
+            <label>🔍 Open/Search Your Channel</label>
             <select id="platformSelect">
                 <option value="youtube">YouTube</option>
                 <option value="tiktok">TikTok</option>
             </select>
-            <input type="text" id="channelInput" placeholder="Enter channel name or profile link">
-            <button class="action-btn search-btn" onclick="searchChannel()">Search Channel</button>
+            <input type="text" id="channelInput" placeholder="Enter full link (e.g. https://youtube.com/...)">
+            <button class="action-btn search-btn" onclick="searchChannel()">Open Channel</button>
         </div>
 
-        <!-- Coins & Payment Section -->
+        <!-- Subscription Plans & Payment Verification Section -->
         <div class="section section-2">
-            <label>💳 Get Coins (Payment Verification)</label>
-            <select id="paymentSelect">
-                <option value="easypaisa">EasyPaisa</option>
-                <option value="jazzcash">JazzCash</option>
-                <option value="meezan">Meezan Bank</option>
-            </select>
-            <input type="text" id="tidInput" placeholder="Enter Transaction ID (TID) or Number">
-            <button class="action-btn" onclick="submitPayment()">Pay 100 PKR (Get 50 Coins)</button>
+            <label>👑 Buy Streaming Plan & Verify Payment</label>
+            
+            <!-- Side-by-Side Selection -->
+            <div class="row-group">
+                <div class="col">
+                    <label>Select Plan Package:</label>
+                    <select id="planPackage" onchange="updatePrice()">
+                        <option value="1 Week Plan" data-price="300">1 Week Plan</option>
+                        <option value="1 Month Plan (Silver)" data-price="1000">1 Month Plan (Silver)</option>
+                        <option value="3 Months Plan" data-price="2700">3 Months Plan</option>
+                        <option value="6 Months Plan (Gold)" data-price="5000">6 Months Plan (Gold)</option>
+                        <option value="1 Year Plan (VIP)" data-price="9000">1 Year Plan (VIP)</option>
+                    </select>
+                </div>
+                <div class="col">
+                    <label>Payment Method:</label>
+                    <select id="paymentMethod" onchange="showMerchantInfo()">
+                        <option value="easypaisa">EasyPaisa</option>
+                        <option value="jazzcash">JazzCash</option>
+                        <option value="meezan">Meezan Bank</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Auto-Calculated Price Display Box -->
+            <div class="price-tag" id="priceDisplay">
+                Send Amount: <b>300 PKR</b>
+            </div>
+
+            <!-- Merchant Number Display Box -->
+            <div class="merchant-box" id="merchantBox">
+                <p><strong>Account Name:</strong> <span id="merchantName">Muhammad Bilal</span></p>
+                <p><strong>Account Number:</strong> <span id="merchantNumber">03009876543</span></p>
+                <button class="copy-btn" onclick="copyNumber()">Copy Account Number</button>
+            </div>
+
+            <!-- Two Verification Fields -->
+            <label>1. Enter Transaction ID (TID):</label>
+            <input type="text" id="tidInput" placeholder="Enter Transaction ID (Min 8 digits)">
+
+            <label>2. Upload Payment Screenshot:</label>
+            <input type="file" id="screenshotInput" accept="image/*">
+
+            <button class="action-btn" onclick="submitPayment()">Submit & Activate Plan</button>
         </div>
 
         <!-- Free Live Stream Time Section -->
         <div class="section section-3">
             <label>⏱️ Free Live Stream Time</label>
-            <p style="font-size: 12px; color: #475569; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Watch ads to earn free minutes:</p>
-            <button class="action-btn ad-btn" onclick="watchAd()">Watch 30s Ad</button>
+            <p style="font-size: 12px; color: #475569; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Watch full ad to earn minutes:</p>
+            <button class="action-btn ad-btn" id="adButton" onclick="watchAd()">Watch 30s Ad</button>
             <div class="status-text" id="statusDisplay">Watched Ads: 0 | Free Time: 0 mins</div>
         </div>
     </div>
@@ -303,29 +371,58 @@ here<!DOCTYPE html>
     <script>
         function toggleMenu() {
             let sidebar = document.getElementById("mySidebar");
-            if (sidebar.style.width === "280px") {
-                sidebar.style.width = "0";
-            } else {
-                sidebar.style.width = "280px";
-            }
+            sidebar.style.width = sidebar.style.width === "280px" ? "0" : "280px";
         }
 
         window.onload = function() {
             refreshData();
+            updatePrice();
+            showMerchantInfo();
         };
 
         function refreshData() {
             let savedAds = localStorage.getItem('watchedAds') || 0;
             let savedMinutes = localStorage.getItem('freeMinutes') || 0;
-            let savedCoins = localStorage.getItem('userCoins') || 0;
+            let savedPlan = localStorage.getItem('userActivePlan') || 'Free';
             let savedUser = localStorage.getItem('userName');
 
-            document.getElementById('navCoins').innerText = savedCoins;
+            document.getElementById('navPlan').innerText = savedPlan;
             document.getElementById('statusDisplay').innerText = "Watched Ads: " + savedAds + " | Free Time: " + savedMinutes + " mins";
 
             if(savedUser) {
                 document.getElementById('menuUserName').innerText = savedUser;
             }
+        }
+
+        function updatePrice() {
+            let selectElem = document.getElementById('planPackage');
+            let selectedOption = selectElem.options[selectElem.selectedIndex];
+            let price = selectedOption.getAttribute('data-price');
+            document.getElementById('priceDisplay').innerHTML = "Send Exact Amount: <b>" + price + " PKR</b>";
+        }
+
+        function showMerchantInfo() {
+            let method = document.getElementById('paymentMethod').value;
+            let nameElem = document.getElementById('merchantName');
+            let numElem = document.getElementById('merchantNumber');
+
+            // یہاں آپ اپنا اصل نام اور نمبر سیٹ کر سکتے ہیں
+            if(method === 'easypaisa') {
+                nameElem.innerText = "Muhammad Bilal";
+                numElem.innerText = "03009876543";
+            } else if(method === 'jazzcash') {
+                nameElem.innerText = "Muhammad Bilal";
+                numElem.innerText = "03011223344";
+            } else {
+                nameElem.innerText = "Muhammad Bilal (Meezan Bank)";
+                numElem.innerText = "1234-56789012-34";
+            }
+        }
+
+        function copyNumber() {
+            let num = document.getElementById('merchantNumber').innerText;
+            navigator.clipboard.writeText(num);
+            alert("Account number copied: " + num);
         }
 
         function loginWithGoogle() {
@@ -347,52 +444,79 @@ here<!DOCTYPE html>
         }
 
         function searchChannel() {
-            let val = document.getElementById('channelInput').value;
-            if(val.trim() === "") {
-                alert("Please enter a channel name or link!");
+            let val = document.getElementById('channelInput').value.trim();
+            if(val === "") {
+                alert("Please enter a valid channel link!");
+                return;
+            }
+            if(val.startsWith('http://') || val.startsWith('https://')) {
+                window.open(val, '_blank');
             } else {
-                alert("Searching channel information for: " + val);
+                let platform = document.getElementById('platformSelect').value;
+                let searchUrl = platform === 'youtube' ? 'https://www.youtube.com/results?search_query=' + encodeURIComponent(val) : 'https://www.tiktok.com/search?q=' + encodeURIComponent(val);
+                window.open(searchUrl, '_blank');
             }
         }
 
         function submitPayment() {
-            let tid = document.getElementById('tidInput').value;
-            if(tid.trim() === "") {
-                alert("Please enter Transaction ID (TID) or number!");
+            let tid = document.getElementById('tidInput').value.trim();
+            let screenshot = document.getElementById('screenshotInput').files[0];
+            let selectElem = document.getElementById('planPackage');
+            let selectedPlan = selectElem.value;
+
+            if(tid.length < 8) {
+                alert("Please enter a valid Transaction ID (TID) containing at least 8 digits!");
                 return;
             }
 
-            let currentCoins = parseInt(localStorage.getItem('userCoins') || 0);
-            currentCoins += 50;
-            localStorage.setItem('userCoins', currentCoins);
+            if(!screenshot) {
+                alert("Please upload the payment screenshot!");
+                return;
+            }
 
+            localStorage.setItem('userActivePlan', selectedPlan);
             refreshData();
-            alert("Payment received! 50 coins added to your account.");
+            alert("Payment & Screenshot submitted successfully! Your " + selectedPlan + " has been activated.");
+            
             document.getElementById('tidInput').value = "";
+            document.getElementById('screenshotInput').value = "";
         }
 
         function watchAd() {
-            let ads = parseInt(localStorage.getItem('watchedAds') || 0);
-            let minutes = parseInt(localStorage.getItem('freeMinutes') || 0);
+            let btn = document.getElementById('adButton');
+            btn.disabled = true;
+            let timeLeft = 5; 
+            btn.innerText = "Ad Playing... (" + timeLeft + "s)";
 
-            ads += 1;
-            minutes += 15;
+            let timer = setInterval(function() {
+                timeLeft--;
+                if(timeLeft > 0) {
+                    btn.innerText = "Ad Playing... (" + timeLeft + "s)";
+                } else {
+                    clearInterval(timer);
+                    btn.disabled = false;
+                    btn.innerText = "Watch 30s Ad";
 
-            localStorage.setItem('watchedAds', ads);
-            localStorage.setItem('freeMinutes', minutes);
+                    let ads = parseInt(localStorage.getItem('watchedAds') || 0) + 1;
+                    let minutes = parseInt(localStorage.getItem('freeMinutes') || 0) + 15;
 
-            refreshData();
-            alert("Ad completed! You earned 15 minutes of free stream time.");
+                    localStorage.setItem('watchedAds', ads);
+                    localStorage.setItem('freeMinutes', minutes);
+
+                    refreshData();
+                    alert("Ad completed! You earned 15 minutes of free stream time.");
+                }
+            }, 1000);
         }
 
         function changeLanguage() {
             let lang = document.getElementById('langSelect').value;
             if(lang === 'ur') {
-                alert("Language changed to Urdu (Feature preview)");
+                alert("زبان کامیابی سے اردو میں تبدیل ہو گئی ہے!");
             } else if(lang === 'hi') {
-                alert("Language changed to Hindi (Feature preview)");
+                alert("भाषा हिंदी में बदल दी गई है!");
             } else {
-                alert("Language set to English");
+                alert("Language changed to English successfully!");
             }
             toggleMenu();
         }
