@@ -145,6 +145,7 @@
         .section-1 { background: var(--section-bg-3); border: 2px solid #3b82f6; }
         .section-2 { background: var(--section-bg-2); border: 2px solid #10b981; }
         .section-3 { background: var(--section-bg-1); border: 2px solid #ec4899; }
+        .section-4 { background: #fff7ed; border: 2px solid #f97316; }
 
         .section {
             margin-bottom: 20px;
@@ -260,6 +261,11 @@
             box-shadow: 0 6px 15px rgba(244, 63, 94, 0.35) !important;
         }
 
+        .video-btn {
+            background: linear-gradient(135deg, #ea580c, #f97316) !important;
+            box-shadow: 0 6px 15px rgba(249, 115, 22, 0.3) !important;
+        }
+
         .status-text {
             font-weight: bold;
             color: #047857;
@@ -270,6 +276,19 @@
             padding: 10px;
             border-radius: 10px;
             border: 2px dashed #10b981;
+        }
+
+        .saved-channel-box {
+            background: #ffffff;
+            border: 2px solid #3b82f6;
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: bold;
+            color: #1e3a8a;
+            word-break: break-all;
+            text-align: center;
         }
     </style>
 </head>
@@ -306,18 +325,27 @@
 
     <!-- Main Container -->
     <div class="container">
-        <!-- 1. Channel Search Section -->
+        <!-- 1. Channel Add Section -->
         <div class="section section-1">
-            <label>🔍 Open/Search Your Channel</label>
+            <label>📌 Add Your Channel to App</label>
             <select id="platformSelect">
                 <option value="youtube">YouTube</option>
                 <option value="tiktok">TikTok</option>
             </select>
-            <input type="text" id="channelInput" placeholder="Enter full link (e.g. https://youtube.com/...)">
-            <button class="action-btn search-btn" onclick="searchChannel()">Open Channel</button>
+            <input type="text" id="channelInput" placeholder="Enter channel link (e.g. https://youtube.com/@...)">
+            <button class="action-btn search-btn" onclick="saveChannel()">Add Channel</button>
+            <div class="saved-channel-box" id="savedChannelDisplay">No Channel Added Yet</div>
         </div>
 
-        <!-- 2. Subscription Plans & Payment Verification Section -->
+        <!-- 2. Video Link / Stream Management Section -->
+        <div class="section section-4" id="videoSection" style="display:none;">
+            <label>🎥 Add Channel Video Link</label>
+            <input type="text" id="videoLinkInput" placeholder="Paste specific video or live stream link">
+            <button class="action-btn video-btn" onclick="saveVideoLink()">Load & Play Video</button>
+            <div class="saved-channel-box" id="savedVideoDisplay" style="border-color: #f97316; color: #c2410c;">No Video Loaded Yet</div>
+        </div>
+
+        <!-- 3. Subscription Plans & Payment Verification Section -->
         <div class="section section-2">
             <label>👑 Buy Streaming Plan & Verify Payment</label>
             
@@ -364,7 +392,7 @@
             <button class="action-btn" onclick="submitPayment()">Submit & Activate Plan</button>
         </div>
 
-        <!-- 3. Free Live Stream Time Section -->
+        <!-- 4. Free Live Stream Time Section -->
         <div class="section section-3">
             <label>⏱️ Free Live Stream Time</label>
             <p style="font-size: 12px; color: #475569; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Watch full ad to earn minutes:</p>
@@ -383,6 +411,7 @@
             refreshData();
             updatePrice();
             showMerchantInfo();
+            loadSavedChannel();
         };
 
         function refreshData() {
@@ -397,6 +426,54 @@
             if(savedUser) {
                 document.getElementById('menuUserName').innerText = savedUser;
             }
+        }
+
+        function saveChannel() {
+            let val = document.getElementById('channelInput').value.trim();
+            let platform = document.getElementById('platformSelect').value;
+            if(val === "") {
+                alert("Please enter a valid channel link!");
+                return;
+            }
+            localStorage.setItem('savedChannelLink', val);
+            localStorage.setItem('savedPlatform', platform);
+            loadSavedChannel();
+            alert("Channel added successfully to the app!");
+            document.getElementById('channelInput').value = "";
+        }
+
+        function loadSavedChannel() {
+            let channel = localStorage.getItem('savedChannelLink');
+            let platform = localStorage.getItem('savedPlatform');
+            let displayBox = document.getElementById('savedChannelDisplay');
+            let videoSection = document.getElementById('videoSection');
+
+            if(channel) {
+                displayBox.innerHTML = "<b>Platform:</b> " + platform.toUpperCase() + "<br><b>Channel:</b> <a href='" + channel + "' target='_blank' style='color: #2563eb;'>" + channel + "</a>";
+                videoSection.style.display = "block"; // چینل ایڈ ہوتے ہی نیچے ویڈیو کا آپشن شو ہو جائے گا
+            } else {
+                displayBox.innerText = "No Channel Added Yet";
+                videoSection.style.display = "none";
+            }
+
+            let savedVideo = localStorage.getItem('savedVideoLink');
+            let videoDisplay = document.getElementById('savedVideoDisplay');
+            if(savedVideo) {
+                videoDisplay.innerHTML = "<b>Loaded Video:</b> <a href='" + savedVideo + "' target='_blank' style='color: #c2410c;'>" + savedVideo + "</a>";
+            }
+        }
+
+        function saveVideoLink() {
+            let vLink = document.getElementById('videoLinkInput').value.trim();
+            if(vLink === "") {
+                alert("Please enter a valid video link!");
+                return;
+            }
+            localStorage.setItem('savedVideoLink', vLink);
+            loadSavedChannel();
+            alert("Video loaded successfully!");
+            window.open(vLink, '_blank');
+            document.getElementById('videoLinkInput').value = "";
         }
 
         function updatePrice() {
@@ -445,21 +522,6 @@
             refreshData();
             alert("Logged out successfully!");
             toggleMenu();
-        }
-
-        function searchChannel() {
-            let val = document.getElementById('channelInput').value.trim();
-            if(val === "") {
-                alert("Please enter a valid channel link!");
-                return;
-            }
-            if(val.startsWith('http://') || val.startsWith('https://')) {
-                window.open(val, '_blank');
-            } else {
-                let platform = document.getElementById('platformSelect').value;
-                let searchUrl = platform === 'youtube' ? 'https://www.youtube.com/results?search_query=' + encodeURIComponent(val) : 'https://www.tiktok.com/search?q=' + encodeURIComponent(val);
-                window.open(searchUrl, '_blank');
-            }
         }
 
         function submitPayment() {
