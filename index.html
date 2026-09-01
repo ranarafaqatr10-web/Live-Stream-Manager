@@ -261,9 +261,16 @@
             box-shadow: 0 6px 15px rgba(244, 63, 94, 0.35) !important;
         }
 
-        .video-btn {
-            background: linear-gradient(135deg, #ea580c, #f97316) !important;
-            box-shadow: 0 6px 15px rgba(249, 115, 22, 0.3) !important;
+        .live-go-btn {
+            background: linear-gradient(135deg, #dc2626, #ef4444) !important;
+            box-shadow: 0 6px 15px rgba(239, 68, 68, 0.4) !important;
+            animation: pulse-live 2s infinite;
+        }
+
+        @keyframes pulse-live {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
         }
 
         .status-text {
@@ -337,12 +344,11 @@
             <div class="saved-channel-box" id="savedChannelDisplay">No Channel Added Yet</div>
         </div>
 
-        <!-- 2. Video Link / Stream Management Section -->
+        <!-- 2. Real YouTube Live Stream Launcher Section -->
         <div class="section section-4" id="videoSection" style="display:none;">
-            <label>🎥 Add Channel Video Link</label>
-            <input type="text" id="videoLinkInput" placeholder="Paste specific video or live stream link">
-            <button class="action-btn video-btn" onclick="saveVideoLink()">Load & Play Video</button>
-            <div class="saved-channel-box" id="savedVideoDisplay" style="border-color: #f97316; color: #c2410c;">No Video Loaded Yet</div>
+            <label>🔴 Start Real Live Broadcast on YouTube</label>
+            <p style="font-size: 12px; color: #7c2d12; margin-top: 0; margin-bottom: 10px;">Click below to launch YouTube Live Studio and go live on your channel instantly:</p>
+            <button class="action-btn live-go-btn" onclick="launchYouTubeLive()">📡 Go Live on YouTube Channel</button>
         </div>
 
         <!-- 3. Subscription Plans & Payment Verification Section -->
@@ -392,12 +398,12 @@
             <button class="action-btn" onclick="submitPayment()">Submit & Activate Plan</button>
         </div>
 
-        <!-- 4. Free Live Stream Time Section -->
-        <div class="section section-3">
-            <label>⏱️ Free Live Stream Time</label>
-            <p style="font-size: 12px; color: #475569; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Watch full ad to earn minutes:</p>
+        <!-- 4. Free Live Stream Time Section (Golden Gold Style) -->
+        <div class="section section-3" style="background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 2px solid #f59e0b;">
+            <label style="color: #b45309;">⏱️ Free Live Stream Time (Gold Rewards)</label>
+            <p style="font-size: 12px; color: #92400e; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Watch full ad to earn minutes:</p>
             <button class="action-btn ad-btn" id="adButton" onclick="watchAd()">Watch 30s Ad</button>
-            <div class="status-text" id="statusDisplay">Watched Ads: 0 | Free Time: 0 mins</div>
+            <div class="status-text" id="statusDisplay" style="border-color: #f59e0b; color: #b45309;">Watched Ads: 0 | Free Time: 0 mins</div>
         </div>
     </div>
 
@@ -450,30 +456,17 @@
 
             if(channel) {
                 displayBox.innerHTML = "<b>Platform:</b> " + platform.toUpperCase() + "<br><b>Channel:</b> <a href='" + channel + "' target='_blank' style='color: #2563eb;'>" + channel + "</a>";
-                videoSection.style.display = "block"; // چینل ایڈ ہوتے ہی نیچے ویڈیو کا آپشن شو ہو جائے گا
+                videoSection.style.display = "block";
             } else {
                 displayBox.innerText = "No Channel Added Yet";
                 videoSection.style.display = "none";
             }
-
-            let savedVideo = localStorage.getItem('savedVideoLink');
-            let videoDisplay = document.getElementById('savedVideoDisplay');
-            if(savedVideo) {
-                videoDisplay.innerHTML = "<b>Loaded Video:</b> <a href='" + savedVideo + "' target='_blank' style='color: #c2410c;'>" + savedVideo + "</a>";
-            }
         }
 
-        function saveVideoLink() {
-            let vLink = document.getElementById('videoLinkInput').value.trim();
-            if(vLink === "") {
-                alert("Please enter a valid video link!");
-                return;
-            }
-            localStorage.setItem('savedVideoLink', vLink);
-            loadSavedChannel();
-            alert("Video loaded successfully!");
-            window.open(vLink, '_blank');
-            document.getElementById('videoLinkInput').value = "";
+        function launchYouTubeLive() {
+            // یہ سیدھا آپ کو یوٹیوب سٹوڈیو لائیو کنٹرول روم پر لے جائے گا جہاں سے چینل پر اصلی لائیو اسٹریمنگ شروع ہوتی ہے
+            let youtubeLiveUrl = "https://studio.youtube.com/channel/live_control";
+            window.open(youtubeLiveUrl, '_blank');
         }
 
         function updatePrice() {
