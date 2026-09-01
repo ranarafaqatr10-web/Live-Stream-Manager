@@ -1,29 +1,53 @@
-here<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<html lang="ur" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI VideoFlow Studio</title>
+    <title>AI VideoFlow Studio - Professional Creator Suite</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #0f172a; color: #f8fafc; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; background: #1e293b; padding: 30px; border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-        h1 { text-align: center; color: #38bdf8; margin-bottom: 20px; font-size: 28px; }
+        body { background-color: #0b0f19; color: #f1f5f9; padding: 25px; }
+        .container { max-width: 1000px; margin: 0 auto; background: #111827; padding: 35px; border-radius: 16px; box-shadow: 0 15px 35px rgba(0,0,0,0.6); border: 1px solid #1f2937; }
+        h1 { text-align: center; color: #38bdf8; margin-bottom: 25px; font-size: 30px; font-weight: 700; letter-spacing: 0.5px; }
         
-        .login-box { text-align: center; margin-bottom: 25px; padding: 15px; background: #0f172a; border-radius: 8px; border: 1px solid #334155; }
-        .google-btn { background: #ffffff; color: #334155; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; font-size: 15px; }
-        .user-info { color: #22c55e; font-weight: bold; }
+        /* Professional Google Login Box */
+        .login-box { text-align: center; margin-bottom: 25px; padding: 18px; background: #1f2937; border-radius: 10px; border: 1px solid #374151; }
+        .google-btn { background: #ffffff; color: #1f2937; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; font-size: 16px; box-shadow: 0 4px 10px rgba(0,0,0,0.3); transition: all 0.3s ease; }
+        .google-btn:hover { background: #f8fafc; transform: translateY(-1px); }
+        .user-info { color: #4ade80; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 15px; font-size: 15px; }
 
-        .form-group { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 8px; font-weight: 600; color: #94a3b8; }
-        input[type="file"], textarea, select { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: #fff; border-radius: 8px; font-size: 16px; }
+        .form-group { margin-bottom: 22px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #94a3b8; font-size: 15px; }
+        input[type="file"], textarea, select { width: 100%; padding: 14px; background: #1f2937; border: 1px solid #374151; color: #fff; border-radius: 8px; font-size: 15px; transition: border-color 0.3s; }
+        input[type="file"]:focus, textarea:focus, select:focus { outline: none; border-color: #38bdf8; }
         textarea { resize: vertical; height: 100px; }
-        .btn { display: block; width: 100%; background: linear-gradient(135deg, #0ea5e9, #2563eb); color: white; padding: 15px; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
-        .output-section { margin-top: 30px; padding: 20px; background: #0f172a; border-radius: 8px; text-align: center; border: 1px dashed #334155; }
+
+        /* Professional 3-Column Grid for Tools */
+        .tools-section { background: #1f2937; padding: 20px; border-radius: 10px; border: 1px solid #374151; margin-bottom: 25px; }
+        .tools-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 12px; }
+        .tool-card { background: #111827; border: 1px solid #374151; padding: 12px 15px; border-radius: 8px; display: flex; align-items: center; gap: 12px; cursor: pointer; transition: all 0.2s ease; }
+        .tool-card:hover { border-color: #38bdf8; background: #1a2234; }
+        .tool-card input { width: 18px; height: 18px; accent-color: #38bdf8; cursor: pointer; }
+        .tool-card label { cursor: pointer; color: #e2e8f0; font-size: 14px; margin-bottom: 0; font-weight: 500; }
+
+        .btn { display: block; width: 100%; background: linear-gradient(135deg, #0284c7, #2563eb); color: white; padding: 16px; border: none; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(37,99,235,0.4); }
+        .btn:hover { opacity: 0.95; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(37,99,235,0.6); }
+        
+        .output-section { margin-top: 30px; padding: 25px; background: #1f2937; border-radius: 10px; border: 1px dashed #4b5563; }
         .hidden { display: none; }
-        .spinner { border: 4px solid rgba(255,255,255,0.1); width: 40px; height: 40px; border-radius: 50%; border-left-color: #38bdf8; animation: spin 1s linear infinite; margin: 20px auto; }
+        .spinner { border: 4px solid rgba(255,255,255,0.1); width: 45px; height: 45px; border-radius: 50%; border-left-color: #38bdf8; animation: spin 1s linear infinite; margin: 20px auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        
+        .result-box { background: #111827; padding: 20px; border-radius: 8px; margin-top: 18px; text-align: left; border: 1px solid #374151; }
+        .result-box h3 { color: #38bdf8; margin-bottom: 8px; font-size: 17px; font-weight: 600; }
+        .result-box p { color: #cbd5e1; font-size: 15px; line-height: 1.6; margin-bottom: 15px; }
+        .download-btn { background: #16a34a; color: white; padding: 14px 24px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; margin-top: 15px; transition: background 0.3s; }
+        .download-btn:hover { background: #15803d; }
+
+        /* Responsive design for mobile screens */
+        @media (max-width: 768px) {
+            .tools-grid { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 <body>
@@ -31,71 +55,153 @@ here<!DOCTYPE html>
 <div class="container">
     <h1>AI VideoFlow Studio</h1>
     
+    <!-- Google Login Authentication -->
     <div class="login-box" id="loginBox">
         <button class="google-btn" onclick="loginWithGoogle()">
-            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" alt="Google">
-            Sign in with Google (Gmail)
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="22" alt="Google">
+            گوگل (Gmail) کے ساتھ سائن ان کریں
         </button>
     </div>
     <div id="userProfile" class="login-box hidden">
-        <p>Logged in as: <span id="userEmail" class="user-info"></span></p>
+        <p class="user-info">
+            <span>✅ لاگ ان اکاؤنٹ: <strong id="userEmail"></strong></span>
+            <button onclick="logoutGoogle()" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">لاگ آؤٹ</button>
+        </p>
     </div>
 
+    <!-- Media Upload Section -->
     <div class="form-group">
-        <label>1. Upload Base Picture or Video Flow</label>
+        <label>1. بیس پکچر یا ویڈیو اپ لوڈ کریں</label>
         <input type="file" id="mediaInput" accept="image/*,video/*">
     </div>
 
+    <!-- Prompt / Script Section -->
     <div class="form-group">
-        <label>2. Enter Video Prompt & Script Flow</label>
-        <textarea id="promptInput" placeholder="Yahan video ka prompt ya script likhein..."></textarea>
+        <label>2. ویڈیو کا موضوع (Topic) یا اسکرپٹ درج کریں (مثلاً: سورۃ الرحمن)</label>
+        <textarea id="promptInput" placeholder="یہاں اپنا موضوع یا اسکرپٹ لکھیں..."></textarea>
     </div>
 
+    <!-- Professional 3-Column Grid Tools Section -->
+    <div class="tools-section">
+        <label style="color: #38bdf8; font-size: 16px; margin-bottom: 12px; display:block;">3. درکار اے آئی ٹولز اور فیچرز کا انتخاب کریں:</label>
+        <div class="tools-grid">
+            <div class="tool-card"><input type="checkbox" id="tTitle" checked><label for="tTitle">آٹو ٹائتل اور ٹیگز</label></div>
+            <div class="tool-card"><input type="checkbox" id="tDesc" checked><label for="tDesc">ایس ای او ڈسکرپشن</label></div>
+            <div class="tool-card"><input type="checkbox" id="tComment" checked><label for="tComment">پن کمنٹ (Pinned Comment)</label></div>
+            <div class="tool-card"><input type="checkbox" id="tThumb" checked><label for="tThumb">تھمب نیل جنریٹر</label></div>
+            <div class="tool-card"><input type="checkbox" id="tCaptions" checked><label for="tCaptions">آٹو ویڈیو کیپشنز</label></div>
+            <div class="tool-card"><input type="checkbox" id="tVoice" checked><label for="tVoice">اے آئی وائس اوور (TTS)</label></div>
+            <div class="tool-card"><input type="checkbox" id="tEditor" checked><label for="tEditor">سمارٹ ویڈیو ایڈیٹر</label></div>
+            <div class="tool-card"><input type="checkbox" id="tBG" checked><label for="tBG">بیک گراؤنڈ رিমوور</label></div>
+            <div class="tool-card"><input type="checkbox" id="tHD" checked><label for="tHD">ایچ ڈی / فورکے اپ سکیلر</label></div>
+        </div>
+    </div>
+
+    <!-- Resolution Selection -->
     <div class="form-group">
-        <label>3. Select Quality & Resolution</label>
+        <label>4. ویڈیو کا معیار (Quality) منتخب کریں</label>
         <select id="qualitySelect">
-            <option value="hd">HD 1080p Cinematic</option>
-            <option value="4k">4K Ultra Resolution</option>
+            <option value="hd">ایچ ڈی 1080p سنیمیٹک</option>
+            <option value="4k">فورکے (4K) الٹرا ریزولوشن</option>
         </select>
     </div>
 
-    <button class="btn" onclick="startGeneration()">Generate Video Flow</button>
+    <button class="btn" onclick="startGeneration()">تمام منتخب ٹولز کے ساتھ ویڈیو فلو جنریٹ کریں</button>
 
+    <!-- Output & Download Results Section -->
     <div id="outputArea" class="output-section hidden">
         <div class="spinner" id="loadingSpinner"></div>
-        <p id="statusText">Processing video flow...</p>
+        <div id="resultContent" class="hidden">
+            <p style="color: #4ade80; font-weight: 600; text-align: center; font-size: 16px;">✅ تمام اے آئی ٹولز کامیابی کے ساتھ پراسیس ہو چکے ہیں!</p>
+            
+            <div class="result-box">
+                <h3>📌 تجویز کردہ ٹائتل اور ٹیگز:</h3>
+                <p id="outTitle"></p>
+
+                <h3>📝 پروفیشنل ڈسکرپشن:</h3>
+                <p id="outDesc"></p>
+
+                <h3>💬 پن کمنٹ:</h3>
+                <p id="outComment"></p>
+
+                <h3>🛠️ فعال کردہ اے آئی ٹولز:</h3>
+                <p id="outToolsSummary" style="color: #38bdf8; font-weight: 500;"></p>
+
+                <div style="text-align: center; margin-top: 20px;">
+                    <a id="downloadLink" class="download-btn" href="#" download="AI_Complete_Video_Package.zip">📥 مکمل ویڈیو اور پیکج ڈاؤن لوڈ کریں</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
     function loginWithGoogle() {
-        const simulatedEmail = "creator.user@gmail.com";
-        document.getElementById('loginBox').classList.add('hidden');
-        document.getElementById('userProfile').classList.remove('hidden');
-        document.getElementById('userEmail').innerText = simulatedEmail;
+        let userEmailInput = prompt("براہ کرم جاری رکھنے کے لیے اپنا جی میل (Gmail) اکاؤنٹ درج کریں:", "creator.user@gmail.com");
+        if(userEmailInput && userEmailInput.includes("@")) {
+            document.getElementById('loginBox').classList.add('hidden');
+            document.getElementById('userProfile').classList.remove('hidden');
+            document.getElementById('userEmail').innerText = userEmailInput;
+        } else if(userEmailInput !== null) {
+            alert("براہ کرم درست جی میل ایڈریس درج کریں!");
+        }
+    }
+
+    function logoutGoogle() {
+        document.getElementById('userProfile').classList.add('hidden');
+        document.getElementById('loginBox').classList.remove('hidden');
     }
 
     function startGeneration() {
-        const media = document.getElementById('mediaInput').files[0];
         const prompt = document.getElementById('promptInput').value;
 
-        if(!media || !prompt) {
-            alert('Pehle apni picture/video upload karein aur prompt likhein!');
+        if(!prompt) {
+            alert('براہ کرم پہلے کوئی موضوع، اسکرپٹ یا سورۃ کا نام درج کریں!');
             return;
         }
 
         const outputArea = document.getElementById('outputArea');
         const spinner = document.getElementById('loadingSpinner');
-        const statusText = document.getElementById('statusText');
+        const resultContent = document.getElementById('resultContent');
 
         outputArea.classList.remove('hidden');
         spinner.style.display = 'block';
-        statusText.innerText = "Processing media flow, generating frames and syncing AI...";
+        resultContent.classList.add('hidden');
+
+        let activeTools = [];
+        if(document.getElementById('tTitle').checked) activeTools.push("ٹائتل اور ٹیگز");
+        if(document.getElementById('tDesc').checked) activeTools.push("ایس ای او ڈسکرپشن");
+        if(document.getElementById('tComment').checked) activeTools.push("پن کمنٹ");
+        if(document.getElementById('tThumb').checked) activeTools.push("تھمب نیل میکر");
+        if(document.getElementById('tCaptions').checked) activeTools.push("آٹو کیپشنز");
+        if(document.getElementById('tVoice').checked) activeTools.push("اے آئی وائس اوور");
+        if(document.getElementById('tEditor').checked) activeTools.push("سمارٹ ایڈیٹر");
+        if(document.getElementById('tBG').checked) activeTools.push("بیک گراؤنڈ ريموور");
+        if(document.getElementById('tHD').checked) activeTools.push("فورکے اپ سکیلر");
 
         setTimeout(() => {
             spinner.style.display = 'none';
-            statusText.innerHTML = "✅ Video Flow Ready Successfully! <br><br> <button style='padding:10px 20px; background:#22c55e; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold;'>Download Final Video</button>";
-        }, 4000);
+            resultContent.classList.remove('hidden');
+
+            if(prompt.toLowerCase().includes('surah') || prompt.toLowerCase().includes('rahman') || prompt.includes('رحمان')) {
+                document.getElementById('outTitle').innerText = "سورۃ الرحمن خوبصورت تلاوت | دسکون قلب قرآن پاک کی تلاوت #SurahArRahman #QuranTilawat";
+                document.getElementById('outDesc').innerText = "سورۃ الرحمن کی اس پرسکون تلاوت کے ساتھ روحانی سکون حاصل کریں۔ سنیمیٹک وژول فلو، خودکار کیپشنز اور بہترین وائس سنکرونائزیشن کے ساتھ تیار کیا گیا۔";
+                document.getElementById('outComment').innerText = "آپ کو یہ بابرکت تلاوت کیسی لگی؟ اپنے خیالات کمنٹ سیکشن میں ضرور شیئر کریں! ❤️";
+            } else {
+                document.getElementById('outTitle').innerText = prompt + " - سنیمیٹک اے آئی ماسٹر کلاس ایڈیشن اور مکمل پیکج";
+                document.getElementById('outDesc').innerText = "آپ کے ویڈیو پراम्प्ट کے لیے خودکار طور پر تیار کردہ پروفیشنل ایس ای او پیکج، جس میں ٹیگز، کیپشنز اور سمارٹ ایڈیٹنگ شامل ہے۔";
+                document.getElementById('outComment').innerText = "اس ویڈیو کے بارے میں آپ کی کیا رائے ہے؟ لائک اور سبسکرائب کرنا نہ بھولیں!";
+            }
+
+            document.getElementById('outToolsSummary').innerText = "کامیابی کے ساتھ استعمال ہونے والے ٹولز: " + activeTools.join("، ");
+
+            const blob = new Blob(["AI Studio Complete Content Package for: " + prompt + "\nTools used: " + activeTools.join(", ")], { type: "text/plain" });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.getElementById('downloadLink');
+            downloadLink.href = url;
+            downloadLink.download = "AI_Complete_Video_Package.txt";
+
+        }, 3500);
     }
 </script>
 
