@@ -1,71 +1,229 @@
-        outputSec.style.display = 'block';
-        const canvas = document.getElementById('thumbCanvas');
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, 1280, 720);
-
-        let grad = ctx.createLinearGradient(0, 0, 1280, 720);
-        grad.addColorStop(0, '#0f172a');
-        grad.addColorStop(1, '#1e293b');
-        ctx.fillStyle = grad;
-        ctx.fillRect(0, 0, 1280, 720);
-
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 10;
-        ctx.strokeRect(50, 50, 1180, 620);
-
-        ctx.fillStyle = '#ffffff';
-        ctx.font = 'bold 60px sans-serif';
-        ctx.textAlign = 'center';
-        ctx.shadowColor = 'rgba(0,0,0,0.8)';
-        ctx.shadowBlur = 15;
-        ctx.fillText(promptText ? promptText : "AI Studio Video Flow", 640, 320);
-
-        ctx.fillStyle = '#38bdf8';
-        ctx.font = 'bold 32px sans-serif';
-        ctx.fillText("⭐ AI MASTER EDITION ⭐", 640, 480);
-
-        // 3. Set Text Results
-        let aiReplyHtml = `<strong>📌 وائرل ٹائتل:</strong> ${promptText || 'حسب فرمائش ویڈیو'} | مکمل گائیڈ<br><br>` +
-                          `<strong>📝 ایس ای او ڈسکرپشن:</strong> اس ویڈیو میں ہم نے '${promptText || 'نئے ٹاپک'}' کے حوالے سے مکمل تفصیلات فراہم کی ہیں۔ ویڈیو کو لائک اور شیئر ضرور کریں!<br><br>` +
-                          `<strong>💬 پن کمنٹ:</strong> آپ کو یہ سیشن کیسا لگا؟ اپنے خیالات نیچے کمنٹ میں بتائیں! 👇`;
-        
-        textResult.innerHTML = aiReplyHtml;
-
-        // 4. Add AI Response in Chat
-        const aiDiv = document.createElement('div');
-        aiDiv.className = 'message ai-msg';
-        aiDiv.innerHTML = "میں نے آپ کے دیے گئے ان پٹ کے مطابق ٹائتل، ڈسکرپشن اور تھمب نیل کامیابی سے تیار کر دیا ہے! نیچے چیک کریں۔";
-        chatContainer.appendChild(aiDiv);
-
-        chatContainer.scrollTop = chatContainer.scrollHeight;
-        document.getElementById('promptInput').value = '';
-    }
-
-    // Voice Simulation / Web Speech API Integration
-    function toggleVoice() {
-        if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-            alert("معذرت، آپ کا براؤزر وائس ریکگنیشن کو سپورٹ نہیں کرتا۔");
-            return;
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gemini Pro Studio</title>
+    <style>
+        :root {
+            --bg-main: #131314;
+            --bg-card: #1e1f20;
+            --bg-input: #282a2c;
+            --border-color: #333537;
+            --accent-blue: #8ab4f8;
+            --text-main: #e3e3e3;
+            --text-muted: #c4c7c5;
         }
 
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'ur-PK'; // Urdu / Hindi support
-        recognition.start();
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', system-ui, sans-serif; }
+        body { background-color: var(--bg-main); color: var(--text-main); height: 100vh; display: flex; flex-direction: column; overflow: hidden; direction: rtl; text-align: right; }
 
-        recognition.onstart = function() {
-            alert("سن رہا ہوں... بولیں!");
-        };
+        /* Top Header */
+        .header { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; background: var(--bg-main); border-bottom: 1px solid var(--border-color); }
+        .header-left { display: flex; align-items: center; gap: 15px; }
+        .menu-btn { background: none; border: none; color: var(--text-main); font-size: 22px; cursor: pointer; padding: 5px; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; }
+        .menu-btn:hover { background: var(--bg-card); }
+        .logo-title { font-size: 18px; font-weight: 600; color: var(--text-main); letter-spacing: 0.5px; }
 
-        recognition.onresult = function(event) {
-            const spokenText = event.results[0][0].transcript;
-            document.getElementById('promptInput').value = spokenText;
-            processAllAI();
-        };
+        /* Sidebar Drawer */
+        .sidebar { position: fixed; top: 0; right: -300px; width: 280px; height: 100%; background: var(--bg-card); border-left: 1px solid var(--border-color); z-index: 1000; transition: 0.3s ease; display: flex; flex-direction: column; padding: 20px; }
+        .sidebar.open { right: 0; }
+        .sidebar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .sidebar-header h3 { font-size: 16px; color: var(--text-main); }
+        .close-sidebar { background: none; border: none; color: var(--text-muted); font-size: 20px; cursor: pointer; }
+        
+        .sidebar-menu-item { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: var(--text-main); text-decoration: none; border-radius: 25px; font-size: 14px; margin-bottom: 5px; transition: 0.2s; }
+        .sidebar-menu-item:hover { background: var(--bg-input); }
+        
+        .sidebar-section-title { font-size: 12px; color: var(--text-muted); margin: 20px 0 10px 0; font-weight: 600; }
+        .recents-list { overflow-y: auto; flex: 1; }
+        .recent-item { padding: 10px 15px; font-size: 13px; color: var(--text-muted); border-radius: 8px; cursor: pointer; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .recent-item:hover { background: var(--bg-input); color: var(--text-main); }
 
-        recognition.onerror = function(event) {
+        /* Overlay */
+        .overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); display: none; z-index: 999; }
+        .overlay.show { display: block; }
+
+        /* Chat Container */
+        .chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; max-width: 800px; width: 100%; margin: 0 auto; }
+        
+        .welcome-box { text-align: center; margin: auto; padding: 20px; }
+        .welcome-box h1 { font-size: 32px; background: linear-gradient(135deg, #9bbcf2, #c58af9, #f28b82); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 10px; font-weight: 700; }
+        .welcome-box p { color: var(--text-muted); font-size: 16px; }
+
+        .message { padding: 14px 18px; border-radius: 16px; font-size: 15px; line-height: 1.6; max-width: 85%; word-break: break-word; }
+        .user-msg { background: var(--bg-card); color: var(--text-main); align-self: flex-start; border-bottom-right-radius: 4px; border: 1px solid var(--border-color); }
+        .ai-msg { background: transparent; color: var(--text-main); align-self: flex-end; }
+
+        /* Input Area (Gemini Style) */
+        .input-area-wrapper { padding: 15px 20px; background: var(--bg-main); display: flex; justify-content: center; }
+        .input-box { max-width: 800px; width: 100%; background: var(--bg-input); border-radius: 28px; padding: 8px 15px; display: flex; align-items: center; gap: 10px; border: 1px solid transparent; transition: 0.2s; }
+        .input-box:focus-within { border-color: var(--accent-blue); background: #2d3033; }
+
+        .action-icon-btn { background: none; border: none; color: var(--text-muted); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: 0.2s; }
+        .action-icon-btn:hover { background: rgba(255,255,255,0.08); color: var(--text-main); }
+
+        .chat-input-field { flex: 1; background: none; border: none; color: var(--text-main); font-size: 15px; outline: none; padding: 8px; direction: rtl; }
+        .chat-input-field::placeholder { color: var(--text-muted); }
+
+        /* File Upload Modal / Menu */
+        .upload-popup { position: absolute; bottom: 85px; background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; display: none; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 100; }
+        .upload-popup.show { display: block; }
+        .upload-option { padding: 10px 15px; font-size: 14px; color: var(--text-main); cursor: pointer; border-radius: 8px; display: flex; gap: 10px; align-items: center; }
+        .upload-option:hover { background: var(--bg-input); }
+    </style>
+</head>
+<body>
+
+    <!-- Overlay -->
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar Drawer -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Gemini Menu</h3>
+            <button class="close-sidebar" onclick="toggleSidebar()">✕</button>
+        </div>
+        <a href="#" class="sidebar-menu-item" onclick="newChat()">➕ New chat</a>
+        <a href="#" class="sidebar-menu-item" onclick="alert('سرچ فیچر')">🔍 Search chats</a>
+        <a href="#" class="sidebar-menu-item" onclick="alert('میڈیا گیلری')">🖼️ Images & Media</a>
+        <a href="#" class="sidebar-menu-item" onclick="alert('لائبریری')">📚 Library</a>
+        
+        <div class="sidebar-section-title">Recent</div>
+        <div class="recents-list">
+            <div class="recent-item">سورہ البقرہ ماسٹر کلاس</div>
+            <div class="recent-item">مصنوعی ویوز والی ایپ کی حقیقت</div>
+            <div class="recent-item">تھمب نیل ڈیزائن گائیڈ</div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header">
+        <div class="header-left">
+            <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+            <span class="logo-title">Gemini</span>
+        </div>
+    </div>
+
+    <!-- Chat Container -->
+    <div class="chat-container" id="chatBox">
+        <div class="welcome-box" id="welcomeBox">
+            <h1>ہیلو، علی!</h1>
+            <p>آج میں آپ کی کیا مدد کر سکتا ہوں؟</p>
+        </div>
+    </div>
+
+    <!-- Input Area -->
+    <div class="input-area-wrapper" style="position: relative;">
+        <!-- Plus Popup Menu -->
+        <div class="upload-popup" id="uploadPopup">
+            <div class="upload-option" onclick="document.getElementById('fileInputHidden').click(); toggleUploadMenu();">📁 ڈیوائس سے فائل یا فوٹو اپ لوڈ کریں</div>
+            <div class="upload-option" onclick="alert('کیمرہ اوپن ہو رہا ہے...'); toggleUploadMenu();">📷 تصویر کھینچیں</div>
+        </div>
+        <input type="file" id="fileInputHidden" style="display:none" accept="image/*,video/*" onchange="handleFileSelect(event)">
+
+        <div class="input-box">
+            <button class="action-icon-btn" onclick="toggleUploadMenu()" title="فائل یا فوٹو جوڑیں (+)">➕</button>
+            <input type="text" class="chat-input-field" id="userInput" placeholder="Gemini سے پوچھیں..." onkeypress="handlePress(event)">
+            <button class="action-icon-btn" onclick="startVoiceInput()" title="مائیکروفون (Voice)">🎤</button>
+            <button class="action-icon-btn" onclick="sendMessage()" title="بھیجیں">➤</button>
+        </div>
+    </div>
+
+<script>
+    const chatBox = document.getElementById('chatBox');
+    const userInput = document.getElementById('userInput');
+    const welcomeBox = document.getElementById('welcomeBox');
+
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('show');
+    }
+
+    function toggleUploadMenu() {
+        document.getElementById('uploadPopup').classList.toggle('show');
+    }
+
+    function newChat() {
+        chatBox.innerHTML = `
+            <div class="welcome-box" id="welcomeBox">
+                <h1>ہیلو، علی!</h1>
+                <p>آج میں آپ کی کیا مدد کر سکتا ہوں؟</p>
+            </div>
+        `;
+        toggleSidebar();
+    }
+
+    function appendMessage(text, sender) {
+        if(welcomeBox && welcomeBox.parentNode) {
+            welcomeBox.remove();
+        }
+        const div = document.createElement('div');
+        div.className = `message ${sender === 'user' ? 'user-msg' : 'ai-msg'}`;
+        div.innerHTML = text;
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    function speakText(text) {
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ur-PK';
+            window.speechSynthesis.speak(utterance);
+        }
+    }
+
+    function sendMessage() {
+        const text = userInput.value.trim();
+        if(!text) return;
+
+        appendMessage(text, 'user');
+        userInput.value = '';
+
+        setTimeout(() => {
+            let aiReply = `جی بالکل! آپ کے حکم "${text}" پر کارروائی کر دی گئی ہے۔ اس حوالے سے مطلوبہ ٹائتل، ڈسکرپشن اور تھمب نیل فلو تیار ہے۔`;
+            appendMessage(aiReply, 'ai');
+            speakText(aiReply);
+        }, 800);
+    }
+
+    function handlePress(e) {
+        if(e.key === 'Enter') {
+            sendMessage();
+        }
+    }
+
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if(file) {
+            appendMessage(`📎 اپ لوڈ کردہ فائل: <strong>${file.name}</strong>`, 'user');
+            setTimeout(() => {
+                let reply = `میں نے آپ کی فائل (${file.name}) موصول کر لی ہے۔ اب بتائیں اس پر کیا کام کرنا ہے (تھمب نیل بنانا ہے یا ایڈیٹنگ کرنی ہے)؟`;
+                appendMessage(reply, 'ai');
+                speakText(reply);
+            }, 800);
+        }
+    }
+
+    function startVoiceInput() {
+        try {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SpeechRecognition) {
+                alert("براؤزر وائس ریکگنیشن سپورٹ نہیں کرتا۔");
+                return;
+            }
+            const recognition = new SpeechRecognition();
+            recognition.lang = 'ur-PK';
+            recognition.start();
+
+            recognition.onresult = function(event) {
+                userInput.value = event.results[0][0].transcript;
+                sendMessage();
+            };
+        } catch(e) {
             alert("وائس ان پٹ میں خرابی پیش آئی۔");
-        };
+        }
     }
 </script>
 
