@@ -3,121 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Auto Caption & Auto Emoji Studio</title>
+    <title>AI Video Auto Caption & Ads Studio</title>
     <style>
         :root {
-            --bg-main: #ffffff;
-            --text-main: #111827;
+            --bg-main: #0f172a;
+            --text-main: #f8fafc;
             --accent: #6366f1;
-            --border-color: #e5e7eb;
+            --border-color: #334155;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 100vh; padding: 20px 15px; direction: rtl; text-align: center; overflow: hidden; }
+        body { background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; justify-content: space-between; align-items: center; min-height: 100vh; padding: 15px; direction: rtl; text-align: center; }
 
-        .top-section { width: 100%; max-width: 450px; margin-top: 10px; }
-        h1 { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #111; }
-        p.sub-text { font-size: 14px; color: #4b5563; margin-bottom: 12px; }
+        .container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 12px; }
+        
+        h1 { font-size: 18px; font-weight: 700; color: #fff; }
+        p.sub-text { font-size: 13px; color: #94a3b8; }
 
-        /* آٹو کیپشن اور ایموجی شو ہونے والا باکس */
-        .caption-preview-box { background: #111827; color: #facc15; padding: 15px; border-radius: 10px; font-size: 19px; font-weight: bold; min-height: 75px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px; word-break: break-word; border: 2px solid #eab308; }
+        /* ویڈیو پلیئر سیکشن */
+        .video-box { width: 100%; height: 200px; background: #000; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        .placeholder-text { color: #64748b; font-size: 14px; position: absolute; }
 
-        .btn { display: block; width: 100%; background: #10b981; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; margin-bottom: 8px; }
+        /* ویڈیو کے اوپر چلنے والا آٹو کیپشن باکس */
+        .caption-overlay { position: absolute; bottom: 15px; background: rgba(0, 0, 0, 0.75); color: #facc15; padding: 8px 15px; border-radius: 6px; font-size: 16px; font-weight: bold; max-width: 90%; word-break: break-word; border: 1px solid #eab308; }
+
+        /* بٹنز */
+        .btn { display: block; width: 100%; background: #10b981; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; transition: 0.2s; }
         .btn:hover { background: #059669; }
 
-        .cancel-btn { background: none; border: none; color: #1e3a8a; font-size: 15px; font-weight: 600; cursor: pointer; padding: 5px; }
-        .cancel-btn:hover { text-decoration: underline; }
+        .secondary-btn { background: #3b82f6; }
+        .secondary-btn:hover { background: #2563eb; }
 
-        #videoFile { display: none; }
+        #videoInput { display: none; }
 
-        /* نیچے اشتہار (Ad Banner) کا ڈیزائن */
-        .ad-container { width: 100%; max-width: 450px; background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 5px; text-align: right; }
-        .ad-header { display: flex; justify-content: space-between; align-items: center; padding: 6px 10px; background: #f9fafb; border-bottom: 1px solid var(--border-color); }
-        .ad-badge { background: #3b82f6; color: white; font-size: 9px; font-weight: bold; padding: 2px 5px; border-radius: 4px; }
+        /* --- اشتہار (Ad Banner) لگانے کا سیکشن --- */
+        .ad-container { width: 100%; background: #1e293b; border: 1px solid var(--border-color); border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; text-align: right; margin-top: 10px; }
+        .ad-header { display: flex; justify-content: space-between; align-items: center; padding: 5px 10px; background: #0f172a; border-bottom: 1px solid var(--border-color); }
+        .ad-badge { background: #f59e0b; color: #000; font-size: 9px; font-weight: bold; padding: 2px 6px; border-radius: 4px; }
         .ad-body { display: flex; gap: 10px; padding: 10px; align-items: center; }
-        .ad-thumb { width: 90px; height: 60px; object-fit: cover; border-radius: 6px; background: #ccc; }
+        .ad-thumb { width: 80px; height: 55px; object-fit: cover; border-radius: 6px; background: #334155; }
         .ad-info { flex: 1; }
-        .ad-title { font-size: 13px; font-weight: 700; color: #111; margin-bottom: 2px; }
-        .ad-desc { font-size: 11px; color: #6b7280; line-height: 1.3; margin-bottom: 6px; }
-        .ad-cta { background: #1f2937; color: white; border: none; padding: 5px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; cursor: pointer; float: left; }
+        .ad-title { font-size: 12px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+        .ad-desc { font-size: 10px; color: #94a3b8; line-height: 1.3; margin-bottom: 5px; }
+        .ad-cta { background: #10b981; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 10px; font-weight: 600; cursor: pointer; float: left; }
     </style>
 </head>
 <body>
 
-    <input type="file" id="videoFile" accept="video/*" onchange="startProcessing()">
+    <div class="container">
+        <h1>✨ AI Video Auto Caption & Emoji</h1>
+        <p class="sub-text" id="statusMsg">اپنی ویڈیو اپ لوڈ کریں اور آٹو کیپشن دیکھیں</p>
 
-    <div class="top-section">
-        <h1>✨ AI Auto Caption & Auto Emojis</h1>
-        <p class="sub-text" id="statusText">بولیں اور خودکار الفاظ کے ساتھ ایموجیز پائیں</p>
-        
-        <div class="caption-preview-box" id="captionOutput">
-            کیپشن اور ایموجی یہاں ظاہر ہوں گے... 🎬
+        <!-- ویڈیو دکھانے اور پلے کرنے کی جگہ -->
+        <div class="video-box" id="videoBox">
+            <span class="placeholder-text" id="placeholderText">کوئی ویڈیو منتخب نہیں کی گئی 🎬</span>
+            <video id="mainVideo" controls style="display: none;"></video>
+            <div class="caption-overlay" id="captionOutput" style="display: none;">کیپشن یہاں آئیں گے...</div>
         </div>
 
-        <button class="btn" onclick="startVoiceCaptions()">🎙️ لائیو بولیں (آٹو کیپشن + آٹو ایموجی)</button>
-        <button class="cancel-btn" onclick="triggerUpload()">📁 ویڈیو سلیکٹ کریں</button>
-    </div>
+        <!-- چھپی ہوئی فائل فیلڈ جو ویڈیو اٹھائے گی -->
+        <input type="file" id="videoInput" accept="video/*" onchange="handleVideoUpload(event)">
 
-    <!-- نیچے چلنے والا اشتہار (Ad Section) -->
-    <div class="ad-container">
-        <div class="ad-header">
-            <span style="font-size: 10px; color: #9ca3af;">Sponsored Ad</span>
-            <span class="ad-badge">Ad</span>
-        </div>
-        <div class="ad-body">
-            <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300" class="ad-thumb" alt="Ad">
-            <div class="ad-info">
-                <div class="ad-title">Pakistan in Motion</div>
-                <div class="ad-desc">Explore the new collection today.</div>
-                <button class="ad-cta" onclick="alert('Ad clicked!')">More</button>
+        <!-- ویڈیو سلیکٹ کرنے کا بٹن -->
+        <button class="btn" onclick="document.getElementById('videoInput').click()">📁 ویڈیو سلیکٹ کریں</button>
+
+        <!-- لائیو بول کر کیپشن بنانے کا بٹن -->
+        <button class="btn secondary-btn" onclick="startVoiceCaptioning()">🎙️ لائیو بولیں (آٹو کیپشن + ایموجی)</button>
+
+        <!-- نیچے اشتہار (Ad Banner) - یہاں آپ اپنے اشتہار کا کوڈ یا لنک لگا سکتے ہیں -->
+        <div class="ad-container">
+            <div class="ad-header">
+                <span style="font-size: 9px; color: #94a3b8;">Sponsored Advertisement</span>
+                <span class="ad-badge">AD</span>
+            </div>
+            <div class="ad-body">
+                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=300" class="ad-thumb" alt="Ad">
+                <div class="ad-info">
+                    <div class="ad-title">Exclusive Offer</div>
+                    <div class="ad-desc">Discover amazing products and services today.</div>
+                    <button class="ad-cta" onclick="alert('اشتہار پر کلک کرنے کا شکریہ!')">Install Now</button>
+                </div>
             </div>
         </div>
     </div>
 
 <script>
-    function triggerUpload() {
-        document.getElementById('videoFile').click();
-    }
+    // 1. ویڈیو اپ لوڈ کرنے اور چلانے کا فنکشن
+    function handleVideoUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const videoElement = document.getElementById('mainVideo');
+            const placeholder = document.getElementById('placeholderText');
+            const captionBox = document.getElementById('captionOutput');
+            
+            videoElement.src = URL.createObjectURL(file);
+            videoElement.style.display = 'block';
+            placeholder.style.display = 'none';
+            captionBox.style.display = 'block';
 
-    function startProcessing() {
-        const fileInput = document.getElementById('videoFile');
-        if (fileInput.files.length > 0) {
-            document.getElementById('statusText').innerText = "پراسیسنگ جاری ہے...";
+            document.getElementById('statusMsg').innerText = "ویڈیو لوڈ ہو گئی! پلے کریں 👇";
+            
+            // فرضی خودکار کیپشن اور ایموجی ویڈیو پر دکھانا
             setTimeout(() => {
-                let sampleText = "مدینہ اور کھانا بہت شاندار ہے!";
-                document.getElementById('captionOutput').innerText = addAutoEmojis(sampleText);
-                document.getElementById('statusText').innerText = "مکمل ہو گیا! ✅";
-            }, 1500);
+                let sampleText = "مدینہ کا سفر اور کھانا بہت مزیدار تھا!";
+                captionBox.innerText = addAutoEmojis(sampleText);
+            }, 1000);
         }
     }
 
-    /* --- ٹاپک کے حساب سے آٹو ایموجی لگانے والا خاص فنکشن --- */
+    // 2. ٹاپک کے حساب سے خودکار ایموجی (Auto Emoji) ایڈ کرنے کا فنکشن
     function addAutoEmojis(text) {
         let modifiedText = text;
-        
-        if (text.includes("مدینہ") || text.includes("مکہ") || text.includes("مسجد") || text.includes("نبی")) {
+        if (text.includes("مدینہ") || text.includes("مکہ") || text.includes("مسجد")) {
             modifiedText += " 🕌 🕋";
         }
-        if (text.includes("کھانا") || text.includes("بھوک") || text.includes("بریانی") || text.includes("روٹی")) {
+        if (text.includes("کھانا") || text.includes("بھوک") || text.includes("بریانی")) {
             modifiedText += " 🍲 😋";
         }
         if (text.includes("پیار") || text.includes("محبت") || text.includes("دل")) {
             modifiedText += " ❤️ ✨";
         }
-        if (text.includes("پانی") || text.includes("پیاس")) {
-            modifiedText += " 💧 🥤";
-        }
-        if (text.includes("کار") || text.includes("گاڑی") || text.includes("سفر")) {
+        if (text.includes("سفر") || text.includes("کار") || text.includes("گاڑی")) {
             modifiedText += " 🚗 🛣️";
         }
-        if (text.includes("سلام") || text.includes("اللّه") || text.includes("خدا")) {
-            modifiedText += " ✨ 🤲";
-        }
-        
         return modifiedText;
     }
 
-    /* --- لائیو وائس اسپیچ اور آٹو ایموجی کا سسٹم --- */
-    function startVoiceCaptions() {
+    // 3. لائیو مائیک کے ذریعے بول کر کیپشن اور ایموجی لانے کا فنکشن
+    function startVoiceCaptioning() {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!SpeechRecognition) {
             alert("معذرت، آپ کا براؤزر اسپیچ ریکگنیشن سپورٹ نہیں کرتا۔");
@@ -125,12 +138,15 @@
         }
 
         const recognition = new SpeechRecognition();
-        recognition.lang = 'ur-PK'; // اردو زبان
+        recognition.lang = 'ur-PK';
         recognition.continuous = true;
         recognition.interimResults = true;
 
+        const captionBox = document.getElementById('captionOutput');
+        captionBox.style.display = 'block';
+
         recognition.onstart = function() {
-            document.getElementById('captionOutput').innerText = "سن رہا ہوں... بولنا شروع کریں 🎙️";
+            document.getElementById('statusMsg').innerText = "سن رہا ہوں... بولنا شروع کریں 🎙️";
         };
 
         recognition.onresult = function(event) {
@@ -138,13 +154,11 @@
             for (let i = event.resultIndex; i < event.results.length; i++) {
                 transcript += event.results[i][0].transcript;
             }
-            // بولے گئے جملے پر خودکار ایموجی لگانا
-            let finalWithEmojis = addAutoEmojis(transcript);
-            document.getElementById('captionOutput').innerText = finalWithEmojis;
+            captionBox.innerText = addAutoEmojis(transcript);
         };
 
         recognition.onerror = function(event) {
-            alert("وائस ان پٹ میں خرابی پیش آئی: " + event.error);
+            alert("وائس ایرر: " + event.error);
         };
 
         recognition.start();
