@@ -23,10 +23,10 @@
         video { width: 100%; height: 100%; object-fit: cover; }
         .placeholder-text { color: #64748b; font-size: 14px; position: absolute; }
         
-        /* ویڈیو کے اوپر چلنے والا آٹو کیپشن باکس */
-        .caption-overlay { position: absolute; bottom: 12px; background: rgba(0, 0, 0, 0.85); color: #facc15; padding: 8px 14px; border-radius: 6px; font-size: 16px; font-weight: bold; max-width: 92%; border: 1px solid #eab308; line-height: 1.4; }
+        /* ویڈیو کے اوپر چلنے والا کیپشن باکس */
+        .caption-overlay { position: absolute; bottom: 12px; background: rgba(0, 0, 0, 0.85); color: #facc15; padding: 8px 14px; border-radius: 6px; font-size: 16px; font-weight: bold; max-width: 92%; border: 1px solid #eab308; line-height: 1.4; display: none; }
 
-        /* --- اشتہار (Ad Banner) جو بالکل بیچ میں ہے --- */
+        /* --- اشتہار (Ad Banner) جو بیچ میں موجود ہے --- */
         .ad-container { width: 100%; background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; text-align: right; }
         .ad-header { display: flex; justify-content: space-between; align-items: center; padding: 4px 10px; background: #0f172a; border-bottom: 1px solid var(--border-color); }
         .ad-badge { background: #f59e0b; color: #000; font-size: 8px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
@@ -48,13 +48,13 @@
 
     <div class="container">
         <h1>✨ AI Video Auto Caption & Emoji</h1>
-        <p class="sub-text" id="statusMsg">ویڈیو سلیکٹ کریں اور خودکار کیپشن و ایموجی دیکھیں</p>
+        <p class="sub-text" id="statusMsg">اپنی ویڈیو سلیکٹ کریں</p>
 
         <!-- ویڈیو باکس -->
         <div class="video-box" id="videoBox">
             <span class="placeholder-text" id="placeholderText">کوئی ویڈیو منتخب نہیں کی گئی 🎬</span>
             <video id="mainVideo" controls style="display: none;"></video>
-            <div class="caption-overlay" id="captionOutput" style="display: none;">کیپشن یہاں آئیں گے...</div>
+            <div class="caption-overlay" id="captionOutput"></div>
         </div>
 
         <!-- 🌟 اشتہار (Ad Banner) جو بیچ میں موجود ہے -->
@@ -75,7 +75,7 @@
 
         <input type="file" id="videoInput" accept="video/*" onchange="handleVideoUpload(event)">
 
-        <!-- صرف ویڈیو سلیکٹ کرنے کا بٹن (مائیک کا کوڈ مکمل طور پر ہٹا دیا گیا ہے) -->
+        <!-- صرف ایک ہی سبز بٹن (مائیک کا کوڈ ہمیشہ کے لیے ختم) -->
         <button class="btn" onclick="document.getElementById('videoInput').click()">📁 ویڈیو سلیکٹ کریں</button>
     </div>
 
@@ -91,25 +91,10 @@
             videoElement.style.display = 'block';
             placeholder.style.display = 'none';
             captionBox.style.display = 'block';
+            captionBox.innerText = "ویڈیو پلے ہو رہی ہے... 🎬✨";
 
-            document.getElementById('statusMsg').innerText = "ویڈیو پلے ہو رہی ہے، آٹو کیپشن جاری ہے 👇";
-            
-            setTimeout(() => {
-                let sampleText = "یا مدینہ سب کا سہارا مدینہ سرکار کا مسیحا سرکار کا مدینہ گلی نبی پر یہ عمر بیتے ہو";
-                captionBox.innerText = addAutoEmojis(sampleText);
-            }, 800);
+            document.getElementById('statusMsg').innerText = "ویڈیو کامیابی سے لوڈ ہو گئی ہے";
         }
-    }
-
-    function addAutoEmojis(text) {
-        let modifiedText = text;
-        if (text.includes("مدینہ") || text.includes("نبی") || text.includes("سرکار") || text.includes("گلی")) {
-            modifiedText += " 🕌 🕋 ✨";
-        }
-        if (text.includes("نماز") || text.includes("مسجد")) {
-            modifiedText += " 🤲 🕌";
-        }
-        return modifiedText;
     }
 </script>
 
