@@ -1,62 +1,117 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Auto Caption & Emoji</title>
+    <style>
+        :root {
+            --bg-main: #0f172a;
+            --text-main: #f8fafc;
+            --border-color: #334155;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
+        body { background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; direction: rtl; text-align: center; }
+
+        .container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 12px; }
+        
+        h1 { font-size: 18px; font-weight: 700; color: #fff; }
+        p.sub-text { font-size: 13px; color: #94a3b8; }
+
+        /* ویڈیو پلیئر سیکشن */
+        .video-box { width: 100%; height: 210px; background: #000; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        .placeholder-text { color: #64748b; font-size: 14px; position: absolute; }
+        
+        /* ویڈیو کے اوپر چلنے والا آٹو کیپشن باکس */
+        .caption-overlay { position: absolute; bottom: 12px; background: rgba(0, 0, 0, 0.85); color: #facc15; padding: 8px 14px; border-radius: 6px; font-size: 16px; font-weight: bold; max-width: 92%; border: 1px solid #eab308; line-height: 1.4; }
+
+        /* --- اشتہار (Ad Banner) جو بالکل بیچ میں ہے --- */
+        .ad-container { width: 100%; background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; text-align: right; }
+        .ad-header { display: flex; justify-content: space-between; align-items: center; padding: 4px 10px; background: #0f172a; border-bottom: 1px solid var(--border-color); }
+        .ad-badge { background: #f59e0b; color: #000; font-size: 8px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
+        .ad-body { display: flex; gap: 10px; padding: 8px; align-items: center; }
+        .ad-thumb { width: 70px; height: 45px; object-fit: cover; border-radius: 5px; background: #334155; }
+        .ad-info { flex: 1; }
+        .ad-title { font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 2px; }
+        .ad-desc { font-size: 9px; color: #94a3b8; line-height: 1.2; margin-bottom: 4px; }
+        .ad-cta { background: #10b981; color: white; border: none; padding: 3px 8px; border-radius: 3px; font-size: 9px; font-weight: 600; cursor: pointer; float: left; }
+
+        /* صرف ویڈیو سلیکٹ کرنے کا سبز بٹن */
+        .btn { display: block; width: 100%; background: #10b981; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
+        .btn:hover { background: #059669; }
+        
+        #videoInput { display: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>✨ AI Video Auto Caption & Emoji</h1>
+        <p class="sub-text" id="statusMsg">ویڈیو سلیکٹ کریں اور خودکار کیپشن و ایموجی دیکھیں</p>
+
+        <!-- ویڈیو باکس -->
+        <div class="video-box" id="videoBox">
+            <span class="placeholder-text" id="placeholderText">کوئی ویڈیو منتخب نہیں کی گئی 🎬</span>
+            <video id="mainVideo" controls style="display: none;"></video>
+            <div class="caption-overlay" id="captionOutput" style="display: none;">کیپشن یہاں آئیں گے...</div>
+        </div>
+
+        <!-- 🌟 اشتہار (Ad Banner) جو بیچ میں موجود ہے -->
+        <div class="ad-container">
+            <div class="ad-header">
+                <span style="font-size: 8px; color: #94a3b8;">Sponsored Advertisement</span>
+                <span class="ad-badge">AD</span>
+            </div>
+            <div class="ad-body">
+                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=300" class="ad-thumb" alt="Ad">
+                <div class="ad-info">
+                    <div class="ad-title">Exclusive Offer</div>
+                    <div class="ad-desc">Discover amazing products and services today.</div>
+                    <button class="ad-cta" onclick="alert('اشتہار پر کلک کرنے کا شکریہ!')">Install Now</button>
+                </div>
+            </div>
+        </div>
+
+        <input type="file" id="videoInput" accept="video/*" onchange="handleVideoUpload(event)">
+
+        <!-- صرف ویڈیو سلیکٹ کرنے کا بٹن (مائیک کا کوڈ مکمل طور پر ہٹا دیا گیا ہے) -->
+        <button class="btn" onclick="document.getElementById('videoInput').click()">📁 ویڈیو سلیکٹ کریں</button>
+    </div>
+
+<script>
+    function handleVideoUpload(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const videoElement = document.getElementById('mainVideo');
+            const placeholder = document.getElementById('placeholderText');
+            const captionBox = document.getElementById('captionOutput');
+            
+            videoElement.src = URL.createObjectURL(file);
+            videoElement.style.display = 'block';
+            placeholder.style.display = 'none';
+            captionBox.style.display = 'block';
+
+            document.getElementById('statusMsg').innerText = "ویڈیو پلے ہو رہی ہے، آٹو کیپشن جاری ہے 👇";
+            
+            setTimeout(() => {
+                let sampleText = "یا مدینہ سب کا سہارا مدینہ سرکار کا مسیحا سرکار کا مدینہ گلی نبی پر یہ عمر بیتے ہو";
                 captionBox.innerText = addAutoEmojis(sampleText);
-            }, 1000);
+            }, 800);
         }
     }
 
-    // 2. ٹاپک کے حساب سے خودکار ایموجی (Auto Emoji) ایڈ کرنے کا فنکشن
     function addAutoEmojis(text) {
         let modifiedText = text;
-        if (text.includes("مدینہ") || text.includes("مکہ") || text.includes("مسجد")) {
-            modifiedText += " 🕌 🕋";
+        if (text.includes("مدینہ") || text.includes("نبی") || text.includes("سرکار") || text.includes("گلی")) {
+            modifiedText += " 🕌 🕋 ✨";
         }
-        if (text.includes("کھانا") || text.includes("بھوک") || text.includes("بریانی")) {
-            modifiedText += " 🍲 😋";
-        }
-        if (text.includes("پیار") || text.includes("محبت") || text.includes("دل")) {
-            modifiedText += " ❤️ ✨";
-        }
-        if (text.includes("سفر") || text.includes("کار") || text.includes("گاڑی")) {
-            modifiedText += " 🚗 🛣️";
+        if (text.includes("نماز") || text.includes("مسجد")) {
+            modifiedText += " 🤲 🕌";
         }
         return modifiedText;
-    }
-
-    // 3. لائیو مائیک کے ذریعے بول کر کیپشن اور ایموجی لانے کا فنکشن
-    function startVoiceCaptioning() {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-        if (!SpeechRecognition) {
-            alert("معذرت، آپ کا براؤزر اسپیچ ریکگنیشن سپورٹ نہیں کرتا۔");
-            return;
-        }
-
-        const recognition = new SpeechRecognition();
-        recognition.lang = 'ur-PK';
-        recognition.continuous = true;
-        recognition.interimResults = true;
-
-        const captionBox = document.getElementById('captionOutput');
-        captionBox.style.display = 'block';
-
-        recognition.onstart = function() {
-            document.getElementById('statusMsg').innerText = "سن رہا ہوں... بولنا شروع کریں 🎙️";
-        };
-
-        recognition.onresult = function(event) {
-            let transcript = '';
-            for (let i = event.resultIndex; i < event.results.length; i++) {
-                transcript += event.results[i][0].transcript;
-            }
-            captionBox.innerText = addAutoEmojis(transcript);
-        };
-
-        recognition.onerror = function(event) {
-            alert("وائس ایرر: " + event.error);
-        };
-
-        recognition.start();
     }
 </script>
 
 </body>
-            </html>
-                
+</html>
