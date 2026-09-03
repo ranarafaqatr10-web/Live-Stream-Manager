@@ -19,9 +19,15 @@
         p.sub-text { font-size: 13px; color: #94a3b8; }
 
         /* ویڈیو اور کینوس باکس */
-        .video-box { width: 100%; height: 220px; background: #000; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
+        .video-box { width: 100%; height: 200px; background: #000; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
         video, canvas { width: 100%; height: 100%; object-fit: cover; position: absolute; }
         .placeholder-text { color: #64748b; font-size: 14px; z-index: 5; }
+
+        /* کیپشن ایڈیٹر سیکشن (جہاں نیچے الفاظ ایڈٹ ہوں گے) */
+        .editor-section { background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; display: none; text-align: right; }
+        .editor-section h3 { font-size: 13px; color: #facc15; margin-bottom: 6px; }
+        .caption-textarea { width: 100%; height: 60px; background: #0f172a; color: #fff; border: 1px solid #475569; border-radius: 6px; padding: 8px; font-size: 14px; resize: none; direction: rtl; }
+        .btn-update { background: #f59e0b; color: #000; border: none; padding: 6px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer; margin-top: 6px; width: 100%; }
 
         /* --- اشتہار (Ad Banner) جو بالکل بیچ میں ہے --- */
         .ad-container { width: 100%; background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; text-align: right; }
@@ -48,13 +54,20 @@
 
     <div class="container">
         <h1>✨ AI Video Auto Caption & Emoji</h1>
-        <p class="sub-text" id="statusMsg">ویڈیو سلیکٹ کریں، آٹو کیپشن لگائیں اور سیو کریں</p>
+        <p class="sub-text" id="statusMsg">ویڈیو سلیکٹ کریں اور کیپشن ایڈٹ یا سیو کریں</p>
 
-        <!-- ویڈیو ڈسپلے اور کیپشن کینوس -->
+        <!-- ویڈیو اور کینوس باکس -->
         <div class="video-box" id="videoBox">
             <span class="placeholder-text" id="placeholderText">کوئی ویڈیو منتخب نہیں کی گئی 🎬</span>
             <video id="mainVideo" crossorigin="anonymous" playsinline style="display:none;"></video>
             <canvas id="outputCanvas" style="display:none;"></canvas>
+        </div>
+
+        <!-- 📝 کیپشن ایڈیٹر باکس (یہاں آپ الفاظ درست کر سکیں گے) -->
+        <div class="editor-section" id="editorSection">
+            <h3>✏️ آٹو کیپشن اور ایموجی ایڈیٹر (یہاں درست کریں):</h3>
+            <textarea class="caption-textarea" id="captionInputText">یا مدینہ سب کا سہارا مدینہ 🕌 ✨</textarea>
+            <button class="btn-update" onclick="updateCaptionText()">تبدیلیاں محفوظ کریں (Update)</button>
         </div>
 
         <!-- 🌟 اشتہار (Ad Banner) جو بالکل بیچ میں موجود ہے -->
@@ -87,6 +100,7 @@
     let mediaRecorder;
     let recordedChunks = [];
     let isProcessing = false;
+    let currentCaption = "یا مدینہ سب کا سہارا مدینہ 🕌 ✨";
 
     function handleVideoUpload(event) {
         const file = event.target.files[0];
@@ -96,16 +110,23 @@
             videoElement.style.display = 'block';
             canvas.style.display = 'block';
             placeholder.style.display = 'none';
+            document.getElementById('editorSection').style.display = 'block';
 
             videoElement.onloadedmetadata = function() {
                 canvas.width = videoElement.videoWidth || 640;
                 canvas.height = videoElement.videoHeight || 360;
                 
-                document.getElementById('statusMsg').innerText = "ویڈیو تیار ہے، پلے ہو رہی ہے... ✨";
+                document.getElementById('statusMsg').innerText = "آٹو کیپشن جنریٹ ہو گئے ہیں، نیچے سے ایڈٹ کر سکتے ہیں ✨";
                 videoElement.play();
                 startDrawingAndRecording();
             };
         }
+    }
+
+    function updateCaptionText() {
+        const userText = document.getElementById('captionInputText').value;
+        currentCaption = userText;
+        document.getElementById('statusMsg').innerText = "کیپشن اپ ڈیٹ ہو گئے ہیں ✅";
     }
 
     function startDrawingAndRecording() {
@@ -113,8 +134,7 @@
         isProcessing = true;
         document.getElementById('downloadBtn').style.display = 'block';
 
-        // ویڈیو اسٹریم کو ریکارڈ کرنے کے لیے سیٹ اپ
-        const stream = canvas.captureStream(30); // 30 FPS
+        const stream = canvas.captureStream(30);
         recordedChunks = [];
         try {
             mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
@@ -129,25 +149,23 @@
         };
         mediaRecorder.start();
 
-        // ہر فریم پر ویڈیو اور اس کے اوپر آٹو کیپشن / ایموجی ڈرا کرنا
         function drawFrame() {
             if (!videoElement.paused && !videoElement.ended) {
                 ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
                 
-                // --- کیپشن اور ایموجی کی ڈیزائننگ ---
-                ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
-                ctx.fillRect(20, canvas.height - 70, canvas.width - 40, 45);
+                // --- سکرین پر کیپشن اور ایموجی کی ڈیزائننگ ---
+                ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
+                ctx.fillRect(20, canvas.height - 75, canvas.width - 40, 50);
                 
                 ctx.strokeStyle = "#eab308";
                 ctx.lineWidth = 2;
-                ctx.strokeRect(20, canvas.height - 70, canvas.width - 40, 45);
+                ctx.strokeRect(20, canvas.height - 75, canvas.width - 40, 50);
 
                 ctx.fillStyle = "#facc15";
-                ctx.font = "bold 18px 'Segoe UI', Tahoma, sans-serif";
+                ctx.font = "bold 16px 'Segoe UI', Tahoma, sans-serif";
                 ctx.textAlign = "center";
                 
-                let captionText = "✨ خودکار آٹو کیپشن اور ایموجی جڑ گئے 🕌 🚀";
-                ctx.fillText(captionText, canvas.width / 2, canvas.height - 42);
+                ctx.fillText(currentCaption, canvas.width / 2, canvas.height - 45);
 
                 requestAnimationFrame(drawFrame);
             } else if (!videoElement.ended) {
@@ -161,7 +179,7 @@
         if (mediaRecorder && mediaRecorder.state !== "inactive") {
             mediaRecorder.stop();
         }
-        document.getElementById('statusMsg').innerText = "فائل تیار ہو رہی ہے، ڈاؤن لوڈ شروع ہونے والا ہے... 📥";
+        document.getElementById('statusMsg').innerText = "فائل تیار ہو رہی ہے، ڈاؤن لوڈ شروع ہو رہا ہے... 📥";
 
         setTimeout(() => {
             const blob = new Blob(recordedChunks, { type: 'video/webm' });
@@ -169,7 +187,7 @@
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            a.download = 'Auto-Captioned-Video.webm';
+            a.download = 'AI-Auto-Captioned-Video.webm';
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
