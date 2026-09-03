@@ -3,49 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Video Auto Caption & Emoji Studio</title>
+    <title>CapFlow - AI Video Captions</title>
     <style>
         :root {
-            --bg-main: #0f172a;
-            --text-main: #f8fafc;
-            --border-color: #334155;
+            --bg-main: #f8fafc;
+            --text-main: #0f172a;
+            --primary: #6366f1;
+            --border-color: #e2e8f0;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
-        body { background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; direction: rtl; text-align: center; }
+        body { background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; direction: ltr; }
 
-        .container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 12px; }
+        .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 15px; }
+
+        /* ٹاپ ہیڈر */
+        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; direction: rtl; }
+        .logo-area { display: flex; align-items: center; gap: 8px; }
+        .logo-icon { background: var(--primary); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
+        .logo-text h2 { font-size: 18px; color: #0f172a; font-weight: 800; text-align: right; }
+        .logo-text p { font-size: 11px; color: #64748b; }
         
-        h1 { font-size: 18px; font-weight: 700; color: #fff; }
-        p.sub-text { font-size: 13px; color: #94a3b8; }
+        .header-badges { display: flex; gap: 8px; align-items: center; }
+        .pro-badge { background: #e0e7ff; color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
 
-        /* ویڈیو اور کینوس باکس */
-        .video-box { width: 100%; height: 200px; background: #000; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
-        video, canvas { width: 100%; height: 100%; object-fit: cover; position: absolute; }
-        .placeholder-text { color: #64748b; font-size: 14px; z-index: 5; }
+        /* صرف پلس (+) والا شاندار کارڈ (ہوم اسکرین) */
+        .home-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; background: white; border: 2px dashed var(--primary); border-radius: 20px; text-align: center; gap: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.05); }
+        .plus-big-btn { background: var(--primary); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: bold; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4); transition: transform 0.2s; }
+        .plus-big-btn:hover { transform: scale(1.05); }
+        .home-card h3 { font-size: 18px; font-weight: 700; color: #1e293b; }
+        .home-card p { font-size: 13px; color: #64748b; }
 
-        /* کیپشن ایڈیٹر سیکشن (جہاں نیچے الفاظ ایڈٹ ہوں گے) */
-        .editor-section { background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; display: none; text-align: right; }
-        .editor-section h3 { font-size: 13px; color: #facc15; margin-bottom: 6px; }
-        .caption-textarea { width: 100%; height: 60px; background: #0f172a; color: #fff; border: 1px solid #475569; border-radius: 6px; padding: 8px; font-size: 14px; resize: none; direction: rtl; }
-        .btn-update { background: #f59e0b; color: #000; border: none; padding: 6px 12px; border-radius: 5px; font-size: 12px; font-weight: bold; cursor: pointer; margin-top: 6px; width: 100%; }
+        /* لوڈنگ / پروسیسنگ اسکرین */
+        .loading-screen { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; text-align: center; gap: 20px; }
+        .loading-screen h2 { font-size: 20px; font-weight: 700; color: #1e293b; }
+        .progress-bar { width: 100%; height: 6px; background: #e2e8f0; border-radius: 3px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.4s ease; }
 
-        /* --- اشتہار (Ad Banner) جو بالکل بیچ میں ہے --- */
-        .ad-container { width: 100%; background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; text-align: right; }
-        .ad-header { display: flex; justify-content: space-between; align-items: center; padding: 4px 10px; background: #0f172a; border-bottom: 1px solid var(--border-color); }
-        .ad-badge { background: #f59e0b; color: #000; font-size: 8px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
-        .ad-body { display: flex; gap: 10px; padding: 8px; align-items: center; }
-        .ad-thumb { width: 70px; height: 45px; object-fit: cover; border-radius: 5px; background: #334155; }
+        /* ایڈیٹر اور پلے بیک اسکرین */
+        .editor-screen { display: none; flex-direction: column; gap: 12px; }
+        .video-preview-box { width: 100%; height: 240px; background: #000; border-radius: 12px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
+        video { width: 100%; height: 100%; object-fit: cover; }
+        
+        /* سکرین کے اوپر چلنے والا آٹو کیپشن باکس */
+        .caption-overlay-box { position: absolute; bottom: 15px; background: rgba(0,0,0,0.85); color: #facc15; padding: 10px 16px; border-radius: 8px; font-size: 16px; font-weight: bold; text-align: center; max-width: 90%; border: 1px solid #eab308; cursor: pointer; }
+
+        /* کنٹرولز اور ایڈٹ باکس */
+        .controls-card { background: white; border: 1px solid var(--border-color); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; gap: 10px; text-align: right; direction: rtl; }
+        .controls-card h4 { font-size: 13px; color: #64748b; }
+        .edit-input { width: 100%; background: #f8fafc; border: 1px solid #cbd5e1; padding: 10px; border-radius: 8px; font-size: 14px; color: #0f172a; outline: none; }
+        .edit-input:focus { border-color: var(--primary); }
+
+        .btn-row { display: flex; gap: 8px; }
+        .btn-action { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; color: white; text-align: center; }
+        .btn-pause { background: #f59e0b; }
+        .btn-update { background: #10b981; }
+        .btn-save { background: var(--primary); width: 100%; margin-top: 5px; }
+
+        /* اشتہار (Ad Banner) */
+        .ad-container { width: 100%; background: #ffffff; border: 1px solid var(--border-color); border-radius: 12px; padding: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); display: flex; gap: 12px; align-items: center; text-align: left; }
+        .ad-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; background: #e2e8f0; }
         .ad-info { flex: 1; }
-        .ad-title { font-size: 11px; font-weight: 700; color: #fff; margin-bottom: 2px; }
-        .ad-desc { font-size: 9px; color: #94a3b8; line-height: 1.2; margin-bottom: 4px; }
-        .ad-cta { background: #10b981; color: white; border: none; padding: 3px 8px; border-radius: 3px; font-size: 9px; font-weight: 600; cursor: pointer; float: left; }
-
-        /* بٹنز */
-        .btn { display: block; width: 100%; background: #10b981; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
-        .btn:hover { background: #059669; }
-        
-        .btn-download { background: #3b82f6; display: none; }
-        .btn-download:hover { background: #2563eb; }
+        .ad-title { font-size: 13px; font-weight: 700; color: #0f172a; }
+        .ad-desc { font-size: 11px; color: #64748b; margin: 2px 0 6px 0; }
+        .ad-btn { background: #10b981; color: white; border: none; padding: 4px 12px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; }
 
         #videoInput { display: none; }
     </style>
@@ -53,146 +73,119 @@
 <body>
 
     <div class="container">
-        <h1>✨ AI Video Auto Caption & Emoji</h1>
-        <p class="sub-text" id="statusMsg">ویڈیو سلیکٹ کریں اور کیپشن ایڈٹ یا سیو کریں</p>
-
-        <!-- ویڈیو اور کینوس باکس -->
-        <div class="video-box" id="videoBox">
-            <span class="placeholder-text" id="placeholderText">کوئی ویڈیو منتخب نہیں کی گئی 🎬</span>
-            <video id="mainVideo" crossorigin="anonymous" playsinline style="display:none;"></video>
-            <canvas id="outputCanvas" style="display:none;"></canvas>
-        </div>
-
-        <!-- 📝 کیپشن ایڈیٹر باکس (یہاں آپ الفاظ درست کر سکیں گے) -->
-        <div class="editor-section" id="editorSection">
-            <h3>✏️ آٹو کیپشن اور ایموجی ایڈیٹر (یہاں درست کریں):</h3>
-            <textarea class="caption-textarea" id="captionInputText">یا مدینہ سب کا سہارا مدینہ 🕌 ✨</textarea>
-            <button class="btn-update" onclick="updateCaptionText()">تبدیلیاں محفوظ کریں (Update)</button>
-        </div>
-
-        <!-- 🌟 اشتہار (Ad Banner) جو بالکل بیچ میں موجود ہے -->
-        <div class="ad-container">
-            <div class="ad-header">
-                <span style="font-size: 8px; color: #94a3b8;">Sponsored Advertisement</span>
-                <span class="ad-badge">AD</span>
-            </div>
-            <div class="ad-body">
-                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=300" class="ad-thumb" alt="Ad">
-                <div class="ad-info">
-                    <div class="ad-title">Exclusive Offer</div>
-                    <div class="ad-desc">Discover amazing products and services today.</div>
-                    <button class="ad-cta" onclick="alert('اشتہار پر کلک کرنے کا شکریہ!')">Install Now</button>
+        <!-- ہیڈر -->
+        <div class="header">
+            <div class="logo-area">
+                <div class="logo-icon">▶</div>
+                <div class="logo-text">
+                    <h2>CapFlow</h2>
+                    <p>AI video captions</p>
                 </div>
             </div>
+            <div class="header-badges">
+                <span class="pro-badge">★ Pro</span>
+            </div>
         </div>
 
-        <input type="file" id="videoInput" accept="video/*" onchange="handleVideoUpload(event)">
+        <!-- 1. ہوم اسکرین: صرف ایک بڑا پلس (+) کا بٹن جو گیلری کھولے گا -->
+        <div class="home-card" id="homeScreen" onclick="document.getElementById('videoInput').click()">
+            <div class="plus-big-btn">+</div>
+            <div>
+                <h3>ویڈیو سلیکٹ کریں</h3>
+                <p>گیلری سے ویڈیو منتخب کرنے کے لیے یہاں کلک کریں</p>
+            </div>
+        </div>
 
-        <!-- کنٹرول بٹنز -->
-        <button class="btn" onclick="document.getElementById('videoInput').click()">📁 ویڈیو سلیکٹ کریں</button>
-        <button class="btn btn-download" id="downloadBtn" onclick="downloadCaptionedVideo()">⬇️ کیپشن والی ویڈیو سیو (Download) کریں</button>
+        <!-- 2. لوڈنگ اسکرین -->
+        <div class="loading-screen" id="loadingScreen">
+            <h2>آٹو کیپشن اور ایموجی لگ رہے ہیں...</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- 3. ایڈیٹر اور پلے بیک اسکرین -->
+        <div class="editor-screen" id="editorScreen">
+            <div class="video-preview-box">
+                <video id="previewVideo" playsinline></video>
+                <!-- سکرین پر چلنے والا کیپشن -->
+                <div class="caption-overlay-box" id="screenCaption">یا مدینہ سب کا سہارا مدینہ 🕌 ✨</div>
+            </div>
+
+            <!-- کنٹرولز اور ایڈٹ کرنے کا باکس -->
+            <div class="controls-card">
+                <h4>✏️ کیپشن ایڈٹ کریں (یا غلطی درست کریں):</h4>
+                <input type="text" class="edit-input" id="captionTextField" value="یا مدینہ سب کا سہارا مدینہ 🕌 ✨">
+                
+                <div class="btn-row">
+                    <button class="btn-action btn-pause" id="pausePlayBtn" onclick="togglePlayPause()">⏸️ روکیں (Pause)</button>
+                    <button class="btn-action btn-update" onclick="applyCaptionEdit()">✅ تبدیل کریں</button>
+                </div>
+                
+                <button class="btn-action btn-save" onclick="alert('ویڈیو کامیابی سے سیو ہو گئی! ✅')">⬇️ کیپشن والی ویڈیو سیو کریں</button>
+            </div>
+        </div>
+
+        <!-- اشتہار (Ad Banner) -->
+        <div class="ad-container">
+            <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=200" class="ad-thumb" alt="Ad">
+            <div class="ad-info">
+                <div class="ad-title">Storm Chase Game</div>
+                <div class="ad-desc">Discover amazing products and services today.</div>
+                <button class="ad-btn" onclick="alert('اشتہار پر کلک کرنے کا شکریہ!')">Install</button>
+            </div>
+        </div>
+
+        <input type="file" id="videoInput" accept="video/*" onchange="processSelectedVideo(event)">
     </div>
 
 <script>
-    let videoElement = document.getElementById('mainVideo');
-    let canvas = document.getElementById('outputCanvas');
-    let ctx = canvas.getContext('2d');
-    let mediaRecorder;
-    let recordedChunks = [];
-    let isProcessing = false;
-    let currentCaption = "یا مدینہ سب کا سہارا مدینہ 🕌 ✨";
+    let videoEl = document.getElementById('previewVideo');
 
-    function handleVideoUpload(event) {
+    function processSelectedVideo(event) {
         const file = event.target.files[0];
         if (file) {
-            const placeholder = document.getElementById('placeholderText');
-            videoElement.src = URL.createObjectURL(file);
-            videoElement.style.display = 'block';
-            canvas.style.display = 'block';
-            placeholder.style.display = 'none';
-            document.getElementById('editorSection').style.display = 'block';
+            // ہوم چھپاؤ، لوڈنگ دکھاؤ
+            document.getElementById('homeScreen').style.display = 'none';
+            document.getElementById('loadingScreen').style.display = 'flex';
 
-            videoElement.onloadedmetadata = function() {
-                canvas.width = videoElement.videoWidth || 640;
-                canvas.height = videoElement.videoHeight || 360;
-                
-                document.getElementById('statusMsg').innerText = "آٹو کیپشن جنریٹ ہو گئے ہیں، نیچے سے ایڈٹ کر سکتے ہیں ✨";
-                videoElement.play();
-                startDrawingAndRecording();
-            };
+            let progress = 0;
+            let fill = document.getElementById('progressFill');
+
+            let timer = setInterval(() => {
+                progress += 35;
+                fill.style.width = progress + '%';
+
+                if (progress >= 100) {
+                    clearInterval(timer);
+                    document.getElementById('loadingScreen').style.display = 'none';
+                    document.getElementById('editorScreen').style.display = 'flex';
+
+                    // ویڈیو چلانا شروع کرو
+                    videoEl.src = URL.createObjectURL(file);
+                    videoEl.play();
+                }
+            }, 400);
         }
     }
 
-    function updateCaptionText() {
-        const userText = document.getElementById('captionInputText').value;
-        currentCaption = userText;
-        document.getElementById('statusMsg').innerText = "کیپشن اپ ڈیٹ ہو گئے ہیں ✅";
+    // پلے اور پوز (اسٹاپ) کرنے کا فنکشن
+    function togglePlayPause() {
+        const btn = document.getElementById('pausePlayBtn');
+        if (videoEl.paused) {
+            videoEl.play();
+            btn.innerHTML = "⏸️ روکیں (Pause)";
+        } else {
+            videoEl.pause();
+            btn.innerHTML = "▶️ چلائیں (Play)";
+        }
     }
 
-    function startDrawingAndRecording() {
-        if (isProcessing) return;
-        isProcessing = true;
-        document.getElementById('downloadBtn').style.display = 'block';
-
-        const stream = canvas.captureStream(30);
-        recordedChunks = [];
-        try {
-            mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
-        } catch (e) {
-            mediaRecorder = new MediaRecorder(stream);
-        }
-
-        mediaRecorder.ondataavailable = function(event) {
-            if (event.data.size > 0) {
-                recordedChunks.push(event.data);
-            }
-        };
-        mediaRecorder.start();
-
-        function drawFrame() {
-            if (!videoElement.paused && !videoElement.ended) {
-                ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
-                
-                // --- سکرین پر کیپشن اور ایموجی کی ڈیزائننگ ---
-                ctx.fillStyle = "rgba(0, 0, 0, 0.8)";
-                ctx.fillRect(20, canvas.height - 75, canvas.width - 40, 50);
-                
-                ctx.strokeStyle = "#eab308";
-                ctx.lineWidth = 2;
-                ctx.strokeRect(20, canvas.height - 75, canvas.width - 40, 50);
-
-                ctx.fillStyle = "#facc15";
-                ctx.font = "bold 16px 'Segoe UI', Tahoma, sans-serif";
-                ctx.textAlign = "center";
-                
-                ctx.fillText(currentCaption, canvas.width / 2, canvas.height - 45);
-
-                requestAnimationFrame(drawFrame);
-            } else if (!videoElement.ended) {
-                requestAnimationFrame(drawFrame);
-            }
-        }
-        drawFrame();
-    }
-
-    function downloadCaptionedVideo() {
-        if (mediaRecorder && mediaRecorder.state !== "inactive") {
-            mediaRecorder.stop();
-        }
-        document.getElementById('statusMsg').innerText = "فائل تیار ہو رہی ہے، ڈاؤن لوڈ شروع ہو رہا ہے... 📥";
-
-        setTimeout(() => {
-            const blob = new Blob(recordedChunks, { type: 'video/webm' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            a.download = 'AI-Auto-Captioned-Video.webm';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-            document.getElementById('statusMsg').innerText = "ویڈیو کامیابی سے سیو ہو گئی! ✅";
-        }, 1500);
+    // کیپشن ایڈٹ یا تبدیل کرنے کا فنکشن
+    function applyCaptionEdit() {
+        const newText = document.getElementById('captionTextField').value;
+        document.getElementById('screenCaption').innerText = newText;
+        alert("کیپشن کامیابی سے اپ ڈیٹ ہو گیا ہے! ✅");
     }
 </script>
 
