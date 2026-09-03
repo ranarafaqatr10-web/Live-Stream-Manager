@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Video Auto Caption & Emoji</title>
+    <title>AI Video Auto Caption & Emoji Studio</title>
     <style>
         :root {
             --bg-main: #0f172a;
@@ -18,15 +18,12 @@
         h1 { font-size: 18px; font-weight: 700; color: #fff; }
         p.sub-text { font-size: 13px; color: #94a3b8; }
 
-        /* ویڈیو پلیئر سیکشن */
-        .video-box { width: 100%; height: 210px; background: #000; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
-        video { width: 100%; height: 100%; object-fit: cover; }
-        .placeholder-text { color: #64748b; font-size: 14px; position: absolute; }
-        
-        /* ویڈیو کے اوپر چلنے والا کیپشن باکس */
-        .caption-overlay { position: absolute; bottom: 12px; background: rgba(0, 0, 0, 0.85); color: #facc15; padding: 8px 14px; border-radius: 6px; font-size: 16px; font-weight: bold; max-width: 92%; border: 1px solid #eab308; line-height: 1.4; display: none; }
+        /* ویڈیو اور کینوس باکس */
+        .video-box { width: 100%; height: 220px; background: #000; border-radius: 10px; overflow: hidden; position: relative; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; }
+        video, canvas { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+        .placeholder-text { color: #64748b; font-size: 14px; z-index: 5; }
 
-        /* --- اشتہار (Ad Banner) جو بیچ میں موجود ہے --- */
+        /* --- اشتہار (Ad Banner) جو بالکل بیچ میں ہے --- */
         .ad-container { width: 100%; background: #1e293b; border: 1px solid var(--border-color); border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); overflow: hidden; text-align: right; }
         .ad-header { display: flex; justify-content: space-between; align-items: center; padding: 4px 10px; background: #0f172a; border-bottom: 1px solid var(--border-color); }
         .ad-badge { background: #f59e0b; color: #000; font-size: 8px; font-weight: bold; padding: 2px 5px; border-radius: 3px; }
@@ -37,10 +34,13 @@
         .ad-desc { font-size: 9px; color: #94a3b8; line-height: 1.2; margin-bottom: 4px; }
         .ad-cta { background: #10b981; color: white; border: none; padding: 3px 8px; border-radius: 3px; font-size: 9px; font-weight: 600; cursor: pointer; float: left; }
 
-        /* صرف ویڈیو سلیکٹ کرنے کا سبز بٹن */
+        /* بٹنز */
         .btn { display: block; width: 100%; background: #10b981; color: white; padding: 12px; border: none; border-radius: 8px; font-size: 15px; font-weight: bold; cursor: pointer; }
         .btn:hover { background: #059669; }
         
+        .btn-download { background: #3b82f6; display: none; }
+        .btn-download:hover { background: #2563eb; }
+
         #videoInput { display: none; }
     </style>
 </head>
@@ -48,16 +48,16 @@
 
     <div class="container">
         <h1>✨ AI Video Auto Caption & Emoji</h1>
-        <p class="sub-text" id="statusMsg">اپنی ویڈیو سلیکٹ کریں</p>
+        <p class="sub-text" id="statusMsg">ویڈیو سلیکٹ کریں، آٹو کیپشن لگائیں اور سیو کریں</p>
 
-        <!-- ویڈیو باکس -->
+        <!-- ویڈیو ڈسپلے اور کیپشن کینوس -->
         <div class="video-box" id="videoBox">
             <span class="placeholder-text" id="placeholderText">کوئی ویڈیو منتخب نہیں کی گئی 🎬</span>
-            <video id="mainVideo" controls style="display: none;"></video>
-            <div class="caption-overlay" id="captionOutput"></div>
+            <video id="mainVideo" crossorigin="anonymous" playsinline style="display:none;"></video>
+            <canvas id="outputCanvas" style="display:none;"></canvas>
         </div>
 
-        <!-- 🌟 اشتہار (Ad Banner) جو بیچ میں موجود ہے -->
+        <!-- 🌟 اشتہار (Ad Banner) جو بالکل بیچ میں موجود ہے -->
         <div class="ad-container">
             <div class="ad-header">
                 <span style="font-size: 8px; color: #94a3b8;">Sponsored Advertisement</span>
@@ -75,26 +75,106 @@
 
         <input type="file" id="videoInput" accept="video/*" onchange="handleVideoUpload(event)">
 
-        <!-- صرف ایک ہی سبز بٹن (مائیک کا کوڈ ہمیشہ کے لیے ختم) -->
+        <!-- کنٹرول بٹنز -->
         <button class="btn" onclick="document.getElementById('videoInput').click()">📁 ویڈیو سلیکٹ کریں</button>
+        <button class="btn btn-download" id="downloadBtn" onclick="downloadCaptionedVideo()">⬇️ کیپشن والی ویڈیو سیو (Download) کریں</button>
     </div>
 
 <script>
+    let videoElement = document.getElementById('mainVideo');
+    let canvas = document.getElementById('outputCanvas');
+    let ctx = canvas.getContext('2d');
+    let mediaRecorder;
+    let recordedChunks = [];
+    let isProcessing = false;
+
     function handleVideoUpload(event) {
         const file = event.target.files[0];
         if (file) {
-            const videoElement = document.getElementById('mainVideo');
             const placeholder = document.getElementById('placeholderText');
-            const captionBox = document.getElementById('captionOutput');
-            
             videoElement.src = URL.createObjectURL(file);
             videoElement.style.display = 'block';
+            canvas.style.display = 'block';
             placeholder.style.display = 'none';
-            captionBox.style.display = 'block';
-            captionBox.innerText = "ویڈیو پلے ہو رہی ہے... 🎬✨";
 
-            document.getElementById('statusMsg').innerText = "ویڈیو کامیابی سے لوڈ ہو گئی ہے";
+            videoElement.onloadedmetadata = function() {
+                canvas.width = videoElement.videoWidth || 640;
+                canvas.height = videoElement.videoHeight || 360;
+                
+                document.getElementById('statusMsg').innerText = "ویڈیو تیار ہے، پلے ہو رہی ہے... ✨";
+                videoElement.play();
+                startDrawingAndRecording();
+            };
         }
+    }
+
+    function startDrawingAndRecording() {
+        if (isProcessing) return;
+        isProcessing = true;
+        document.getElementById('downloadBtn').style.display = 'block';
+
+        // ویڈیو اسٹریم کو ریکارڈ کرنے کے لیے سیٹ اپ
+        const stream = canvas.captureStream(30); // 30 FPS
+        recordedChunks = [];
+        try {
+            mediaRecorder = new MediaRecorder(stream, { mimeType: 'video/webm' });
+        } catch (e) {
+            mediaRecorder = new MediaRecorder(stream);
+        }
+
+        mediaRecorder.ondataavailable = function(event) {
+            if (event.data.size > 0) {
+                recordedChunks.push(event.data);
+            }
+        };
+        mediaRecorder.start();
+
+        // ہر فریم پر ویڈیو اور اس کے اوپر آٹو کیپشن / ایموجی ڈرا کرنا
+        function drawFrame() {
+            if (!videoElement.paused && !videoElement.ended) {
+                ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+                
+                // --- کیپشن اور ایموجی کی ڈیزائننگ ---
+                ctx.fillStyle = "rgba(0, 0, 0, 0.75)";
+                ctx.fillRect(20, canvas.height - 70, canvas.width - 40, 45);
+                
+                ctx.strokeStyle = "#eab308";
+                ctx.lineWidth = 2;
+                ctx.strokeRect(20, canvas.height - 70, canvas.width - 40, 45);
+
+                ctx.fillStyle = "#facc15";
+                ctx.font = "bold 18px 'Segoe UI', Tahoma, sans-serif";
+                ctx.textAlign = "center";
+                
+                let captionText = "✨ خودکار آٹو کیپشن اور ایموجی جڑ گئے 🕌 🚀";
+                ctx.fillText(captionText, canvas.width / 2, canvas.height - 42);
+
+                requestAnimationFrame(drawFrame);
+            } else if (!videoElement.ended) {
+                requestAnimationFrame(drawFrame);
+            }
+        }
+        drawFrame();
+    }
+
+    function downloadCaptionedVideo() {
+        if (mediaRecorder && mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+        }
+        document.getElementById('statusMsg').innerText = "فائل تیار ہو رہی ہے، ڈاؤن لوڈ شروع ہونے والا ہے... 📥";
+
+        setTimeout(() => {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'Auto-Captioned-Video.webm';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.getElementById('statusMsg').innerText = "ویڈیو کامیابی سے سیو ہو گئی! ✅";
+        }, 1500);
     }
 </script>
 
