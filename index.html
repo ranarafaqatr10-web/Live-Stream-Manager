@@ -19,15 +19,18 @@
 
         .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
 
-        /* ہیڈر */
+        /* ہیڈر (یہاں اوپر کونے میں VPN کا سٹیٹس دکھائے گا) */
         .header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; direction: rtl; }
         .logo-area { display: flex; align-items: center; gap: 8px; }
         .logo-icon { background: var(--primary); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
         .logo-text h2 { font-size: 18px; color: #fff; font-weight: 800; text-align: right; }
         .logo-text p { font-size: 11px; color: #94a3b8; }
-        .status-badge { background: #334155; color: #cbd5e1; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        
+        /* کونے والا وی پی این سٹیٹس بیج */
+        .vpn-badge { display: flex; align-items: center; gap: 5px; background: #334155; color: #cbd5e1; padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; transition: 0.3s; }
+        .vpn-badge.active { background: #065f46; color: #34d399; border: 1px solid #10b981; }
 
-        /* وی پی این مین کنٹرول باکس اور گول دائرہ */
+        /* وی پی این مین کنٹرول باکس (گول دائرہ) */
         .vpn-container { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 35px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         
         .connect-circle { width: 160px; height: 160px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 30px rgba(59, 130, 246, 0.4); transition: all 0.3s ease; text-align: center; border: 4px solid rgba(255,255,255,0.1); }
@@ -47,7 +50,7 @@
         .ad-title { font-size: 16px; font-weight: bold; color: #fff; }
         .ad-desc { font-size: 12px; color: #94a3b8; }
 
-        /* نیچے والے چھوٹے چھوٹے ایڈز (متعدد بینرز) */
+        /* نیچے والے چھوٹے چھوٹے ایڈز */
         .ads-section { width: 100%; display: flex; flex-direction: column; gap: 10px; }
         .small-ad { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; display: flex; gap: 10px; align-items: center; text-align: left; direction: ltr; }
         .small-ad img { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; }
@@ -60,7 +63,7 @@
 <body>
 
     <div class="container">
-        <!-- ہیڈر -->
+        <!-- ہیڈر (یہاں اوپر کونے میں VPN لکھا آئے گا) -->
         <div class="header">
             <div class="logo-area">
                 <div class="logo-icon">🛡️</div>
@@ -69,7 +72,10 @@
                     <p>Unlimited Free</p>
                 </div>
             </div>
-            <div class="status-badge" id="topStatus">مفت سرور</div>
+            <div class="vpn-badge" id="topVpnBadge">
+                <span id="vpnBadgeIcon">🔌</span>
+                <span id="vpnBadgeText">VPN آف</span>
+            </div>
         </div>
 
         <!-- وی پی این مین کنٹرول باکس (گول دائرہ) -->
@@ -81,7 +87,7 @@
             <div class="connection-status" id="statusText">کنیکٹ کرنے کے لیے دائرے پر کلک کریں</div>
         </div>
 
-        <!-- نیچے چھوٹے چھوٹے ایڈز کی فہرست -->
+        <!-- نیچے چھوٹے چھوٹے ایڈز -->
         <div class="ads-section">
             <div class="small-ad">
                 <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=100" alt="Ad">
@@ -103,7 +109,7 @@
         </div>
     </div>
 
-    <!-- ایڈ والا پاپ اپ موڈل (کنیکٹ اور ڈس کنیکٹ دونوں پر چلے گا) -->
+    <!-- ایڈ والا پاپ اپ موڈل -->
     <div class="ad-modal" id="adModal">
         <div class="ad-box">
             <div class="ad-header">
@@ -146,13 +152,18 @@
                 modal.style.display = 'none'; // ایڈ ختم
 
                 if (!isConnected) {
-                    // اب وی پی این ان لمیٹڈ کنیکٹ ہو گیا
+                    // اب وی پی این ان لمیٹڈ جڑ گیا اور اوپر کونے میں نشان آ گیا
                     isConnected = true;
                     document.getElementById('connectCircle').classList.add('connected');
                     document.getElementById('circleIcon').innerHTML = "🔒";
                     document.getElementById('circleText').innerHTML = "Disconnect";
                     document.getElementById('statusText').innerText = "وی پی این ان لمیٹڈ جڑ چکا ہے! ✅";
-                    document.getElementById('topStatus').innerText = "محفوظ (Secure)";
+                    
+                    // اوپر کونے والا VPN بیج اپڈیٹ
+                    let badge = document.getElementById('topVpnBadge');
+                    badge.classList.add('active');
+                    document.getElementById('vpnBadgeIcon').innerHTML = "🟢";
+                    document.getElementById('vpnBadgeText').innerHTML = "VPN آن (Connected)";
                 } else {
                     // اب وی پی این ڈس کنیکٹ ہو گیا
                     isConnected = false;
@@ -160,7 +171,12 @@
                     document.getElementById('circleIcon').innerHTML = "🔌";
                     document.getElementById('circleText').innerHTML = "Connect";
                     document.getElementById('statusText').innerText = "وی پی این کامیابی سے بند کر دیا گیا ہے۔";
-                    document.getElementById('topStatus').innerText = "مفت سرور";
+                    
+                    // اوپر کونے والا VPN بیج آف ہو گیا
+                    let badge = document.getElementById('topVpnBadge');
+                    badge.classList.remove('active');
+                    document.getElementById('vpnBadgeIcon').innerHTML = "🔌";
+                    document.getElementById('vpnBadgeText').innerHTML = "VPN آف";
                 }
             }
         }, 1000);
