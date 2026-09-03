@@ -3,62 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CapFlow - AI Auto Captions</title>
+    <title>Turbo Unlimited VPN</title>
     <style>
         :root {
             --bg-main: #0f172a;
             --card-bg: #1e293b;
             --text-main: #f8fafc;
-            --primary: #6366f1;
+            --primary: #3b82f6;
+            --success: #10b981;
+            --danger: #ef4444;
             --border-color: #334155;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, sans-serif; }
         body { background: var(--bg-main); color: var(--text-main); display: flex; flex-direction: column; align-items: center; min-height: 100vh; padding: 15px; direction: ltr; }
 
-        .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 15px; }
+        .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 15px; align-items: center; }
 
         /* ہیڈر */
-        .header { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; direction: rtl; }
+        .header { width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; direction: rtl; }
         .logo-area { display: flex; align-items: center; gap: 8px; }
         .logo-icon { background: var(--primary); color: white; width: 35px; height: 35px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 18px; }
         .logo-text h2 { font-size: 18px; color: #fff; font-weight: 800; text-align: right; }
         .logo-text p { font-size: 11px; color: #94a3b8; }
-        .pro-badge { background: #312e81; color: #818cf8; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; }
+        .status-badge { background: #334155; color: #cbd5e1; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; }
 
-        /* ہوم اسکرین: صرف پلس (+) والا بٹن */
-        .home-card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; background: var(--card-bg); border: 2px dashed var(--primary); border-radius: 20px; text-align: center; gap: 15px; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
-        .plus-big-btn { background: var(--primary); color: white; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: bold; box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4); }
-        .home-card h3 { font-size: 18px; font-weight: 700; color: #fff; }
-        .home-card p { font-size: 13px; color: #94a3b8; }
-
-        /* ویٹنگ / پروسیسنگ اسکرین */
-        .loading-screen { display: none; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; text-align: center; gap: 20px; background: var(--card-bg); border-radius: 20px; }
-        .spinner { width: 50px; height: 50px; border: 5px solid var(--border-color); border-top: 5px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .loading-screen h3 { font-size: 18px; color: #fff; }
-        .loading-screen p { font-size: 12px; color: #94a3b8; }
-
-        /* ایڈیٹر اور ویڈیو پلیئر اسکرین */
-        .editor-screen { display: none; flex-direction: column; gap: 12px; }
-        .video-preview-box { width: 100%; height: 260px; background: #000; border-radius: 14px; overflow: hidden; position: relative; display: flex; align-items: center; justify-content: center; }
-        video { width: 100%; height: 100%; object-fit: contain; }
+        /* وی پی این مین کنٹرول باکس اور گول دائرہ */
+        .vpn-container { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 20px; padding: 35px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
         
-        /* سکرین پر چلنے والا آٹو کیپشن باکس */
-        .caption-overlay-box { position: absolute; bottom: 15px; background: rgba(0,0,0,0.8); color: #facc15; padding: 8px 14px; border-radius: 8px; font-size: 16px; font-weight: bold; text-align: center; max-width: 90%; border: 1px solid #eab308; }
+        .connect-circle { width: 160px; height: 160px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #1d4ed8); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 0 30px rgba(59, 130, 246, 0.4); transition: all 0.3s ease; text-align: center; border: 4px solid rgba(255,255,255,0.1); }
+        .connect-circle.connected { background: linear-gradient(135deg, #10b981, #047857); box-shadow: 0 0 30px rgba(16, 185, 129, 0.4); }
+        
+        .circle-icon { font-size: 32px; margin-bottom: 5px; }
+        .circle-text { font-size: 16px; font-weight: bold; color: white; }
 
-        /* کنٹرولز اور ایڈٹ باکس */
-        .controls-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 14px; padding: 15px; display: flex; flex-direction: column; gap: 10px; text-align: right; direction: rtl; }
-        .controls-card h4 { font-size: 13px; color: #94a3b8; }
-        .edit-input { width: 100%; background: #0f172a; border: 1px solid var(--border-color); padding: 10px; border-radius: 8px; font-size: 14px; color: #fff; outline: none; }
-        .edit-input:focus { border-color: var(--primary); }
+        .connection-status { font-size: 13px; color: #94a3b8; font-weight: 600; text-align: center; }
 
-        .btn-row { display: flex; gap: 8px; }
-        .btn-action { flex: 1; padding: 10px; border: none; border-radius: 8px; font-size: 14px; font-weight: bold; cursor: pointer; color: white; text-align: center; }
-        .btn-pause { background: #d97706; }
-        .btn-update { background: #059669; }
-        .btn-save { background: var(--primary); width: 100%; margin-top: 5px; }
+        /* ایڈ / ویڈیو پاپ اپ موڈل */
+        .ad-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; padding: 20px; }
+        .ad-box { width: 100%; max-width: 380px; background: var(--card-bg); border-radius: 16px; padding: 20px; display: flex; flex-direction: column; gap: 15px; border: 1px solid var(--border-color); text-align: center; }
+        .ad-header { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #94a3b8; }
+        .ad-timer { background: #ef4444; color: white; padding: 2px 8px; border-radius: 6px; font-weight: bold; }
+        .ad-banner-img { width: 100%; height: 160px; object-fit: cover; border-radius: 10px; background: #000; }
+        .ad-title { font-size: 16px; font-weight: bold; color: #fff; }
+        .ad-desc { font-size: 12px; color: #94a3b8; }
 
-        #videoInput { display: none; }
+        /* نیچے والے چھوٹے چھوٹے ایڈز (متعدد بینرز) */
+        .ads-section { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+        .small-ad { width: 100%; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 12px; padding: 10px 12px; display: flex; gap: 10px; align-items: center; text-align: left; direction: ltr; }
+        .small-ad img { width: 40px; height: 40px; border-radius: 6px; object-fit: cover; }
+        .small-ad-info { flex: 1; }
+        .small-ad-title { font-size: 12px; font-weight: bold; color: #fff; }
+        .small-ad-desc { font-size: 10px; color: #94a3b8; }
+        .small-ad-btn { background: var(--primary); color: white; border: none; padding: 4px 10px; border-radius: 5px; font-size: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -67,117 +63,107 @@
         <!-- ہیڈر -->
         <div class="header">
             <div class="logo-area">
-                <div class="logo-icon">▶</div>
+                <div class="logo-icon">🛡️</div>
                 <div class="logo-text">
-                    <h2>CapFlow</h2>
-                    <p>AI Auto Captions</p>
+                    <h2>Turbo VPN</h2>
+                    <p>Unlimited Free</p>
                 </div>
             </div>
-            <span class="pro-badge">★ Pro AI</span>
+            <div class="status-badge" id="topStatus">مفت سرور</div>
         </div>
 
-        <!-- 1. ہوم اسکرین: پلس (+) بٹن -->
-        <div class="home-card" id="homeScreen" onclick="document.getElementById('videoInput').click()">
-            <div class="plus-big-btn">+</div>
-            <div>
-                <h3>ویڈیو سلیکٹ کریں</h3>
-                <p>گیلری سے ویڈیو منتخب کرنے کے لیے یہاں کلک کریں</p>
+        <!-- وی پی این مین کنٹرول باکس (گول دائرہ) -->
+        <div class="vpn-container">
+            <div class="connect-circle" id="connectCircle" onclick="handleVpnClick()">
+                <div class="circle-icon" id="circleIcon">🔌</div>
+                <div class="circle-text" id="circleText">Connect</div>
             </div>
+            <div class="connection-status" id="statusText">کنیکٹ کرنے کے لیے دائرے پر کلک کریں</div>
         </div>
 
-        <!-- 2. ویٹنگ / پروسیسنگ اسکرین -->
-        <div class="loading-screen" id="loadingScreen">
-            <div class="spinner"></div>
-            <h3>اے آئی آٹو کیپشن جنریٹ ہو رہا ہے...</h3>
-            <p>براہ کرم چند سیکنڈ انتظار کریں، ویڈیو پروسیس ہو رہی ہے...</p>
-        </div>
-
-        <!-- 3. ایڈیٹر اسکرین -->
-        <div class="editor-screen" id="editorScreen">
-            <div class="video-preview-box">
-                <video id="previewVideo" playsinline></video>
-                <div class="caption-overlay-box" id="screenCaption">آٹو کیپشن یہاں ظاہر ہوگا...</div>
-            </div>
-
-            <!-- کیپشن ایڈٹ کرنے اور کنٹرولز کا باکس -->
-            <div class="controls-card">
-                <h4>✏️ کیپشن کو یہاں ایڈٹ یا درست کریں:</h4>
-                <input type="text" class="edit-input" id="captionTextField" value="آٹو کیپشن یہاں ظاہر ہوگا...">
-                
-                <div class="btn-row">
-                    <button class="btn-action btn-pause" id="pausePlayBtn" onclick="togglePlayPause()">⏸️ روکیں</button>
-                    <button class="btn-action btn-update" onclick="applyCaptionEdit()">✅ تبدیل کریں</button>
+        <!-- نیچے چھوٹے چھوٹے ایڈز کی فہرست -->
+        <div class="ads-section">
+            <div class="small-ad">
+                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=100" alt="Ad">
+                <div class="small-ad-info">
+                    <div class="small-ad-title">Star Realm Dash</div>
+                    <div class="small-ad-desc">بہترین گیم اور انعامات</div>
                 </div>
-                
-                <button class="btn-action btn-save" onclick="alert('ویڈیو کامیابی سے سیو اور ایکسپورٹ ہو گئی! ✅')">⬇️ کیپشن والی ویڈیو سیو کریں</button>
+                <button class="small-ad-btn" onclick="alert('اشتہار کھولا گیا!')">Install</button>
+            </div>
+
+            <div class="small-ad">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=100" alt="Ad">
+                <div class="small-ad-info">
+                    <div class="small-ad-title">Super VPN Proxy</div>
+                    <div class="small-ad-desc">لامحدود تیز رفتار انٹرنیٹ</div>
+                </div>
+                <button class="small-ad-btn" onclick="alert('اشتہار کھولا گیا!')">Open</button>
             </div>
         </div>
+    </div>
 
-        <input type="file" id="videoInput" accept="video/*" onchange="handleVideoUpload(event)">
+    <!-- ایڈ والا پاپ اپ موڈل (کنیکٹ اور ڈس کنیکٹ دونوں پر چلے گا) -->
+    <div class="ad-modal" id="adModal">
+        <div class="ad-box">
+            <div class="ad-header">
+                <span id="adModalHeading">اشتہار چل رہا ہے...</span>
+                <span class="ad-timer" id="adTimer">4s</span>
+            </div>
+            <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=400" class="ad-banner-img" alt="Ad">
+            <div class="ad-title">اسپانسرڈ اشتہار</div>
+            <div class="ad-desc" id="adModalDesc">براہ کرم عمل مکمل ہونے تک انتظار کریں...</div>
+        </div>
     </div>
 
 <script>
-    let videoEl = document.getElementById('previewVideo');
-    let captionBox = document.getElementById('screenCaption');
-    let captionInput = document.getElementById('captionTextField');
+    let isConnected = false;
 
-    function handleVideoUpload(event) {
-        const file = event.target.files[0];
-        if (file) {
-            // ہوم چھپاؤ، ویٹنگ/لوڈنگ اسکرین دکھاؤ
-            document.getElementById('homeScreen').style.display = 'none';
-            document.getElementById('loadingScreen').style.display = 'flex';
+    function handleVpnClick() {
+        const modal = document.getElementById('adModal');
+        const timerEl = document.getElementById('adTimer');
+        const headingEl = document.getElementById('adModalHeading');
+        const descEl = document.getElementById('adModalDesc');
 
-            let videoUrl = URL.createObjectURL(file);
-            videoEl.src = videoUrl;
+        modal.style.display = 'flex';
+        let timeLeft = 4; // 4 سیکنڈ کا ایڈ ٹائمر
+        timerEl.innerText = timeLeft + 's';
 
-            // اے آئی پروسیسنگ کا فرضی ویٹنگ ٹائم (3 سیکنڈ تاکہ ریئل ایپ جیسا فیل آئے)
-            setTimeout(() => {
-                document.getElementById('loadingScreen').style.display = 'none';
-                document.getElementById('editorScreen').style.display = 'flex';
-
-                // ویڈیو پلے کرو اور کیپشن شو کرو
-                videoEl.play();
-                
-                // فرضی یا اصلی آٹو کیپشن ٹیکسٹ سیٹ کرنا
-                let sampleCaptions = [
-                    "السلام علیکم ورحمۃ اللہ وبرکاتہ ✨",
-                    "آج ہم ایک بہت شاندار بات کرنے والے ہیں 🚀",
-                    "ویڈیو کو پورا دیکھیں تاکہ آپ کو سمجھ آئے 💡",
-                    "شکریہ اس زبردست ویڈیو کو دیکھنے کا! 🙏"
-                ];
-                
-                let index = 0;
-                window.captionInterval = setInterval(() => {
-                    if (!videoEl.paused && index < sampleCaptions.length) {
-                        captionBox.innerText = sampleCaptions[index];
-                        captionInput.value = sampleCaptions[index];
-                        index++;
-                    }
-                    if (index >= sampleCaptions.length) {
-                        index = 0; // لوپ چلانے کے لیے
-                    }
-                }, 3000);
-
-            }, 3000); // 3 سیکنڈ ویٹنگ
-        }
-    }
-
-    function togglePlayPause() {
-        const btn = document.getElementById('pausePlayBtn');
-        if (videoEl.paused) {
-            videoEl.play();
-            btn.innerHTML = "⏸️ روکیں";
+        if (!isConnected) {
+            headingEl.innerText = "کنیکٹنگ ایڈ چل رہا ہے...";
+            descEl.innerText = "وی پی این کنیکٹ ہونے کے لیے اشتہار پورا دیکھیں...";
         } else {
-            videoEl.pause();
-            btn.innerHTML = "▶️ چلائیں";
+            headingEl.innerText = "ڈس کنیکٹنگ ایڈ چل رہا ہے...";
+            descEl.innerText = "وی پی این بند ہونے کے لیے اشتہار پورا دیکھیں...";
         }
-    }
 
-    function applyCaptionEdit() {
-        const newText = captionInput.value;
-        captionBox.innerText = newText;
-        alert("کیپشن کامیابی سے اپ ڈیٹ ہو گیا ہے! ✅");
+        let countdown = setInterval(() => {
+            timeLeft--;
+            timerEl.innerText = timeLeft + 's';
+
+            if (timeLeft <= 0) {
+                clearInterval(countdown);
+                modal.style.display = 'none'; // ایڈ ختم
+
+                if (!isConnected) {
+                    // اب وی پی این ان لمیٹڈ کنیکٹ ہو گیا
+                    isConnected = true;
+                    document.getElementById('connectCircle').classList.add('connected');
+                    document.getElementById('circleIcon').innerHTML = "🔒";
+                    document.getElementById('circleText').innerHTML = "Disconnect";
+                    document.getElementById('statusText').innerText = "وی پی این ان لمیٹڈ جڑ چکا ہے! ✅";
+                    document.getElementById('topStatus').innerText = "محفوظ (Secure)";
+                } else {
+                    // اب وی پی این ڈس کنیکٹ ہو گیا
+                    isConnected = false;
+                    document.getElementById('connectCircle').classList.remove('connected');
+                    document.getElementById('circleIcon').innerHTML = "🔌";
+                    document.getElementById('circleText').innerHTML = "Connect";
+                    document.getElementById('statusText').innerText = "وی پی این کامیابی سے بند کر دیا گیا ہے۔";
+                    document.getElementById('topStatus').innerText = "مفت سرور";
+                }
+            }
+        }, 1000);
     }
 </script>
 
